@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ResourceCard from "../components/ResourceCard.astro";
+import resources from "../data/resources.json";
+---
+
+<BaseLayout
+  title="Resources"
+  description="Browse printable, practical, and reflective teaching resources from SEED."
+>
+  <section class="page-hero">
+    <div class="shell stack">
+      <span class="eyebrow">Resources</span>
+      <h1>A small, thoughtful library to begin with.</h1>
+      <p>
+        Every example resource is stored as structured content, making this page easy to update as
+        SEED grows.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell resources-grid">
+      {resources.map((resource) => (
+        <div id={resource.slug}>
+          <ResourceCard {...resource} />
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

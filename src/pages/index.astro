@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ResourceCard from "../components/ResourceCard.astro";
+import resources from "../data/resources.json";
+import site from "../data/site.json";
+import { withBase } from "../utils/withBase";
+
+const featuredResources = resources.filter((resource) => resource.featured).slice(0, 3);
+---
+
+<BaseLayout title="Home" description={site.description}>
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div class="hero-copy stack">
+        <span class="eyebrow">SEED Resource Centre</span>
+        <h1>Simple teaching resources, presented with calm and clarity.</h1>
+        <p>
+          SEED is a warm, minimal education resource centre for teachers. It is built to feel
+          steady, easy to navigate, and ready to grow over time without becoming hard to manage.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href={withBase("/resources")}>Browse resources</a>
+          <a class="button-secondary" href={withBase("/about")}>About SEED</a>
+        </div>
+      </div>
+
+      <aside class="panel stack">
+        <span class="eyebrow">Why it works</span>
+        <h2>Static-first, content-led, and easy to expand.</h2>
+        <p>
+          Pages are powered by structured content, so new resources can be added later without
+          redesigning the whole site.
+        </p>
+        <div class="feature-grid">
+          <div class="feature-card stack">
+            <h3>Clean structure</h3>
+            <p>Simple routes, reusable components, and beginner-friendly files.</p>
+          </div>
+          <div class="feature-card stack">
+            <h3>Gentle design</h3>
+            <p>Warm tones, generous spacing, and typography designed for quiet confidence.</p>
+          </div>
+          <div class="feature-card stack">
+            <h3>Easy growth</h3>
+            <p>Teachers now, with room for parent and student sections later on.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <div class="stack">
+          <span class="eyebrow">Featured Resources</span>
+          <h2>Useful starting points for the first version of SEED.</h2>
+        </div>
+        <a class="button-secondary" href={withBase("/resources")}>See all resources</a>
+      </div>
+
+      <div class="resources-grid">
+        {featuredResources.map((resource) => <ResourceCard {...resource} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell two-column">
+      <div class="quote-card stack">
+        <span class="eyebrow">Designed for real use</span>
+        <h2>Professional enough to trust, simple enough to maintain.</h2>
+        <p>
+          The first version keeps the experience focused: a clear homepage, a resource library, a
+          blog space, and a few future-facing pages without unnecessary complexity.
+        </p>
+      </div>
+      <div class="panel split-callout stack">
+        <span class="eyebrow">Next steps</span>
+        <h3>Ready for later additions</h3>
+        <ul class="list-clean">
+          <li>Topic filters for literacy, wellbeing, and classroom routines</li>
+          <li>Parent and student landing pages when the audience expands</li>
+          <li>Optional CMS integration if hand-editing JSON becomes limiting</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

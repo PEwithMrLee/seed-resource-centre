@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Home",
+    "href": "/"
+  },
+  {
+    "label": "Resources",
+    "href": "/resources"
+  },
+  {
+    "label": "Blog",
+    "href": "/blog"
+  },
+  {
+    "label": "About",
+    "href": "/about"
+  },
+  {
+    "label": "Coming Soon",
+    "href": "/coming-soon"
+  }
+]

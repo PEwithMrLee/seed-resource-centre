@@ -1,0 +1,40 @@
+---
+import navigation from "../data/navigation.json";
+import { withBase } from "../utils/withBase";
+
+const { currentPath = "/" } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const normalizedBase = base.endsWith("/") ? base.slice(0, -1) : base;
+const pathWithoutBase =
+  normalizedBase && currentPath.startsWith(normalizedBase)
+    ? currentPath.slice(normalizedBase.length) || "/"
+    : currentPath;
+---
+
+<header class="site-header">
+  <div class="shell nav-wrap">
+    <a class="brand" href={withBase("/")}>
+      <span class="brand-mark">SEED</span>
+      <span class="brand-text">Resource Centre</span>
+    </a>
+
+    <nav aria-label="Primary navigation">
+      <ul class="nav-list">
+        {navigation.map((item) => {
+          const isActive =
+            item.href === "/"
+              ? pathWithoutBase === "/"
+              : pathWithoutBase.startsWith(item.href);
+
+          return (
+            <li>
+              <a class:list={["nav-link", { active: isActive }]} href={withBase(item.href)}>
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  </div>
+</header>

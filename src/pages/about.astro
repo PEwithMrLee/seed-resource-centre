@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="About"
+  description="Learn more about the purpose and design principles behind SEED."
+>
+  <section class="page-hero">
+    <div class="shell two-column">
+      <div class="stack">
+        <span class="eyebrow">About SEED</span>
+        <h1>A resource centre designed to feel calm, useful, and credible.</h1>
+        <p>
+          SEED starts with teachers. The aim is to share practical resources in a way that feels
+          professional and uncluttered, while keeping the technical setup easy to maintain.
+        </p>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">Principles</span>
+        <h3>What guides this first version</h3>
+        <ul class="list-clean">
+          <li>Use static pages for speed, stability, and simple hosting</li>
+          <li>Keep content in structured files instead of hardcoding it into layouts</li>
+          <li>Design with warmth and whitespace rather than visual noise</li>
+          <li>Make future expansion possible without a rebuild from scratch</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell two-column">
+      <div class="quote-card stack">
+        <span class="eyebrow">Audience</span>
+        <h2>Teachers first, with a path for wider support later.</h2>
+        <p>
+          The initial content and language are teacher-focused, but the structure leaves room for
+          future sections for parents, carers, and students when needed.
+        </p>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">Maintenance</span>
+        <h3>Built for beginner-friendly upkeep</h3>
+        <p>
+          To add a new resource, edit one JSON file. To publish a new post, add one more object to
+          the blog data file. That is enough for a small site to stay manageable.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

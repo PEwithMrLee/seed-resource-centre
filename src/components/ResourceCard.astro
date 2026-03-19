@@ -1,0 +1,44 @@
+---
+import { withBase } from "../utils/withBase";
+
+interface Props {
+  title: string;
+  type: string;
+  audience: string;
+  description: string;
+  tagline: string;
+  category: string;
+  href: string;
+  ctaLabel: string;
+}
+
+const {
+  title,
+  type,
+  audience,
+  description,
+  tagline,
+  category,
+  href,
+  ctaLabel
+} = Astro.props;
+
+const isExternal = href.startsWith("http");
+const finalHref = isExternal ? href : withBase(href);
+---
+
+<article class="resource-card">
+  <div class="resource-meta">
+    <span>{type}</span>
+    <span>{audience}</span>
+  </div>
+  <h3>{title}</h3>
+  <p class="resource-tagline">{tagline}</p>
+  <p>{description}</p>
+  <div class="resource-footer">
+    <span class="resource-category">{category}</span>
+    <a href={finalHref} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noreferrer" : undefined}>
+      {ctaLabel}
+    </a>
+  </div>
+</article>

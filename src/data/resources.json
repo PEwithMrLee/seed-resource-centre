@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "classroom-kindness-poster",
+    "title": "Classroom Kindness Poster",
+    "type": "Downloadable Poster",
+    "audience": "Teachers",
+    "description": "A printable A4 poster with a gentle classroom reminder set designed for shared spaces and morning routines.",
+    "tagline": "Ready to print and pin up.",
+    "category": "Classroom Culture",
+    "ctaLabel": "Download PDF",
+    "href": "#",
+    "featured": true
+  },
+  {
+    "slug": "two-minute-reset-tip",
+    "title": "Two-Minute Reset",
+    "type": "Teaching Tip Card",
+    "audience": "Teachers",
+    "description": "A short strategy card for helping a class regain focus using breath, posture, and one clear instruction.",
+    "tagline": "Small move, steady room.",
+    "category": "Teaching Practice",
+    "ctaLabel": "Read Tip",
+    "href": "/resources#two-minute-reset-tip",
+    "featured": true
+  },
+  {
+    "slug": "starting-with-calm",
+    "title": "Starting With Calm",
+    "type": "Short Blog Post",
+    "audience": "Teachers",
+    "description": "A brief reflection on why calm, predictable openings help both students and teachers settle into learning.",
+    "tagline": "Five minutes that shape the day.",
+    "category": "Reflection",
+    "ctaLabel": "Read Post",
+    "href": "/blog#starting-with-calm",
+    "featured": false
+  },
+  {
+    "slug": "visual-routines-video",
+    "title": "Visual Routines in Action",
+    "type": "YouTube Video Resource",
+    "audience": "Teachers",
+    "description": "A short video example showing how simple visual prompts can support smooth classroom transitions.",
+    "tagline": "See the routine in practice.",
+    "category": "Video",
+    "ctaLabel": "Watch Video",
+    "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "featured": true
+  }
+]
