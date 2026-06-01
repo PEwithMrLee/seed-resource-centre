@@ -10,6 +10,7 @@ interface Props {
   category: string;
   href: string;
   ctaLabel: string;
+  image?: string;
 }
 
 const {
@@ -20,7 +21,8 @@ const {
   tagline,
   category,
   href,
-  ctaLabel
+  ctaLabel,
+  image
 } = Astro.props;
 
 const isExternal = href.startsWith("http");
@@ -28,6 +30,7 @@ const finalHref = isExternal ? href : withBase(href);
 ---
 
 <article class="resource-card">
+  {image && <img src={image} alt={title} class="resource-image" />}
   <div class="resource-meta">
     <span>{type}</span>
     <span>{audience}</span>

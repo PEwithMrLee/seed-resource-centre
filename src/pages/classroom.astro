@@ -1,0 +1,163 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../utils/withBase";
+---
+
+<BaseLayout
+  title="Inside My Classroom"
+  description="A window into real teaching practice — curriculum design, learning routines, assessment, and day-to-day life in the classroom."
+>
+  <section class="page-hero">
+    <div class="shell two-column">
+      <div class="stack">
+        <span class="eyebrow">Inside My Classroom</span>
+        <h1>How this actually works in a real classroom.</h1>
+        <p>
+          This section answers the question teachers ask most: <em>but what does it actually look like?</em>
+          Real examples, real routines, and real reflections from day-to-day practice.
+        </p>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">What you'll find here</span>
+        <h3>Practical, not theoretical</h3>
+        <ul class="list-clean">
+          <li>Curriculum planning and alignment examples</li>
+          <li>Assessment and reflection systems in action</li>
+          <li>Daily routines and classroom structures</li>
+          <li>Unit and lesson design, start to finish</li>
+          <li>Events, experiences, and large-scale planning</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="section-head">
+        <div class="stack">
+          <span class="eyebrow">Curriculum Design & Alignment</span>
+          <h2>Building a curriculum that connects vertically and horizontally.</h2>
+        </div>
+      </div>
+      <div class="classroom-grid">
+        <div class="panel stack">
+          <h3>Vertical Progression</h3>
+          <p>How skills and concepts build deliberately across year levels — so students aren't starting from scratch each year.</p>
+          <a class="card-cta" href={withBase("/resources#vertical-horizontal-alignment")}>See the alignment infographic →</a>
+        </div>
+        <div class="panel stack">
+          <h3>Horizontal Alignment</h3>
+          <p>How units across subjects connect at the same year level — building coherence without losing subject identity.</p>
+          <a class="card-cta" href={withBase("/resources#vertical-horizontal-alignment")}>See the alignment infographic →</a>
+        </div>
+        <div class="panel stack">
+          <h3>IB Curriculum Mapping</h3>
+          <p>Practical examples of mapping IB frameworks to real units — keeping the documentation useful rather than decorative.</p>
+          <a class="card-cta" href={withBase("/resources")}>Browse planning resources →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <div class="stack">
+          <span class="eyebrow">Making Learning Visible</span>
+          <h2>When students can see their learning, they take ownership of it.</h2>
+        </div>
+      </div>
+      <div class="classroom-grid">
+        <div class="panel stack">
+          <h3>Assessment in Practice</h3>
+          <p>Assessment that informs teaching — not just grades. Examples of how formative and summative tasks work together.</p>
+        </div>
+        <div class="panel stack">
+          <h3>Student Reflection</h3>
+          <p>Simple, consistent reflection routines that help students understand what they've learned and where to go next.</p>
+        </div>
+        <div class="panel stack">
+          <h3>Feedback That Works</h3>
+          <p>Practical feedback strategies that students actually use — specific, timely, and connected to next steps.</p>
+          <a class="card-cta" href={withBase("/resources#making-learning-visible")}>See the infographic →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="section-head">
+        <div class="stack">
+          <span class="eyebrow">Daily Routines & Structures</span>
+          <h2>The systems that make a classroom run smoothly.</h2>
+        </div>
+      </div>
+      <div class="classroom-grid">
+        <div class="panel stack">
+          <h3>Lesson Openings</h3>
+          <p>How a lesson starts shapes everything that follows. Intentional openings that settle students and signal what's coming.</p>
+          <a class="card-cta" href={withBase("/resources#how-you-start-shapes-everything")}>See the G.R.E.E.T prompt card →</a>
+        </div>
+        <div class="panel stack">
+          <h3>Reducing Teacher Talk</h3>
+          <p>The L.E.S.S framework in practice — how to give clearer instructions, ask better questions, and create more thinking time.</p>
+          <a class="card-cta" href={withBase("/resources#say-less-get-more")}>See the L.E.S.S prompt card →</a>
+        </div>
+        <div class="panel stack">
+          <h3>Transitions & Flow</h3>
+          <p>Smooth transitions that don't lose momentum — practical signals, routines, and structures that keep class flow consistent.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell two-column">
+      <div class="quote-card stack">
+        <span class="eyebrow">More coming soon</span>
+        <h2>Unit design, events, and real lesson examples on the way.</h2>
+        <p>
+          This section grows alongside the resource library. Upcoming additions include full unit planning examples,
+          Athletics Day organisation, and real lesson walkthroughs with reflections.
+        </p>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">In the meantime</span>
+        <h3>Start with the resources</h3>
+        <p>The downloadable resources are the most practical starting point — prompt cards, infographics, and planning tools ready to use today.</p>
+        <a class="button" href={withBase("/resources")} style="width: fit-content; margin-top: 0.5rem;">Browse resources</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .classroom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card-cta {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+  }
+
+  .card-cta:hover {
+    color: var(--accent-deep);
+  }
+
+  em {
+    font-style: italic;
+    color: var(--accent-deep);
+  }
+
+  @media (max-width: 900px) {
+    .classroom-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

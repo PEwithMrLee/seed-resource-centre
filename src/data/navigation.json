@@ -8,15 +8,15 @@
     "href": "/resources"
   },
   {
+    "label": "Inside My Classroom",
+    "href": "/classroom"
+  },
+  {
     "label": "Blog",
     "href": "/blog"
   },
   {
-    "label": "About",
-    "href": "/about"
-  },
-  {
-    "label": "Coming Soon",
-    "href": "/coming-soon"
+    "label": "Say Hello",
+    "href": "/say-hello"
   }
 ]

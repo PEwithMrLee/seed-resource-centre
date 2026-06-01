@@ -1,0 +1,162 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Say Hello"
+  description="Get in touch with The SEED Lab — resource requests, collaboration enquiries, or just to say hello."
+>
+  <section class="page-hero">
+    <div class="shell two-column">
+      <div class="stack">
+        <span class="eyebrow">Say Hello</span>
+        <h1>Questions, ideas, or just a kind word.</h1>
+        <p>
+          Whether you have a resource request, a collaboration idea, or just want to connect —
+          this is the place. The SEED Lab is a small, teacher-run project and every message is read personally.
+        </p>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">Get in touch</span>
+        <h3>A few reasons people reach out</h3>
+        <ul class="list-clean">
+          <li>Resource requests — something specific you'd find useful</li>
+          <li>Collaboration enquiries — working together on something</li>
+          <li>Feedback on existing resources</li>
+          <li>General questions about teaching practice</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="contact-layout">
+        <div class="contact-main stack">
+          <span class="eyebrow">Send a message</span>
+          <h2>Drop us a line.</h2>
+          <p>Fill in the form below and we'll get back to you as soon as possible.</p>
+
+          <form class="contact-form stack" name="contact" method="POST" data-netlify="true">
+            <div class="form-group">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" placeholder="First name is fine" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="reason">What's this about?</label>
+              <select id="reason" name="reason">
+                <option value="">Select a reason</option>
+                <option value="resource-request">Resource request</option>
+                <option value="collaboration">Collaboration enquiry</option>
+                <option value="feedback">Feedback on a resource</option>
+                <option value="general">General question</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+            </div>
+            <button type="submit" class="button" style="width: fit-content;">Send message</button>
+          </form>
+        </div>
+
+        <aside class="contact-aside stack">
+          <div class="panel stack">
+            <span class="eyebrow">Direct email</span>
+            <h3>Prefer email?</h3>
+            <p>Reach out directly at any time.</p>
+            <a class="email-link" href="mailto:hello@theseedlab.org">hello@theseedlab.org</a>
+          </div>
+          <div class="panel stack">
+            <span class="eyebrow">Response time</span>
+            <h3>When to expect a reply</h3>
+            <p>This is a one-person project run alongside full-time teaching. Replies typically arrive within a few days.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .contact-form {
+    margin-top: 1rem;
+  }
+
+  .form-group {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    color: var(--text);
+    background: rgba(255, 253, 249, 0.9);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1rem;
+    width: 100%;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(76, 107, 84, 0.12);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 130px;
+  }
+
+  .contact-aside {
+    position: sticky;
+    top: 7rem;
+  }
+
+  .email-link {
+    display: inline-flex;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 1.05rem;
+    word-break: break-all;
+  }
+
+  .email-link:hover {
+    color: var(--accent-deep);
+  }
+
+  @media (max-width: 900px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-aside {
+      position: static;
+    }
+  }
+</style>
