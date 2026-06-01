@@ -2,3 +2,7 @@ dist/
 .astro/
 node_modules/
 .DS_Store
+seed-project/
+seed-project-updated/
+*.zip
+really-updated/
