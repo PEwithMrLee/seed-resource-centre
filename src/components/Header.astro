@@ -14,13 +14,16 @@ const pathWithoutBase =
 <header class="site-header">
   <div class="shell nav-wrap">
     <a class="brand" href={withBase("/")}>
-      <span class="brand-mark">SEED</span>
-      <span class="brand-text">Resource Centre</span>
+      <img src="/seed-logo.png" alt="The SEED Lab" class="brand-logo" />
+      <div class="brand-words">
+        <span class="brand-mark">The SEED Lab</span>
+        <span class="brand-sub">Supporting Educators in Effective Development</span>
+      </div>
     </a>
 
     <nav aria-label="Primary navigation">
       <ul class="nav-list">
-        {navigation.map((item) => {
+        {navigation.filter(item => item.href !== "/say-hello").map((item) => {
           const isActive =
             item.href === "/"
               ? pathWithoutBase === "/"
@@ -34,7 +37,33 @@ const pathWithoutBase =
             </li>
           );
         })}
+        <li>
+          <a class="nav-cta" href={withBase("/say-hello")}>Say Hello</a>
+        </li>
       </ul>
     </nav>
   </div>
 </header>
+
+<style>
+  .brand-logo {
+    height: 3rem;
+    width: auto;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .brand-words {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: -0.2rem;
+  }
+
+  .brand-sub {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    line-height: 1;
+  }
+</style>
