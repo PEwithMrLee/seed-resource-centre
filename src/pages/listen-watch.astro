@@ -1,0 +1,316 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../utils/withBase";
+
+const curatedPodcasts = [
+  {
+    title: "Cult of Pedagogy",
+    host: "Jennifer Gonzalez",
+    description: "One of the most respected teacher podcasts available. Deep dives into classroom strategy, instructional design, and professional growth. Practical, honest, and never preachy.",
+    url: "https://www.cultofpedagogy.com/pod/",
+    category: "Teaching Practice"
+  },
+  {
+    title: "The Staffroom Podcast",
+    host: "Various educators",
+    description: "Conversations about the real, day-to-day experience of teaching — not the polished version. Refreshingly candid about what works and what doesn't.",
+    url: "https://staffroompodcast.com",
+    category: "Teaching Life"
+  },
+  {
+    title: "The PYP Podcast",
+    host: "IB PYP Educators",
+    description: "Focused on the IB Primary Years Programme — curriculum design, transdisciplinary learning, and approaches to teaching. Essential listening for IB primary educators.",
+    url: "#",
+    category: "IB Education"
+  },
+  {
+    title: "The PE Geek Podcast",
+    host: "Jarrod Robinson",
+    description: "Technology, innovation, and practical ideas for PE teachers. Covers everything from movement apps to curriculum design for physical education.",
+    url: "https://thepegeek.com/podcast",
+    category: "Physical Education"
+  }
+];
+---
+
+<BaseLayout
+  title="Listen & Watch"
+  description="Podcasts, teaching vlogs, and curated recommendations from The SEED Lab — your own content and the best from across the education world."
+>
+
+  <section class="page-hero">
+    <div class="shell two-column">
+      <div class="stack">
+        <span class="eyebrow">Listen & Watch</span>
+        <h1>Teaching conversations worth your time.</h1>
+        <p>
+          A growing collection of podcasts, classroom vlogs, and curated recommendations —
+          created here at The SEED Lab and handpicked from across the education world.
+        </p>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">What's coming</span>
+        <h3>Three things in this space</h3>
+        <ul class="list-clean">
+          <li>The SEED Lab Podcast — teaching conversations, coming soon</li>
+          <li>Classroom vlogs — real lessons, real reflections</li>
+          <li>Curated picks — the best education podcasts, vetted and recommended</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEED Lab Podcast -->
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="coming-soon-feature">
+        <div class="csf-badge">Coming Soon</div>
+        <div class="csf-content stack">
+          <span class="eyebrow">The SEED Lab Podcast</span>
+          <h2>Real teaching conversations. No filter.</h2>
+          <p>
+            Short, practical episodes exploring what actually works in the classroom —
+            curriculum design, assessment, behaviour, planning, and the honest reality
+            of being a teacher. No guests with agendas. No corporate sponsorship. Just
+            genuine classroom experience turned into useful listening.
+          </p>
+          <p>
+            Episodes will be released alongside written notes and linked resources so
+            every conversation has a practical takeaway you can use straight away.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href={withBase("/say-hello")}>Get notified when it launches</a>
+          </div>
+        </div>
+        <div class="csf-visual">
+          <div class="podcast-placeholder">
+            <div class="podcast-icon">🎙</div>
+            <p class="podcast-label">Episode 1 — Coming Soon</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaching Vlogs -->
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <div class="stack">
+          <span class="eyebrow">Classroom Vlogs</span>
+          <h2>Inside the room. Real lessons, honest reflections.</h2>
+        </div>
+      </div>
+      <div class="vlog-coming-soon panel stack">
+        <span class="eyebrow">In production</span>
+        <h3>Short-form teaching videos — filmed in a real classroom.</h3>
+        <p>
+          Not polished tutorial content. Real lessons, filmed with permission, with honest
+          commentary on what was planned, what happened, and what I'd change. The kind of
+          professional development that actually reflects what teaching looks like.
+        </p>
+        <p>
+          Topics planned: PE lesson openings using G.R.E.E.T, unit planning walkthroughs,
+          student-led assessment in action, and transitions that actually work.
+        </p>
+        <div class="vlog-cta">
+          <a class="button-secondary" href={withBase("/classroom")}>See the classroom section →</a>
+          <a class="button" href={withBase("/say-hello")}>Request a topic</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Curated Recommendations -->
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="section-head">
+        <div class="stack">
+          <span class="eyebrow">Curated Recommendations</span>
+          <h2>The podcasts worth adding to your commute.</h2>
+        </div>
+      </div>
+      <p class="curated-intro">
+        These are the education podcasts I actually listen to — vetted for quality, practicality,
+        and genuine usefulness. No sponsored recommendations, no filler.
+      </p>
+      <div class="podcast-grid">
+        {curatedPodcasts.map((podcast) => (
+          <a class="podcast-card" href={podcast.url} target="_blank" rel="noreferrer">
+            <div class="podcast-card-inner">
+              <div class="podcast-meta">
+                <span class="pill">{podcast.category}</span>
+              </div>
+              <h3>{podcast.title}</h3>
+              <p class="podcast-host">Hosted by {podcast.host}</p>
+              <p>{podcast.description}</p>
+              <span class="podcast-link">Listen →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="shell two-column">
+      <div class="quote-card stack">
+        <span class="eyebrow">Suggest something</span>
+        <h2>Know a podcast that should be on this list?</h2>
+        <p>
+          If there's an education podcast or YouTube channel you think deserves a spot
+          here, send it through. Always looking for quality recommendations from teachers
+          who know what's actually worth listening to.
+        </p>
+        <a class="button-secondary" href={withBase("/say-hello")} style="width: fit-content; margin-top: 0.5rem;">Send a recommendation →</a>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">Stay updated</span>
+        <h3>Be first to know when the podcast drops</h3>
+        <p>
+          Get in touch and I'll let you know when Episode 1 is ready — along with the
+          linked resources and show notes.
+        </p>
+        <a class="button" href={withBase("/say-hello")} style="width: fit-content; margin-top: 0.5rem;">Say hello</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .coming-soon-feature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+  }
+
+  .csf-badge {
+    position: absolute;
+    top: -1rem;
+    left: 0;
+    background: var(--terra);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+  }
+
+  .csf-content {
+    padding-top: 1.5rem;
+  }
+
+  .csf-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .podcast-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 300px;
+    background: linear-gradient(145deg, var(--accent-soft), rgba(236, 244, 232, 0.5));
+    border: 2px dashed var(--line-strong);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .podcast-icon {
+    font-size: 3.5rem;
+    opacity: 0.7;
+  }
+
+  .podcast-label {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    max-width: none;
+  }
+
+  .vlog-coming-soon {
+    max-width: 720px;
+  }
+
+  .vlog-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .curated-intro {
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+  }
+
+  .podcast-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .podcast-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .podcast-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+
+  .podcast-card-inner {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .podcast-meta {
+    margin-bottom: 0.25rem;
+  }
+
+  .podcast-host {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-style: italic;
+    max-width: none;
+  }
+
+  .podcast-link {
+    color: var(--terra);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+
+  @media (max-width: 900px) {
+    .coming-soon-feature,
+    .podcast-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .csf-visual {
+      display: none;
+    }
+  }
+</style>
