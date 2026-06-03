@@ -140,16 +140,23 @@ import { withBase } from "../utils/withBase";
           </div>
         </div>
         <div class="tech-preview">
-          <div class="app-preview-frame">
-            <div class="app-preview-bar">
-              <span></span><span></span><span></span>
+          <div class="ipad-mockup">
+            <div class="ipad-outer">
+              <div class="ipad-top-bar">
+                <div class="ipad-camera"></div>
+              </div>
+              <div class="ipad-screen">
+                <iframe
+                  src="/pe-challenges.html"
+                  title="PE Challenges App on iPad"
+                  loading="lazy"
+                  scrolling="no"
+                ></iframe>
+              </div>
+              <div class="ipad-bottom-bar">
+                <div class="ipad-home"></div>
+              </div>
             </div>
-            <iframe
-              src="/pe-challenges.html"
-              title="PE Challenges App Preview"
-              loading="lazy"
-              scrolling="no"
-            ></iframe>
           </div>
         </div>
       </div>
@@ -231,39 +238,71 @@ import { withBase } from "../utils/withBase";
     margin-top: 0.5rem;
   }
 
-  .app-preview-frame {
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--line-strong);
-    box-shadow: var(--shadow);
-    background: #fff;
-  }
-
-  .app-preview-bar {
-    background: #f0f0f0;
-    padding: 0.6rem 1rem;
+  .ipad-mockup {
     display: flex;
-    gap: 0.4rem;
+    justify-content: center;
     align-items: center;
-    border-bottom: 1px solid var(--line);
   }
 
-  .app-preview-bar span {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--line-strong);
-  }
-
-  .app-preview-bar span:first-child { background: #ff5f57; }
-  .app-preview-bar span:nth-child(2) { background: #febc2e; }
-  .app-preview-bar span:nth-child(3) { background: #28c840; }
-
-  .app-preview-frame iframe {
+  .ipad-outer {
+    background: #1a1a1a;
+    border-radius: 28px;
+    padding: 16px 12px;
+    box-shadow:
+      0 0 0 1px #333,
+      0 30px 80px rgba(0,0,0,0.35),
+      inset 0 0 0 2px #444;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
     width: 100%;
-    height: 420px;
+    max-width: 420px;
+  }
+
+  .ipad-top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 4px 0 10px;
+  }
+
+  .ipad-camera {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #333;
+    border: 1px solid #444;
+  }
+
+  .ipad-screen {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    aspect-ratio: 3 / 4;
+  }
+
+  .ipad-screen iframe {
+    width: 100%;
+    height: 100%;
     border: none;
     display: block;
+  }
+
+  .ipad-bottom-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 4px;
+  }
+
+  .ipad-home {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #444;
+    background: #222;
   }
 
   @media (max-width: 900px) {
