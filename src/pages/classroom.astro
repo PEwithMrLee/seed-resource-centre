@@ -140,22 +140,43 @@ import { withBase } from "../utils/withBase";
           </div>
         </div>
         <div class="tech-preview">
-          <div class="ipad-mockup">
-            <div class="ipad-outer">
-              <div class="ipad-top-bar">
-                <div class="ipad-camera"></div>
+          <div class="ipad-landscape">
+            <div class="ipad-left-bar">
+              <div class="ipad-camera-side"></div>
+            </div>
+            <div class="ipad-screen-landscape">
+              <div class="app-mockup">
+                <div class="app-header">
+                  <span class="app-trophy">🏆</span>
+                  <span class="app-title">PE Challenges</span>
+                </div>
+                <p class="app-subtitle">Choose a category to get started</p>
+                <div class="app-categories">
+                  <div class="app-cat orange">
+                    <span class="app-cat-icon">🏀</span>
+                    <strong>Sport Skills</strong>
+                    <span>Measurable sport challenges</span>
+                  </div>
+                  <div class="app-cat blue">
+                    <span class="app-cat-icon">💪</span>
+                    <strong>Fitness Challenges</strong>
+                    <span>Strength &amp; endurance tests</span>
+                  </div>
+                  <div class="app-cat green">
+                    <span class="app-cat-icon">🎯</span>
+                    <strong>Target Games</strong>
+                    <span>Accuracy &amp; focus tasks</span>
+                  </div>
+                  <div class="app-cat purple">
+                    <span class="app-cat-icon">🤸</span>
+                    <strong>Movement Circuits</strong>
+                    <span>Station-based activities</span>
+                  </div>
+                </div>
               </div>
-              <div class="ipad-screen">
-                <iframe
-                  src="/pe-challenges.html"
-                  title="PE Challenges App on iPad"
-                  loading="lazy"
-                  scrolling="no"
-                ></iframe>
-              </div>
-              <div class="ipad-bottom-bar">
-                <div class="ipad-home"></div>
-              </div>
+            </div>
+            <div class="ipad-right-bar">
+              <div class="ipad-home-side"></div>
             </div>
           </div>
         </div>
@@ -208,8 +229,8 @@ import { withBase } from "../utils/withBase";
 
   .tech-feature {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 2.5rem;
     align-items: center;
   }
 
@@ -238,75 +259,140 @@ import { withBase } from "../utils/withBase";
     margin-top: 0.5rem;
   }
 
-  .ipad-mockup {
+  /* ── Landscape iPad ── */
+  .ipad-landscape {
     display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .ipad-outer {
-    background: #1a1a1a;
-    border-radius: 28px;
-    padding: 16px 12px;
+    align-items: stretch;
+    background: #1c1c1e;
+    border-radius: 24px;
     box-shadow:
-      0 0 0 1px #333,
-      0 30px 80px rgba(0,0,0,0.35),
-      inset 0 0 0 2px #444;
+      0 0 0 1px #3a3a3a,
+      0 32px 80px rgba(0,0,0,0.4),
+      inset 0 0 0 2px #2a2a2a;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .ipad-left-bar {
+    width: 18px;
+    background: #1c1c1e;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0;
-    width: 100%;
-    max-width: 480px;
-  }
-
-  .ipad-top-bar {
-    width: 100%;
-    display: flex;
     justify-content: center;
-    padding: 4px 0 10px;
+    flex-shrink: 0;
   }
 
-  .ipad-camera {
-    width: 8px;
-    height: 8px;
+  .ipad-camera-side {
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: #333;
+    background: #3a3a3a;
     border: 1px solid #444;
   }
 
-  .ipad-screen {
-    width: 100%;
-    border-radius: 8px;
+  .ipad-screen-landscape {
+    flex: 1;
+    background: #f0f0f5;
     overflow: hidden;
-    background: #fff;
-    aspect-ratio: 3 / 4;
-    position: relative;
+    border-radius: 6px;
+    margin: 10px 0;
   }
 
-  .ipad-screen iframe {
-    width: 166%;
-    height: 166%;
-    border: none;
-    display: block;
-    transform: scale(0.6);
-    transform-origin: top left;
-    pointer-events: none;
-  }
-
-  .ipad-bottom-bar {
-    width: 100%;
+  .ipad-right-bar {
+    width: 22px;
+    background: #1c1c1e;
     display: flex;
+    align-items: center;
     justify-content: center;
-    padding: 10px 0 4px;
+    flex-shrink: 0;
   }
 
-  .ipad-home {
-    width: 36px;
-    height: 36px;
+  .ipad-home-side {
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    border: 2px solid #444;
-    background: #222;
+    border: 2px solid #3a3a3a;
+    background: #252525;
+  }
+
+  /* ── App Mockup ── */
+  .app-mockup {
+    padding: 1rem 1.25rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #6c5ce7;
+    margin: -1rem -1.25rem 0;
+    padding: 0.65rem 1.25rem;
+  }
+
+  .app-trophy {
+    font-size: 1.2rem;
+  }
+
+  .app-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #fff;
+    font-family: "DM Sans", sans-serif;
+  }
+
+  .app-subtitle {
+    font-size: 0.78rem;
+    color: #666;
+    text-align: center;
+    margin: 0.25rem 0 0.1rem;
+    max-width: none;
+    line-height: 1.3;
+  }
+
+  .app-categories {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .app-cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: 10px;
+    border: 2.5px solid transparent;
+    background: #fff;
+    text-align: center;
+  }
+
+  .app-cat.orange { border-color: #ff6b35; }
+  .app-cat.blue   { border-color: #4a90d9; }
+  .app-cat.green  { border-color: #27ae60; }
+  .app-cat.purple { border-color: #9b59b6; }
+
+  .app-cat-icon { font-size: 1.5rem; }
+
+  .app-cat strong {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #2c2c2c;
+    font-family: "DM Sans", sans-serif;
+    line-height: 1.2;
+  }
+
+  .app-cat span {
+    font-size: 0.68rem;
+    color: #888;
+    font-family: "DM Sans", sans-serif;
+    line-height: 1.2;
   }
 
   @media (max-width: 900px) {
