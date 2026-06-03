@@ -23,6 +23,29 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} | {site.name}</title>
     <meta name="description" content={description} />
+
+    <!-- Canonical & indexing -->
+    <link rel="canonical" href={`https://theseedlab.org${currentPath}`} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (social sharing) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The SEED Lab" />
+    <meta property="og:title" content={`${title} | The SEED Lab`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={`https://theseedlab.org${currentPath}`} />
+    <meta property="og:image" content="https://theseedlab.org/seed-logo.png" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} | The SEED Lab`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://theseedlab.org/seed-logo.png" />
+
+    <!-- Authorship & theme -->
+    <meta name="author" content="The SEED Lab" />
+    <meta name="theme-color" content="#3a5e3a" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
