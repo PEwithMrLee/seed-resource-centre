@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🏆 PE Challenges</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .header h1 { font-size: 20px; font-weight: 700; }
+
+        /* ── Screens ── */
+        .screen { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .screen.active { display: block; }
+
+        /* ── Home hero ── */
+        .home-hero { text-align: center; padding: 24px 0 16px; }
+        .home-hero .hero-emoji { font-size: 64px; }
+        .home-hero h2 { font-size: 28px; font-weight: 800; color: #2d3748; margin-top: 8px; }
+        .home-hero p { color: #718096; font-size: 16px; margin-top: 6px; }
+
+        /* ── Generic card ── */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+            border: 3px solid transparent;
+            transition: transform 0.12s;
+        }
+        .card:active { transform: scale(0.97); }
+        .card .card-icon { font-size: 42px; }
+        .card .card-title { font-size: 17px; font-weight: 700; color: #2d3748; }
+        .card .card-sub { font-size: 13px; color: #718096; }
+
+        /* ── Category grid ── */
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+        @media (max-width: 480px) { .cat-grid { grid-template-columns: 1fr; } }
+
+        .cat-sport  { border-color: #FF6B35; background: linear-gradient(135deg,#fff5f0,#fff); }
+        .cat-fitness{ border-color: #4299e1; background: linear-gradient(135deg,#ebf8ff,#fff); }
+        .cat-results{ border-color: #9f7aea; background: linear-gradient(135deg,#faf5ff,#fff);
+                      flex-direction: row; text-align: left; min-height: auto; padding: 16px 20px;
+                      margin-top: 14px; gap: 14px; }
+        .cat-results .card-title { font-size: 16px; }
+
+        /* ── Activity list ── */
+        .activity-card {
+            background: white; border-radius: 16px; padding: 16px 18px;
+            cursor: pointer; display: flex; align-items: center; gap: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-bottom: 12px;
+            border: 2px solid #e2e8f0; transition: transform 0.12s;
+        }
+        .activity-card:active { transform: scale(0.98); }
+        .activity-card .act-icon { font-size: 34px; width: 50px; text-align: center; }
+        .activity-card .act-name { font-size: 16px; font-weight: 700; color: #2d3748; }
+        .activity-card .act-desc { font-size: 13px; color: #718096; margin-top: 2px; }
+        .activity-card .act-arrow { margin-left: auto; color: #cbd5e0; font-size: 22px; }
+        .cat-sport-bg  .activity-card { border-color: #fed7cc; }
+        .cat-fitness-bg .activity-card { border-color: #bee3f8; }
+
+        /* ── Level cards ── */
+        .level-card {
+            background: white; border-radius: 18px; padding: 18px 20px;
+            cursor: pointer; display: flex; align-items: center; gap: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07); margin-bottom: 12px;
+            border: 3px solid transparent; transition: transform 0.12s;
+        }
+        .level-card:active { transform: scale(0.98); }
+        .level-easy   { border-color: #48bb78; background: linear-gradient(135deg,#f0fff4,#fff); }
+        .level-medium { border-color: #ed8936; background: linear-gradient(135deg,#fffaf0,#fff); }
+        .level-hard   { border-color: #f56565; background: linear-gradient(135deg,#fff5f5,#fff); }
+        .level-card .lv-emoji { font-size: 32px; }
+        .level-card .lv-name  { font-size: 17px; font-weight: 700; color: #2d3748; }
+        .level-card .lv-sub   { font-size: 13px; color: #718096; margin-top: 2px; }
+        .level-badge {
+            display: inline-block; padding: 3px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 700; color: white; margin-top: 4px;
+        }
+        .badge-easy   { background: #48bb78; }
+        .badge-medium { background: #ed8936; }
+        .badge-hard   { background: #f56565; }
+
+        /* ── Challenge page ── */
+        .challenge-top {
+            background: white; border-radius: 20px; padding: 20px;
+            margin-bottom: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); text-align: center;
+        }
+        .challenge-top .ch-emoji { font-size: 48px; display: block; margin-bottom: 6px; }
+        .challenge-top .ch-title { font-size: 22px; font-weight: 800; color: #2d3748; }
+        .challenge-top .ch-subtitle { font-size: 14px; color: #718096; margin-top: 4px; font-weight: 600; }
+        .goal-box {
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            color: white; border-radius: 14px; padding: 14px 16px;
+            font-size: 15px; font-weight: 600; text-align: center; margin-top: 14px;
+        }
+
+        /* ── Section block ── */
+        .block {
+            background: white; border-radius: 20px; padding: 18px 20px;
+            margin-bottom: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .block h3 { font-size: 16px; font-weight: 700; color: #2d3748; margin-bottom: 12px; }
+
+        /* ── Instructions ── */
+        .steps { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; color: #4a5568; line-height: 1.5; }
+        .step-num {
+            background: #667eea; color: white;
+            width: 26px; height: 26px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+        }
+
+        /* ── Video ── */
+        .video-wrap { position: relative; padding-bottom: 56.25%; border-radius: 12px; overflow: hidden; }
+        .video-wrap iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:none; }
+        .video-placeholder {
+            background: #e2e8f0; border-radius: 12px; height: 170px;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; color: #718096; gap: 8px;
+        }
+
+        /* ── Log form ── */
+        .form-label { font-size: 14px; color: #718096; display: block; margin-bottom: 6px; }
+        .name-input, .reflection-input {
+            width: 100%; border: 2px solid #e2e8f0; border-radius: 12px;
+            padding: 12px 14px; font-size: 15px; font-family: inherit; color: #2d3748;
+        }
+        .name-input:focus, .reflection-input:focus { outline: none; border-color: #667eea; }
+        .reflection-input { resize: vertical; min-height: 80px; }
+
+        .score-row { display: flex; gap: 10px; align-items: center; }
+        .score-input {
+            flex: 1; border: 2px solid #e2e8f0; border-radius: 12px;
+            padding: 12px; font-size: 22px; font-weight: 700; text-align: center;
+            color: #2d3748; font-family: inherit;
+        }
+        .score-input:focus { outline: none; border-color: #667eea; }
+        .score-unit { font-size: 14px; color: #718096; font-weight: 600; min-width: 80px; }
+
+        .star-row { display: flex; gap: 8px; justify-content: center; margin-top: 4px; }
+        .star-btn {
+            font-size: 38px; background: none; border: none; cursor: pointer;
+            filter: grayscale(1); opacity: 0.35; transition: transform 0.1s;
+        }
+        .star-btn.active { filter: none; opacity: 1; }
+        .star-btn:active { transform: scale(1.3); }
+
+        .form-gap { display: flex; flex-direction: column; gap: 14px; }
+
+        /* ── Save button ── */
+        .save-btn {
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            color: white; border: none; border-radius: 16px;
+            padding: 16px; font-size: 17px; font-weight: 700;
+            cursor: pointer; width: 100%; font-family: inherit;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+            transition: transform 0.1s;
+        }
+        .save-btn:active { transform: scale(0.98); }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed; bottom: 28px; left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: #48bb78; color: white;
+            padding: 14px 28px; border-radius: 50px;
+            font-size: 16px; font-weight: 700;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s; z-index: 999; white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ── Results ── */
+        .result-row {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding: 12px 0; border-bottom: 1px solid #e2e8f0;
+        }
+        .result-row:last-child { border-bottom: none; }
+        .result-name  { font-size: 15px; font-weight: 700; color: #2d3748; }
+        .result-meta  { font-size: 13px; color: #718096; margin-top: 2px; }
+        .result-quote { font-size: 13px; color: #718096; font-style: italic; margin-top: 4px; }
+        .result-score { font-size: 22px; font-weight: 800; color: #667eea; text-align: right; }
+        .result-unit-sm { font-size: 11px; color: #a0aec0; font-weight: 400; }
+        .clear-btn {
+            background: none; border: 2px solid #fc8181; color: #fc8181;
+            border-radius: 12px; padding: 10px 16px; font-size: 14px;
+            font-weight: 600; cursor: pointer; font-family: inherit; width: 100%; margin-top: 12px;
+        }
+        .empty-state { text-align: center; color: #a0aec0; padding: 40px 20px; }
+        .empty-state .em-icon { font-size: 52px; margin-bottom: 12px; }
+
+        /* ── Section label ── */
+        .section-label {
+            font-size: 12px; font-weight: 700; color: #a0aec0;
+            text-transform: uppercase; letter-spacing: 1px; margin: 18px 0 10px;
+        }
+
+        .spacer { height: 30px; }
+
+        /* ── Teacher PIN screen ── */
+        .pin-wrap { text-align: center; padding: 40px 20px; }
+        .pin-wrap .pin-icon { font-size: 56px; margin-bottom: 12px; }
+        .pin-wrap h2 { font-size: 22px; font-weight: 800; color: #2d3748; margin-bottom: 6px; }
+        .pin-wrap p  { font-size: 14px; color: #718096; margin-bottom: 24px; }
+        .pin-input {
+            width: 160px; border: 3px solid #e2e8f0; border-radius: 16px;
+            padding: 14px; font-size: 28px; font-weight: 800; text-align: center;
+            color: #2d3748; font-family: inherit; letter-spacing: 8px;
+            display: block; margin: 0 auto 16px;
+        }
+        .pin-input:focus { outline: none; border-color: #667eea; }
+        .pin-error { color: #f56565; font-size: 14px; font-weight: 600; margin-top: 8px; min-height: 20px; }
+        .pin-btn {
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            color: white; border: none; border-radius: 14px;
+            padding: 14px 36px; font-size: 16px; font-weight: 700;
+            cursor: pointer; font-family: inherit; margin-top: 8px;
+        }
+
+        /* ── Teacher dashboard ── */
+        .teacher-bar {
+            display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
+        }
+        .filter-select {
+            flex: 1; min-width: 140px; border: 2px solid #e2e8f0; border-radius: 12px;
+            padding: 10px 12px; font-size: 14px; font-family: inherit; color: #2d3748;
+            background: white;
+        }
+        .filter-select:focus { outline: none; border-color: #667eea; }
+        .refresh-btn {
+            background: #667eea; color: white; border: none; border-radius: 12px;
+            padding: 10px 16px; font-size: 14px; font-weight: 700;
+            cursor: pointer; font-family: inherit; white-space: nowrap;
+        }
+        .sheet-btn {
+            background: #48bb78; color: white; border: none; border-radius: 12px;
+            padding: 10px 16px; font-size: 14px; font-weight: 700;
+            cursor: pointer; font-family: inherit; white-space: nowrap; text-decoration: none;
+            display: inline-block;
+        }
+        .stats-row {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;
+        }
+        .stat-card {
+            background: white; border-radius: 16px; padding: 14px;
+            text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+        }
+        .stat-num  { font-size: 26px; font-weight: 800; color: #667eea; }
+        .stat-label{ font-size: 12px; color: #718096; margin-top: 2px; }
+
+        .t-table-wrap { overflow-x: auto; }
+        .t-table {
+            width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px;
+        }
+        .t-table th {
+            background: #f7fafc; color: #4a5568; font-weight: 700;
+            padding: 10px 12px; text-align: left; border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        .t-table td {
+            padding: 10px 12px; border-bottom: 1px solid #f0f4f8; color: #2d3748;
+            vertical-align: top;
+        }
+        .t-table tr:last-child td { border-bottom: none; }
+        .t-table tr:hover td { background: #f7fafc; }
+        .lv-chip {
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-size: 12px; font-weight: 700; color: white;
+        }
+        .lv-easy   { background: #48bb78; }
+        .lv-medium { background: #ed8936; }
+        .lv-hard   { background: #f56565; }
+
+        .loading-state { text-align: center; padding: 40px; color: #a0aec0; }
+        .loading-state .spin { font-size: 36px; display: block; margin-bottom: 10px; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .setup-banner {
+            background: #fffbeb; border: 2px solid #f6ad55; border-radius: 16px;
+            padding: 16px 18px; margin-bottom: 14px; font-size: 14px; color: #744210;
+        }
+        .setup-banner strong { display: block; margin-bottom: 4px; font-size: 15px; }
+        .setup-banner a { color: #667eea; font-weight: 700; }
+
+        .cat-teacher {
+            border-color: #667eea;
+            background: linear-gradient(135deg,#ebf4ff,#fff);
+        }
+
+        /* ── Everyone Plays category ── */
+        .cat-everyone {
+            border-color: #38b2ac;
+            background: linear-gradient(135deg,#e6fffa,#fff);
+        }
+
+        /* ── Game variations ── */
+        .game-card {
+            background: white; border-radius: 16px; padding: 18px;
+            margin-bottom: 12px; border: 3px solid #667eea;
+            background: linear-gradient(135deg,#ebf4ff,#fff);
+            cursor: pointer; transition: transform 0.12s;
+            box-shadow: 0 4px 12px rgba(102,126,234,0.12);
+        }
+        .game-card:active { transform: scale(0.98); }
+        .game-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .game-card-icon { font-size: 32px; }
+        .game-card-title { font-size: 17px; font-weight: 800; color: #2d3748; }
+        .game-players {
+            display: inline-block; background: #667eea; color: white;
+            border-radius: 20px; padding: 3px 12px; font-size: 12px;
+            font-weight: 700; margin-top: 4px;
+        }
+        .game-card-desc { font-size: 14px; color: #718096; line-height: 1.5; }
+
+        /* ── Game detail screen ── */
+        .game-detail-top {
+            background: linear-gradient(135deg,#667eea,#764ba2);
+            border-radius: 20px; padding: 24px; margin-bottom: 14px;
+            color: white; text-align: center;
+        }
+        .game-detail-top .gd-icon { font-size: 52px; display: block; margin-bottom: 8px; }
+        .game-detail-top .gd-title { font-size: 24px; font-weight: 800; }
+        .game-detail-top .gd-sub { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+        .gd-players-badge {
+            display: inline-block; background: rgba(255,255,255,0.25);
+            border-radius: 20px; padding: 6px 16px; font-size: 14px;
+            font-weight: 700; margin-top: 12px;
+        }
+
+        /* ── Level lock ── */
+        .level-card.locked {
+            border-color: #e2e8f0 !important;
+            background: #f7fafc !important;
+            pointer-events: none; opacity: 0.6;
+        }
+        .lock-icon { font-size: 22px; color: #a0aec0; }
+        .lock-msg { font-size: 12px; color: #a0aec0; margin-top: 3px; font-style: italic; }
+
+        .game-card.locked {
+            border-color: #e2e8f0; background: #f7fafc;
+            pointer-events: none; opacity: 0.55;
+        }
+        .game-lock-banner {
+            background: #e2e8f0; border-radius: 8px;
+            padding: 6px 12px; font-size: 12px; color: #718096;
+            font-weight: 600; margin-top: 8px; display: inline-block;
+        }
+
+        /* ── Learn It ── */
+        .learn-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;
+        }
+        .learn-badge-locked { background: #fed7aa; color: #c05621; }
+        .learn-badge-done   { background: #c6f6d5; color: #276749; }
+
+        .learn-top {
+            background: linear-gradient(135deg,#f6ad55,#ed8936);
+            border-radius: 20px; padding: 22px; margin-bottom: 14px;
+            color: white; text-align: center;
+        }
+        .learn-top .lt-icon  { font-size: 48px; display: block; margin-bottom: 6px; }
+        .learn-top .lt-title { font-size: 22px; font-weight: 800; }
+        .learn-top .lt-sub   { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+
+        .coaching-point {
+            display: flex; gap: 12px; align-items: flex-start;
+            padding: 10px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; color: #2d3748;
+        }
+        .coaching-point:last-child { border-bottom: none; }
+        .cp-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+        .mistake-item {
+            display: flex; gap: 12px; align-items: flex-start;
+            padding: 10px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; color: #4a5568;
+        }
+        .mistake-item:last-child { border-bottom: none; }
+
+        /* ── Quiz ── */
+        .quiz-q { font-size: 16px; font-weight: 700; color: #2d3748; margin-bottom: 12px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+        .quiz-opt {
+            background: #f7fafc; border: 2px solid #e2e8f0; border-radius: 12px;
+            padding: 12px 16px; font-size: 15px; color: #2d3748; cursor: pointer;
+            font-family: inherit; text-align: left; transition: border-color 0.15s, background 0.15s;
+        }
+        .quiz-opt:active { transform: scale(0.99); }
+        .quiz-opt.correct { border-color: #48bb78; background: #f0fff4; color: #276749; font-weight: 700; }
+        .quiz-opt.wrong   { border-color: #f56565; background: #fff5f5; color: #c53030; }
+        .quiz-opt.disabled { pointer-events: none; opacity: 0.6; }
+
+        .quiz-feedback {
+            border-radius: 12px; padding: 12px 14px; font-size: 14px;
+            font-weight: 600; margin-bottom: 16px; display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.good { background: #f0fff4; color: #276749; border: 2px solid #48bb78; }
+        .quiz-feedback.bad  { background: #fff5f5; color: #c53030; border: 2px solid #f56565; }
+
+        .unlock-btn {
+            background: linear-gradient(135deg,#48bb78,#38a169);
+            color: white; border: none; border-radius: 16px;
+            padding: 16px; font-size: 17px; font-weight: 700;
+            cursor: pointer; width: 100%; font-family: inherit;
+            box-shadow: 0 4px 15px rgba(72,187,120,0.4); display: none;
+        }
+        .unlock-btn.show { display: block; }
+
+        /* ── Everyone Plays sub-categories ── */
+        .everyone-card {
+            background: white; border-radius: 18px; padding: 20px;
+            cursor: pointer; display: flex; align-items: center; gap: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07); margin-bottom: 12px;
+            border: 3px solid transparent; transition: transform 0.12s;
+        }
+        .everyone-card:active { transform: scale(0.98); }
+        .ec-leg   { border-color: #ed8936; background: linear-gradient(135deg,#fffaf0,#fff); }
+        .ec-arm   { border-color: #9f7aea; background: linear-gradient(135deg,#faf5ff,#fff); }
+        .ec-sick  { border-color: #4299e1; background: linear-gradient(135deg,#ebf8ff,#fff); }
+        .everyone-card .ec-icon { font-size: 36px; width: 52px; text-align: center; }
+        .everyone-card .ec-name { font-size: 17px; font-weight: 700; color: #2d3748; }
+        .everyone-card .ec-desc { font-size: 13px; color: #718096; margin-top: 3px; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <button class="back-btn" id="backBtn" style="display:none" onclick="goBack()">←</button>
+    <h1 id="headerTitle">🏆 PE Challenges</h1>
+</div>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+    <div class="home-hero">
+        <div class="hero-emoji">🏆</div>
+        <h2>PE Challenges</h2>
+        <p>Choose a category to get started!</p>
+    </div>
+
+    <div class="cat-grid">
+        <div class="card cat-sport" onclick="showCategory('sport')">
+            <div class="card-icon">🏀</div>
+            <div class="card-title">Sport Skills</div>
+            <div class="card-sub">Measurable sport challenges</div>
+        </div>
+        <div class="card cat-fitness" onclick="showCategory('fitness')">
+            <div class="card-icon">💪</div>
+            <div class="card-title">Fitness Challenges</div>
+            <div class="card-sub">Strength &amp; endurance tests</div>
+        </div>
+    </div>
+
+    <div class="card cat-everyone" onclick="showEveryonePlays()" style="flex-direction:row;text-align:left;min-height:auto;padding:16px 20px;margin-top:14px;gap:14px;">
+        <div style="font-size:28px">🌟</div>
+        <div>
+            <div class="card-title" style="font-size:16px;">Everyone Plays</div>
+            <div class="card-sub">Modified challenges for injured or unwell students</div>
+        </div>
+    </div>
+
+    <div class="card cat-results" onclick="showResults()">
+        <div style="font-size:28px">📊</div>
+        <div>
+            <div class="card-title">My Results</div>
+            <div class="card-sub">View your logged scores</div>
+        </div>
+    </div>
+
+    <div class="card cat-teacher" onclick="showPinScreen()" style="flex-direction:row;text-align:left;min-height:auto;padding:16px 20px;margin-top:10px;gap:14px;">
+        <div style="font-size:28px">👩‍🏫</div>
+        <div>
+            <div class="card-title" style="font-size:16px;">Teacher View</div>
+            <div class="card-sub">See all student results</div>
+        </div>
+    </div>
+</div>
+
+<!-- CATEGORY -->
+<div class="screen" id="screen-category">
+    <div id="category-content"></div>
+</div>
+
+<!-- LEVEL SELECT -->
+<div class="screen" id="screen-level">
+    <div id="level-content"></div>
+</div>
+
+<!-- CHALLENGE -->
+<div class="screen" id="screen-challenge">
+    <div id="challenge-content"></div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+    <div id="results-content"></div>
+</div>
+
+<!-- PIN ENTRY -->
+<div class="screen" id="screen-pin">
+    <div class="pin-wrap">
+        <div class="pin-icon">🔐</div>
+        <h2>Teacher View</h2>
+        <p>Enter your PIN to access class results</p>
+        <input type="password" inputmode="numeric" maxlength="4" class="pin-input" id="pinInput" placeholder="••••" onkeydown="if(event.key==='Enter') checkPin()">
+        <div class="pin-error" id="pinError"></div>
+        <button class="pin-btn" onclick="checkPin()">Enter →</button>
+    </div>
+</div>
+
+<!-- TEACHER DASHBOARD -->
+<div class="screen" id="screen-teacher">
+    <div id="teacher-content"></div>
+</div>
+
+<!-- LEARN IT -->
+<div class="screen" id="screen-learn">
+    <div id="learn-content"></div>
+</div>
+
+<!-- GAME DETAIL -->
+<div class="screen" id="screen-game">
+    <div id="game-content"></div>
+</div>
+
+<!-- EVERYONE PLAYS -->
+<div class="screen" id="screen-everyone">
+    <div id="everyone-content"></div>
+</div>
+
+<!-- EVERYONE SUB-CATEGORY -->
+<div class="screen" id="screen-everyone-sub">
+    <div id="everyone-sub-content"></div>
+</div>
+
+<div class="toast" id="toast">✅ Result saved!</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════
+const DATA = {
+    sport: {
+        label: 'Sport Skills',
+        icon: '🏀',
+        bgClass: 'cat-sport-bg',
+        activities: [
+            {
+                id: 'basketball',
+                name: 'Basketball Free Throw',
+                icon: '🏀',
+                desc: 'Shoot from the free throw line',
+                unit: 'baskets / 10 shots',
+                levels: {
+                    easy: {
+                        title: 'Closer Shot',
+                        goal: 'Score as many baskets as you can — shoot from halfway to the hoop (about 2 metres). 10 shots!',
+                        steps: [
+                            'Stand halfway between the hoop and the free throw line',
+                            'Hold the ball with both hands at chest height',
+                            'Bend your knees slightly and push up as you shoot',
+                            'Aim for the back of the ring',
+                            'Take 10 shots and count how many go in'
+                        ],
+                        video: 'https://www.youtube.com/embed/FsJaHt7R2is',
+                        reflect: 'What did you change between shots to improve your aim?'
+                    },
+                    medium: {
+                        title: 'Free Throw Line',
+                        goal: 'Score as many baskets as you can from the free throw line. 10 shots!',
+                        steps: [
+                            'Stand on the free throw line',
+                            'Place your shooting hand under the ball, other hand on the side',
+                            'Bend your knees and extend your arm as you shoot',
+                            'Follow through — fingers should point at the hoop after release',
+                            'Take 10 shots and count how many go in'
+                        ],
+                        video: 'https://www.youtube.com/embed/FsJaHt7R2is',
+                        reflect: 'How does your follow-through affect where the ball goes?'
+                    },
+                    hard: {
+                        title: 'Step Back',
+                        goal: 'Shoot from one big step behind the free throw line. 10 shots!',
+                        steps: [
+                            'Stand one big step behind the free throw line',
+                            'Use full technique — knee bend, push, follow through',
+                            'Aim slightly higher to give the ball more arc',
+                            'Focus and reset after each shot',
+                            'Take 10 shots and count how many go in'
+                        ],
+                        video: 'https://www.youtube.com/embed/FsJaHt7R2is',
+                        reflect: 'What mental strategy helped you stay focused for all 10 shots?'
+                    }
+                }
+            },
+            {
+                id: 'soccer',
+                name: 'Soccer Penalty Kick',
+                icon: '⚽',
+                desc: 'Kick at a target goal',
+                unit: 'goals / 10 kicks',
+                levels: {
+                    easy: {
+                        title: 'Big Goal',
+                        goal: 'Score as many goals as you can — kick from 5 metres into the full goal. 10 kicks!',
+                        steps: [
+                            'Place the ball 5 metres from the goal',
+                            'Take 3 steps back from the ball',
+                            'Approach the ball at a slight angle',
+                            'Kick with the inside of your foot for accuracy',
+                            'Follow through toward the goal and count your scores'
+                        ],
+                        video: 'https://www.youtube.com/embed/k7OMGmjpDqs',
+                        reflect: 'Which part of your foot gave you the most control?'
+                    },
+                    medium: {
+                        title: 'Corner Target',
+                        goal: 'Aim for the corners of the goal — kick from 8 metres. 10 kicks!',
+                        steps: [
+                            'Place the ball 8 metres from the goal',
+                            'Decide before you kick which corner you are targeting',
+                            'Use the inside of your foot for precision',
+                            'Keep your body over the ball as you kick',
+                            'Count how many hit your target corner'
+                        ],
+                        video: 'https://www.youtube.com/embed/k7OMGmjpDqs',
+                        reflect: 'How did deciding your target before kicking help your accuracy?'
+                    },
+                    hard: {
+                        title: 'Power & Placement',
+                        goal: 'Kick from 11 metres — aim for the top corners! 10 kicks!',
+                        steps: [
+                            'Place the ball at full penalty spot distance (11 metres)',
+                            'Choose top left or top right corner as your target',
+                            'Use your laces for power and lean slightly back',
+                            'Strike through the centre of the ball',
+                            'Count how many reach your target area'
+                        ],
+                        video: 'https://www.youtube.com/embed/k7OMGmjpDqs',
+                        reflect: 'What is the hardest part of combining power and accuracy?'
+                    }
+                }
+            },
+            {
+                id: 'target-throw',
+                name: 'Target Throw',
+                icon: '🎯',
+                desc: 'Throw at a bullseye target',
+                unit: 'hits / 10 throws',
+                levels: {
+                    easy: {
+                        title: 'Close Range',
+                        goal: 'Hit the target as many times as you can from 3 metres. 10 throws!',
+                        steps: [
+                            'Stand 3 metres from the target',
+                            'Hold the beanbag or ball in your dominant hand',
+                            'Step forward with the opposite foot as you throw',
+                            'Aim directly at the centre of the target',
+                            'Count how many times you hit it out of 10'
+                        ],
+                        video: '',
+                        reflect: 'What helped you aim more accurately?'
+                    },
+                    medium: {
+                        title: 'Mid Range',
+                        goal: 'Hit the inner circle from 6 metres. Only inner circle hits count! 10 throws!',
+                        steps: [
+                            'Stand 6 metres from the target',
+                            'Use an overarm throwing technique',
+                            'Keep your eye on the target as you release',
+                            'Aim slightly above the bullseye to account for drop',
+                            'Only count hits inside the inner circle'
+                        ],
+                        video: '',
+                        reflect: 'How did you adjust your throw after missing?'
+                    },
+                    hard: {
+                        title: 'Long Range',
+                        goal: 'Bullseye only from 9 metres. 10 throws — can you hit 5?',
+                        steps: [
+                            'Stand 9 metres from the target',
+                            'Wind up fully — elbow up, shoulder square to target',
+                            'Snap your wrist as you release for accuracy',
+                            'Focus on the smallest point of the target',
+                            'Count bullseye hits only'
+                        ],
+                        video: '',
+                        reflect: 'How does throwing from further away change your technique?'
+                    }
+                }
+            },
+            {
+                id: 'long-jump',
+                name: 'Standing Long Jump',
+                icon: '🏃',
+                desc: 'Jump as far as you can',
+                unit: 'centimetres',
+                levels: {
+                    easy: {
+                        title: 'Jump & Land',
+                        goal: 'Jump as far as you can — focus on a safe landing. Best of 3 jumps!',
+                        steps: [
+                            'Stand with feet shoulder-width apart behind the line',
+                            'Bend your knees and swing your arms back',
+                            'Jump forward swinging both arms forward at the same time',
+                            'Land on both feet with soft, bent knees',
+                            'Measure from the line to where your heels land — record your best'
+                        ],
+                        video: 'https://www.youtube.com/embed/lVBW0yYFeSk',
+                        reflect: 'How did using your arms change how far you jumped?'
+                    },
+                    medium: {
+                        title: 'Power Jump',
+                        goal: 'Maximise your distance with a full arm swing and explosive push. Best of 3!',
+                        steps: [
+                            'Start with feet together at the line',
+                            'Drop into a half-squat — thighs almost parallel to the floor',
+                            'Explode forward, driving arms up and forward hard',
+                            'Stretch your legs out in front to land further',
+                            'Measure from line to back heel — record your best in cm'
+                        ],
+                        video: 'https://www.youtube.com/embed/lVBW0yYFeSk',
+                        reflect: 'Which part of the jump do you think adds the most distance?'
+                    },
+                    hard: {
+                        title: 'Consistency Challenge',
+                        goal: 'Do 5 jumps and record each one. What is your average distance?',
+                        steps: [
+                            'Complete 5 standing long jumps with maximum effort',
+                            'Measure and note each jump distance in cm',
+                            'Add all 5 together and divide by 5 to get your average',
+                            'Enter your average as your score',
+                            'Bonus: What was the difference between your best and worst?'
+                        ],
+                        video: 'https://www.youtube.com/embed/lVBW0yYFeSk',
+                        reflect: 'What caused the difference between your best and worst jumps?'
+                    }
+                }
+            },
+            {
+                id: 'wall-rally',
+                name: 'Wall Rally',
+                icon: '🎾',
+                desc: 'Consecutive hits against the wall',
+                unit: 'consecutive hits',
+                levels: {
+                    easy: {
+                        title: 'Bounce & Hit',
+                        goal: 'Hit the wall, let it bounce once, then hit again. How many in a row?',
+                        steps: [
+                            'Stand 2 metres from the wall',
+                            'Hit the ball against the wall with your hand or a bat',
+                            'Let it bounce once on the floor before hitting it again',
+                            'Count how many times in a row you keep it going',
+                            'If you miss, record your count and try to beat it'
+                        ],
+                        video: '',
+                        reflect: 'What did you focus on to keep the rally going?'
+                    },
+                    medium: {
+                        title: 'Direct Rally',
+                        goal: 'Keep the ball going without letting it bounce. How many consecutive hits?',
+                        steps: [
+                            'Stand 2–3 metres from the wall',
+                            'Use a bat or racket to hit the ball against the wall',
+                            'Return it before it bounces twice',
+                            'Steady controlled hits beat hard wild ones',
+                            'Count consecutive successful returns'
+                        ],
+                        video: '',
+                        reflect: 'Was it better to hit hard or soft? Why?'
+                    },
+                    hard: {
+                        title: 'Alternating Hands',
+                        goal: 'Rally against the wall alternating left and right hand each time. Max in a row!',
+                        steps: [
+                            'Hit the wall and alternate which hand you use each return',
+                            'Left, right, left, right — or forehand, backhand',
+                            'Stay in control — small adjustments, not big swings',
+                            'Each alternating hit counts as 1',
+                            'Record your best consecutive rally'
+                        ],
+                        video: '',
+                        reflect: 'How hard was it to switch sides? What helped?'
+                    }
+                }
+            }
+        ]
+    },
+
+    fitness: {
+        label: 'Fitness Challenges',
+        icon: '💪',
+        bgClass: 'cat-fitness-bg',
+        activities: [
+            {
+                id: 'pushups',
+                name: 'Push-Ups',
+                icon: '💪',
+                desc: 'How many in 30 seconds?',
+                unit: 'push-ups in 30 sec',
+                levels: {
+                    easy: {
+                        title: 'Knee Push-Ups',
+                        goal: 'Do as many knee push-ups as you can in 30 seconds!',
+                        steps: [
+                            'Start on hands and knees — hands shoulder-width apart',
+                            'Lower your chest toward the floor by bending your elbows',
+                            'Push back up to straight arms',
+                            'Keep your back flat — no sagging hips!',
+                            'Count every full push-up you complete in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/jWxvty2KROs',
+                        reflect: 'How did your body feel at the end? What got tired first?'
+                    },
+                    medium: {
+                        title: 'Full Push-Ups',
+                        goal: 'Do as many full push-ups as you can in 30 seconds!',
+                        steps: [
+                            'Start in a high plank — hands under shoulders, body straight',
+                            'Lower your chest to just above the floor',
+                            'Push back up explosively',
+                            'Keep your core tight throughout — no sagging!',
+                            'Count every full rep in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/jWxvty2KROs',
+                        reflect: 'What muscle groups did you feel working the most?'
+                    },
+                    hard: {
+                        title: 'Wide & Narrow',
+                        goal: 'Alternate wide-arm and narrow-arm push-ups — how many in 30 seconds?',
+                        steps: [
+                            'Do one wide push-up — hands wider than shoulder-width',
+                            'Then one narrow push-up — hands close together under chest',
+                            'Alternate every single rep',
+                            'Keep your body in a straight line throughout',
+                            'Count total push-ups in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/jWxvty2KROs',
+                        reflect: 'Which variation was harder? Can you explain why?'
+                    }
+                }
+            },
+            {
+                id: 'situps',
+                name: 'Sit-Ups',
+                icon: '🧘',
+                desc: 'How many in 30 seconds?',
+                unit: 'sit-ups in 30 sec',
+                levels: {
+                    easy: {
+                        title: 'Crunches',
+                        goal: 'Do as many crunches as you can in 30 seconds!',
+                        steps: [
+                            'Lie on your back, knees bent, feet flat on the floor',
+                            'Cross arms over your chest or hands lightly behind ears',
+                            'Lift your shoulders off the floor — a small but deliberate movement',
+                            'Lower back down in a controlled way',
+                            'Count every crunch in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/Xyd_fa5zoEU',
+                        reflect: 'Did you feel it in the right place — your tummy muscles?'
+                    },
+                    medium: {
+                        title: 'Full Sit-Ups',
+                        goal: 'Do as many full sit-ups as you can in 30 seconds!',
+                        steps: [
+                            'Lie on your back, knees bent, feet flat (partner holds feet or hook under something)',
+                            'Place hands behind your head lightly — don\'t pull your neck',
+                            'Sit all the way up until your elbows touch your knees',
+                            'Lower back down with control',
+                            'Count every full sit-up in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/Xyd_fa5zoEU',
+                        reflect: 'How is a full sit-up different from a crunch? Which is harder?'
+                    },
+                    hard: {
+                        title: 'Twist Sit-Ups',
+                        goal: 'Add a twist at the top of every sit-up. How many in 30 seconds?',
+                        steps: [
+                            'Sit up and at the top twist left — touch your right elbow to your left knee',
+                            'Go back down',
+                            'Next rep — sit up and twist right',
+                            'Alternate the twist every rep',
+                            'Count total sit-ups in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/Xyd_fa5zoEU',
+                        reflect: 'What extra muscles did the twist work compared to a normal sit-up?'
+                    }
+                }
+            },
+            {
+                id: 'starjumps',
+                name: 'Star Jumps',
+                icon: '⭐',
+                desc: 'How many in 30 seconds?',
+                unit: 'star jumps in 30 sec',
+                levels: {
+                    easy: {
+                        title: 'Slow & Steady',
+                        goal: 'Do as many star jumps as you can in 30 seconds — full arms AND legs every time!',
+                        steps: [
+                            'Start standing with feet together and arms at your sides',
+                            'Jump and spread your feet wide while lifting arms up over your head',
+                            'Jump back to start position — feet together, arms down',
+                            'Make sure arms AND legs reach a full stretch each time',
+                            'Count every full star jump in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+                        reflect: 'How did your breathing change during the challenge?'
+                    },
+                    medium: {
+                        title: 'Fast Star Jumps',
+                        goal: 'Go as fast as you can — maximum star jumps in 30 seconds!',
+                        steps: [
+                            'Same technique — but push for maximum speed',
+                            'Stay on the balls of your feet for quicker movement',
+                            'Keep arms and legs fully extended at the top',
+                            'Spring between positions — don\'t pause',
+                            'Count every complete rep in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+                        reflect: 'How did your score compare to what you expected?'
+                    },
+                    hard: {
+                        title: '3 Round Blitz',
+                        goal: '3 × 30 seconds with only 10 seconds rest between rounds. Record your total!',
+                        steps: [
+                            'Round 1: 30 seconds of fast star jumps — count them',
+                            '10 seconds rest',
+                            'Round 2: 30 seconds of fast star jumps — count them',
+                            '10 seconds rest',
+                            'Round 3: 30 seconds of fast star jumps — count them',
+                            'Add all 3 rounds together for your total score'
+                        ],
+                        video: 'https://www.youtube.com/embed/c4DAnQ6DtF8',
+                        reflect: 'How did your score change between round 1 and round 3? Why?'
+                    }
+                }
+            },
+            {
+                id: 'plank',
+                name: 'Plank Hold',
+                icon: '⏱️',
+                desc: 'How long can you hold it?',
+                unit: 'seconds held',
+                levels: {
+                    easy: {
+                        title: 'Knee Plank',
+                        goal: 'Hold a knee plank for as long as you can. Record your time in seconds!',
+                        steps: [
+                            'Start on hands and knees on the floor',
+                            'Walk your hands forward until your body is straight from knees to shoulders',
+                            'Keep arms straight and squeeze your tummy muscles',
+                            'Look down at the floor — keep your neck neutral',
+                            'Hold until you can\'t maintain position — record seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/pSHjTRCQxIw',
+                        reflect: 'What part of your body felt it most?'
+                    },
+                    medium: {
+                        title: 'Full Plank',
+                        goal: 'Hold a full plank on hands or forearms for as long as possible!',
+                        steps: [
+                            'Start in a push-up position — straight arms or forearms on floor',
+                            'Your body must be a straight line from head to heels',
+                            'Squeeze your core, glutes, and legs tight',
+                            'Don\'t let your hips drop or rise',
+                            'Record total seconds held'
+                        ],
+                        video: 'https://www.youtube.com/embed/pSHjTRCQxIw',
+                        reflect: 'What did you think about to help you hold on longer?'
+                    },
+                    hard: {
+                        title: 'Plank & Tap',
+                        goal: 'Hold a plank AND tap alternate shoulders. Count the taps until you stop!',
+                        steps: [
+                            'Start in a full plank on your hands',
+                            'Lift your right hand and tap your left shoulder',
+                            'Return it, then lift left hand and tap right shoulder',
+                            'Keep your hips as still as possible — no rotating!',
+                            'Count total shoulder taps until you have to stop'
+                        ],
+                        video: 'https://www.youtube.com/embed/pSHjTRCQxIw',
+                        reflect: 'How hard was it to keep your hips still? What helped?'
+                    }
+                }
+            },
+            {
+                id: 'skipping',
+                name: 'Skipping',
+                icon: '🪢',
+                desc: 'How many jumps in 30 seconds?',
+                unit: 'jumps in 30 sec',
+                levels: {
+                    easy: {
+                        title: 'Steady Skip',
+                        goal: 'Skip steadily for 30 seconds — count every successful jump!',
+                        steps: [
+                            'Hold one end of the rope in each hand',
+                            'Start with the rope behind you on the ground',
+                            'Swing it over your head and jump as it reaches your feet',
+                            'Jump with both feet together',
+                            'Count every successful jump in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/FJmRQ5iTXKE',
+                        reflect: 'What rhythm or counting method helped you skip better?'
+                    },
+                    medium: {
+                        title: 'Fast Skip',
+                        goal: 'Skip as fast as you can for 30 seconds — max jumps!',
+                        steps: [
+                            'Stay on the balls of your feet throughout',
+                            'Keep jumps small — just enough to clear the rope',
+                            'Turn the rope with your wrists, not your whole arms',
+                            'Find a fast rhythm and lock into it',
+                            'Record total jumps in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/FJmRQ5iTXKE',
+                        reflect: 'What technique change made the biggest difference to your speed?'
+                    },
+                    hard: {
+                        title: 'Double Unders',
+                        goal: 'Try double unders — the rope passes twice per jump. How many in 30 seconds?',
+                        steps: [
+                            'Jump higher than a normal skip',
+                            'Spin the rope faster — two full rotations per jump',
+                            'Use your wrists for a quick rope spin',
+                            'If double unders are too difficult, multiply your normal skip count by 3',
+                            'Record double unders (or converted score) in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/FJmRQ5iTXKE',
+                        reflect: 'What is the key difference in technique for a double under?'
+                    }
+                }
+            },
+            {
+                id: 'burpees',
+                name: 'Burpees',
+                icon: '🔥',
+                desc: 'How many in 30 seconds?',
+                unit: 'burpees in 30 sec',
+                levels: {
+                    easy: {
+                        title: 'Step Burpee',
+                        goal: 'Modified burpees — step instead of jump. How many in 30 seconds?',
+                        steps: [
+                            'Stand tall, then bend and place hands on the floor',
+                            'Step one foot back, then the other into a plank position',
+                            'Step one foot forward, then the other back to squat',
+                            'Stand up straight — that is one burpee!',
+                            'Count every complete burpee in 30 seconds'
+                        ],
+                        video: 'https://www.youtube.com/embed/mkpKBMJM6oU',
+                        reflect: 'Which part of the burpee was the hardest for you?'
+                    },
+                    medium: {
+                        title: 'Full Burpee',
+                        goal: 'Full burpees with a jump at the top — how many in 30 seconds?',
+                        steps: [
+                            'From standing, jump both hands down to the floor',
+                            'Jump both feet back into a plank',
+                            'Do a push-up (optional but recommended!)',
+                            'Jump both feet back toward your hands',
+                            'Explode upward into a jump with arms overhead — count each one!'
+                        ],
+                        video: 'https://www.youtube.com/embed/mkpKBMJM6oU',
+                        reflect: 'How does the burpee combine strength and cardio?'
+                    },
+                    hard: {
+                        title: 'Burpee Blitz',
+                        goal: '3 rounds of 30 seconds with 10 seconds rest between. Record your total!',
+                        steps: [
+                            'Round 1: Max burpees in 30 seconds — note your count',
+                            '10 seconds rest',
+                            'Round 2: Max burpees in 30 seconds — note your count',
+                            '10 seconds rest',
+                            'Round 3: Max burpees in 30 seconds — note your count',
+                            'Add all three rounds for your total score'
+                        ],
+                        video: 'https://www.youtube.com/embed/mkpKBMJM6oU',
+                        reflect: 'Did your reps go up or down each round? What does that tell you about your fitness?'
+                    }
+                }
+            }
+        ]
+    }
+};
+
+// ═══════════════════════════════════════════
+//  LEARN IT DATA
+// ═══════════════════════════════════════════
+const LEARN = {
+    basketball: {
+        video: '',
+        points: [
+            { icon: '🦵', text: 'Bend your knees — power comes from your legs, not just your arms' },
+            { icon: '👁️', text: 'Focus on the back of the rim — not the front, not the backboard' },
+            { icon: '🖐️', text: 'Shooting hand under the ball, guide hand on the side — not behind' },
+            { icon: '💨', text: 'Follow through every time — fingers pointing at the hoop after you release' },
+            { icon: '🔁', text: 'Use the same routine every shot — consistency builds muscle memory' }
+        ],
+        mistakes: [
+            { icon: '❌', text: 'Pushing the ball with two hands — one hand shoots, one hand guides' },
+            { icon: '❌', text: 'Flat trajectory — the ball needs arc to drop through the ring' },
+            { icon: '❌', text: 'No follow through — your arm should stay extended after you release' },
+            { icon: '❌', text: 'Jumping sideways — jump straight up, land where you took off' }
+        ],
+        quiz: [
+            {
+                q: 'Where should you focus your eyes when shooting a free throw?',
+                options: ['The front of the rim', 'The back of the rim', 'The backboard', 'The ball'],
+                answer: 1,
+                explanation: '✅ Correct! Aiming for the back of the rim gives the ball the best chance of dropping through.'
+            },
+            {
+                q: 'Where does the power for a basketball shot come from?',
+                options: ['Only your arms', 'Only your wrists', 'Your legs pushing up through your whole body', 'Your shoulders'],
+                answer: 2,
+                explanation: '✅ Correct! The shot starts from the ground — bend your knees and push up through your whole body.'
+            }
+        ]
+    },
+    soccer: {
+        video: '',
+        points: [
+            { icon: '👟', text: 'Use the inside of your foot for accuracy — the laces for power' },
+            { icon: '👁️', text: 'Look at the ball at the moment of contact — not where you want it to go' },
+            { icon: '🦵', text: 'Plant your non-kicking foot beside the ball, pointing at your target' },
+            { icon: '💨', text: 'Follow through toward the target after contact — don\'t stop your leg' },
+            { icon: '🏃', text: 'Approach at a slight angle — straight approaches make accuracy harder' }
+        ],
+        mistakes: [
+            { icon: '❌', text: 'Kicking with your toe — causes unpredictable direction and less power' },
+            { icon: '❌', text: 'Leaning back too far — the ball will go high and over the goal' },
+            { icon: '❌', text: 'Looking at the goal too early — take your eye off the ball and you\'ll miss' },
+            { icon: '❌', text: 'No follow through — stopping your leg kills power and accuracy' }
+        ],
+        quiz: [
+            {
+                q: 'Which part of your foot gives you the most accuracy when passing or shooting?',
+                options: ['Your toe', 'The inside of your foot', 'Your heel', 'Your laces'],
+                answer: 1,
+                explanation: '✅ Correct! The inside of the foot has a large flat surface — perfect for controlled, accurate kicks.'
+            },
+            {
+                q: 'Where should your non-kicking foot be planted when you shoot?',
+                options: ['Behind the ball', 'Beside the ball, pointing at your target', 'In front of the ball', 'It doesn\'t matter'],
+                answer: 1,
+                explanation: '✅ Correct! Your planted foot beside the ball controls your balance and direction.'
+            }
+        ]
+    },
+    'target-throw': {
+        video: '',
+        points: [
+            { icon: '🦶', text: 'Step forward with the opposite foot to your throwing hand as you release' },
+            { icon: '💪', text: 'Elbow up — your throwing arm should come over the top, not to the side' },
+            { icon: '👁️', text: 'Fix your eyes on the smallest point of the target before you throw' },
+            { icon: '🖐️', text: 'Snap your wrist as you release for accuracy and control' },
+            { icon: '🔁', text: 'Use the same grip and release point every throw — consistency is key' }
+        ],
+        mistakes: [
+            { icon: '❌', text: 'Throwing side-arm — reduces accuracy and control significantly' },
+            { icon: '❌', text: 'Looking away before you release — your throw follows your eyes' },
+            { icon: '❌', text: 'Stepping with the same foot as your throwing hand — this kills power' },
+            { icon: '❌', text: 'Gripping too tight — a relaxed grip gives better feel and release' }
+        ],
+        quiz: [
+            {
+                q: 'If you throw with your right hand, which foot should step forward?',
+                options: ['Right foot', 'Left foot', 'Both feet stay still', 'Either foot'],
+                answer: 1,
+                explanation: '✅ Correct! Stepping with the opposite foot rotates your body and generates power.'
+            },
+            {
+                q: 'What should you focus your eyes on just before you throw?',
+                options: ['Your hand', 'The whole target board', 'The smallest point of the target', 'The floor'],
+                answer: 2,
+                explanation: '✅ Correct! The more precisely you focus, the more accurately you throw — your body follows your eyes.'
+            }
+        ]
+    },
+    'long-jump': {
+        video: '',
+        points: [
+            { icon: '💪', text: 'Swing your arms forward and up explosively as you jump — they add real distance' },
+            { icon: '🦵', text: 'Bend your knees deeply before jumping — load the spring!' },
+            { icon: '🦶', text: 'Push off from the balls of your feet, not your heels' },
+            { icon: '🌊', text: 'Reach your legs forward at the end of the jump — stretch for every centimetre' },
+            { icon: '🛬', text: 'Land with soft, bent knees — absorb the impact safely' }
+        ],
+        mistakes: [
+            { icon: '❌', text: 'Arms by your side — not using your arms can cost you 30cm or more' },
+            { icon: '❌', text: 'Jumping up instead of forward — aim your energy at 45 degrees outward' },
+            { icon: '❌', text: 'Straight-leg landing — always bend your knees to absorb impact safely' },
+            { icon: '❌', text: 'Shallow knee bend — the less you load, the less power you get' }
+        ],
+        quiz: [
+            {
+                q: 'What role do your arms play in a standing long jump?',
+                options: ['They don\'t help — only legs matter', 'They help with balance only', 'They add power and distance by swinging forward', 'They should be held still'],
+                answer: 2,
+                explanation: '✅ Correct! A strong arm swing can add 20–30cm to your jump — never leave them by your side!'
+            },
+            {
+                q: 'How should you land in a standing long jump?',
+                options: ['On straight, locked legs', 'On your heels first, legs straight', 'With soft, bent knees to absorb impact', 'On your toes only'],
+                answer: 2,
+                explanation: '✅ Correct! Soft bent knees protect your joints and help you land further forward.'
+            }
+        ]
+    },
+    'wall-rally': {
+        video: '',
+        points: [
+            { icon: '👁️', text: 'Watch the ball all the way onto your bat or hand — don\'t look away early' },
+            { icon: '🦶', text: 'Stay light on your feet — small steps to get into position, not big lunges' },
+            { icon: '💨', text: 'Controlled hits beat powerful ones — soft and steady keeps the rally going' },
+            { icon: '📐', text: 'Aim for the middle of the wall, at a consistent height each time' },
+            { icon: '🔁', text: 'Reset your position after every hit — don\'t stand still and reach' }
+        ],
+        mistakes: [
+            { icon: '❌', text: 'Hitting too hard — power causes unpredictable bounces you can\'t control' },
+            { icon: '❌', text: 'Flat-footed — you need to move quickly, so stay on the balls of your feet' },
+            { icon: '❌', text: 'Watching the wall instead of the ball — always track the ball, not where it went' },
+            { icon: '❌', text: 'Big swings — short compact strokes give far better control' }
+        ],
+        quiz: [
+            {
+                q: 'Why is it better to hit softly rather than hard in a wall rally?',
+                options: ['It isn\'t — harder is always better', 'Soft hits give you more time to prepare for the next shot', 'Soft hits make the ball bounce higher', 'It doesn\'t make any difference'],
+                answer: 1,
+                explanation: '✅ Correct! Slower, controlled hits give you more time to move and set up your next shot — the key to long rallies.'
+            },
+            {
+                q: 'Where should you aim on the wall for the most consistent rally?',
+                options: ['As high as possible', 'As low as possible near the floor', 'Middle of the wall at a consistent height', 'The corners'],
+                answer: 2,
+                explanation: '✅ Correct! Hitting the same spot consistently makes the ball return at a predictable angle you can plan for.'
+            }
+        ]
+    }
+};
+
+// ═══════════════════════════════════════════
+//  GAME VARIATIONS DATA
+// ═══════════════════════════════════════════
+const GAMES = {
+    basketball: [
+        {
+            id: 'around-the-world',
+            video: '',
+            name: 'Around the World',
+            icon: '🌍',
+            players: '2+ players',
+            tagline: 'First to complete all spots wins!',
+            steps: [
+                'Set up 5 shooting spots in a semicircle around the hoop — close, left wing, top, right wing, and far',
+                'Player 1 shoots from spot 1. If they score, they move to spot 2. If they miss, their turn ends',
+                'Player 2 takes their turn from spot 1 — same rules',
+                'Take turns moving through the spots. You must complete them in order',
+                'First player to score from all 5 spots wins!'
+            ],
+            tip: '💡 Tip: You can "chance it" after a miss — shoot again immediately. Score = move forward. Miss = go back one spot!'
+        },
+        {
+            id: 'knockout',
+            video: '',
+            name: 'Knockout',
+            icon: '💥',
+            players: '3+ players',
+            tagline: 'Score before the person behind you or you\'re out!',
+            steps: [
+                'Everyone lines up at the free throw line with one ball between every two players',
+                'The first two players each have a ball. Everyone else waits',
+                'On "Go!" — player 1 shoots. As soon as they release, player 2 can shoot',
+                'If player 2 scores BEFORE player 1, player 1 is knocked out and gives their ball to the next person in line',
+                'If player 1 scores first, they pass their ball to the next player and join the back of the queue',
+                'Last player standing wins! 🏆'
+            ],
+            tip: '💡 Tip: After your first shot misses, grab the rebound quickly and shoot from wherever you are — don\'t go back to the line!'
+        }
+    ],
+    soccer: [
+        {
+            id: 'penalty-shootout',
+            video: '',
+            name: 'Penalty Shootout',
+            icon: '🥅',
+            players: '2 players',
+            tagline: '5 shots each — most goals wins!',
+            steps: [
+                'One player is the goalkeeper, one is the shooter. Swap roles after 5 shots',
+                'Shooter places the ball at the penalty spot (or agreed distance)',
+                'Goalkeeper stands on the goal line and cannot move until the ball is kicked',
+                'Take 5 shots each. Count how many goals each player scores',
+                'Most goals after 5 shots wins. If tied — sudden death! One shot each until someone wins'
+            ],
+            tip: '💡 Tip: Goalkeepers — pick a side before the kick and commit. Shooters — disguise where you\'re aiming!'
+        },
+        {
+            id: 'world-cup',
+            video: '',
+            name: 'World Cup',
+            icon: '🏆',
+            players: '3+ players',
+            tagline: 'Pick a country — last one standing wins!',
+            steps: [
+                'Everyone picks a country name (their team)',
+                'Take turns shooting penalties — one shot each per round',
+                'If you MISS your penalty, you get a strike. 3 strikes and you\'re out',
+                'Keep going in rounds until only one country remains',
+                'The last country standing is the World Cup champion! 🏆'
+            ],
+            tip: '💡 Tip: Rotate the goalkeeper role each round so everyone gets a turn in goal'
+        }
+    ],
+    'target-throw': [
+        {
+            id: 'closest-to-bullseye',
+            video: '',
+            name: 'Bullseye Battle',
+            icon: '🎯',
+            players: '2+ players',
+            tagline: 'Closest throw each round scores a point!',
+            steps: [
+                'Each player throws one beanbag or ball at the target per round',
+                'After everyone has thrown, measure who is closest to the bullseye',
+                'Closest player scores 1 point. If it\'s a bullseye — 2 points!',
+                'Retrieve all throws, then start the next round',
+                'First player to 10 points wins!'
+            ],
+            tip: '💡 Tip: Watch where others\' throws land and adjust your aim before you throw'
+        },
+        {
+            id: 'target-golf',
+            video: '',
+            name: 'Target Golf',
+            icon: '⛳',
+            players: '2+ players',
+            tagline: 'Fewest throws to hit all targets wins!',
+            steps: [
+                'Set up 5 targets (cones, hoops, or spots) around the space at different distances',
+                'Each player takes turns throwing at target 1. Keep throwing until you hit it — count your throws',
+                'Move to target 2 and repeat for all 5 targets',
+                'Add up total throws for all 5 targets — that\'s your score',
+                'Lowest score wins — just like golf! ⛳'
+            ],
+            tip: '💡 Tip: Make closer targets worth less points than far targets to make it fair for all skill levels'
+        }
+    ],
+    'long-jump': [
+        {
+            id: 'jump-off',
+            video: '',
+            name: 'Jump Off',
+            icon: '⚡',
+            players: '2 players',
+            tagline: 'Best of 3 rounds — furthest jump wins each round!',
+            steps: [
+                'Both players stand side by side at the jump line',
+                'On "3, 2, 1, Jump!" — both jump at the same time',
+                'Measure both jumps. Furthest jump wins that round',
+                'Play 3 rounds. Most round wins takes the match',
+                'If 1-1 after 2 rounds — the 3rd is the decider! 🏅'
+            ],
+            tip: '💡 Tip: Swing your arms hard — it adds real distance to your jump!'
+        },
+        {
+            id: 'long-jump-league',
+            video: '',
+            name: 'Long Jump League',
+            icon: '🥇',
+            players: '3+ players',
+            tagline: 'Everyone jumps — gold, silver, bronze awarded!',
+            steps: [
+                'Everyone gets 3 jumps each — record every distance',
+                'Each player\'s best jump is their final score',
+                'After everyone has jumped, rank all players from furthest to shortest',
+                'Award 🥇 Gold, 🥈 Silver, 🥉 Bronze to the top 3',
+                'Optional: record results and try to beat them next lesson!'
+            ],
+            tip: '💡 Tip: Rest between jumps — you\'ll jump further when fresh'
+        }
+    ],
+    'wall-rally': [
+        {
+            id: 'squash-battle',
+            video: '',
+            name: 'Squash Battle',
+            icon: '🏸',
+            players: '2 players',
+            tagline: 'Miss the wall and your opponent scores!',
+            steps: [
+                'Both players stand side by side facing the wall',
+                'Player 1 starts by hitting the ball against the wall',
+                'Players take turns hitting the ball — alternate after each hit',
+                'If a player misses the wall or lets the ball bounce twice, the other player scores a point',
+                'First to 11 points wins! Swap sides at 6 points'
+            ],
+            tip: '💡 Tip: Aim for consistent, controlled hits rather than smashing it hard'
+        },
+        {
+            id: 'king-of-the-wall',
+            video: '',
+            name: 'King of the Wall',
+            icon: '👑',
+            players: '3+ players',
+            tagline: 'Beat the champion to take the throne!',
+            steps: [
+                'One player is the "King/Queen" — they start at the wall',
+                'The challenger stands beside them',
+                'They rally against the wall together, taking alternate hits',
+                'First to miss is out. If the challenger wins, they become King/Queen',
+                'If King/Queen wins, the next challenger steps up',
+                'How long can you hold the throne? 👑'
+            ],
+            tip: '💡 Tip: As King/Queen, vary your shot pace to put the challenger off!'
+        }
+    ]
+};
+
+// ═══════════════════════════════════════════
+//  EVERYONE PLAYS DATA
+// ═══════════════════════════════════════════
+const EVERYONE = {
+    leg: {
+        label: 'Lower Body Injury',
+        icon: '🦵',
+        cardClass: 'ec-leg',
+        desc: 'Leg, knee or ankle injury — upper body challenges',
+        activities: [
+            {
+                id: 'scarf-juggling',
+                name: 'Scarf Juggling',
+                icon: '🎪',
+                desc: 'Seated juggling with scarves or light balls',
+                unit: 'consecutive catches',
+                levels: {
+                    easy: { title: 'One Scarf', goal: 'Toss one scarf up and catch it. How many in a row?',
+                        steps: ['Sit comfortably on a chair or on the floor','Hold a scarf in your dominant hand','Toss it upward and catch it with the same hand','Count how many catches in a row without dropping','Try alternating hands once you\'re confident'],
+                        video: '', reflect: 'Which hand felt more in control? Why?' },
+                    medium: { title: 'Two Scarves', goal: 'Keep two scarves in the air at once. How many catches?',
+                        steps: ['Hold one scarf in each hand','Toss the right scarf up, then as it peaks toss the left','Catch right with your left hand, catch left with your right','Keep going — cross-hand catches count!','Count total catches without dropping both'],
+                        video: '', reflect: 'How did your eyes help you track both scarves?' },
+                    hard: { title: 'Three Scarves', goal: 'Full 3-scarf juggling pattern. How many catches before a drop?',
+                        steps: ['Hold two scarves in your dominant hand, one in the other','Throw one from your dominant hand, then one from the other, then the third','Keep the cascade going — always throw before you catch','This takes practice — even 5 catches is brilliant!','Count total catches in your best run'],
+                        video: '', reflect: 'What is the hardest part of juggling three? Focus or coordination?' }
+                }
+            },
+            {
+                id: 'seated-ball-skills',
+                name: 'Seated Ball Skills',
+                icon: '🏀',
+                desc: 'Ball control challenges from a chair',
+                unit: 'successful attempts',
+                levels: {
+                    easy: { title: 'Bounce & Catch', goal: 'Bounce a ball and catch it — how many in 30 seconds?',
+                        steps: ['Sit on a chair with feet flat on the floor','Hold a basketball or medium ball in both hands','Bounce it straight down in front of you','Catch it cleanly with both hands','Count successful bounces and catches in 30 seconds'],
+                        video: '', reflect: 'How did you control the height and direction of the bounce?' },
+                    medium: { title: 'Alternate Hands', goal: 'Bounce with right, then left, alternating — 30 seconds!',
+                        steps: ['Sit on a chair','Bounce the ball with your right hand only','After each bounce, switch to your left hand','Keep the rhythm going — right, left, right, left','Count successful alternating bounces in 30 seconds'],
+                        video: '', reflect: 'Was one hand much weaker? How could you improve it?' },
+                    hard: { title: 'Around the World', goal: 'Pass the ball around your body. How many rotations in 30 seconds?',
+                        steps: ['Sit upright on a chair','Hold the ball in front of you','Pass it around your back — right hand passes behind, left receives','Keep going in one direction — count each full rotation','Reverse direction halfway through for extra challenge'],
+                        video: '', reflect: 'How did your core muscles help during this challenge?' }
+                }
+            },
+            {
+                id: 'ipad-official',
+                name: 'iPad Official',
+                icon: '📱',
+                desc: 'Referee, score-keep or video-analyse the lesson',
+                unit: 'tasks completed',
+                levels: {
+                    easy: { title: 'Scorekeeper', goal: 'Keep an accurate score for a team game happening in the lesson',
+                        steps: ['Ask your teacher which game or group needs a scorekeeper','Use the Notes app or paper to track scores','Announce the score clearly after each point','Keep track of time if needed','At the end, report the final score to the class'],
+                        video: '', reflect: 'What was the hardest part of keeping an accurate score?' },
+                    medium: { title: 'Video Analyst', goal: 'Film a classmate and give them one piece of technical feedback',
+                        steps: ['Ask a classmate\'s permission to film their attempt at a challenge','Use your iPad to record their technique from the side','Watch it back carefully in slow motion if possible','Identify one thing they did really well','Identify one specific thing they could improve — be kind and helpful!','Share your feedback with them'],
+                        video: '', reflect: 'What did you notice about their technique that they might not have known?' },
+                    hard: { title: 'Coach Role', goal: 'Watch a group for a full activity and give 3 structured feedback points',
+                        steps: ['Choose a group or team to observe during the activity','Watch closely for 5 minutes — take notes on your iPad','Look for: technique, effort, teamwork, and tactics','Prepare 3 feedback points: 2 positives and 1 area to improve','Deliver your feedback to the group confidently at the end'],
+                        video: '', reflect: 'What is the most important quality a good coach needs?' }
+                }
+            }
+        ]
+    },
+    arm: {
+        label: 'Upper Body Injury',
+        icon: '💪',
+        cardClass: 'ec-arm',
+        desc: 'Arm, wrist or shoulder injury — lower body challenges',
+        activities: [
+            {
+                id: 'balance-challenge',
+                name: 'Balance Challenge',
+                icon: '🧘',
+                desc: 'One-leg balance and stability challenges',
+                unit: 'seconds',
+                levels: {
+                    easy: { title: 'One Leg Hold', goal: 'Stand on one leg for as long as possible — record your best time!',
+                        steps: ['Stand near a wall in case you need support at first','Lift one foot slightly off the ground','Keep your standing knee slightly bent — don\'t lock it','Focus your eyes on one still point ahead of you','Hold as long as you can — record seconds. Then swap legs!'],
+                        video: '', reflect: 'Did you find one leg easier than the other? Why might that be?' },
+                    medium: { title: 'Eyes Closed Balance', goal: 'One leg balance with eyes closed — how long?',
+                        steps: ['Stand in a clear space away from others','Lift one foot off the ground','Close your eyes carefully','Your body will wobble more — that\'s normal!','Hold as long as you can safely — record seconds'],
+                        video: '', reflect: 'How much harder was it without your eyes? What does this tell you about balance?' },
+                    hard: { title: 'Single Leg Squat', goal: 'How many single leg squats (pistol squat) in 30 seconds?',
+                        steps: ['Stand on one leg with arms out front for balance','Slowly bend your standing knee and lower down — as far as comfortable','Push back up to standing','Keep your chest up and knee tracking over your toe','Count reps in 30 seconds — then swap legs'],
+                        video: '', reflect: 'What muscles did you feel working the hardest?' }
+                }
+            },
+            {
+                id: 'footwork-drills',
+                name: 'Footwork Drills',
+                icon: '👟',
+                desc: 'Speed and agility using feet only',
+                unit: 'repetitions',
+                levels: {
+                    easy: { title: 'Hoop Steps', goal: 'Step in and out of a hoop as many times as possible in 30 seconds!',
+                        steps: ['Place a hoop flat on the floor','Stand outside the hoop with feet together','Step both feet in, then both feet out','Keep a steady rhythm — in, out, in, out','Count how many times you step IN in 30 seconds'],
+                        video: '', reflect: 'How did your rhythm and speed improve as you found your flow?' },
+                    medium: { title: 'Quick Feet', goal: 'Fast feet in and out of ladder or cones — count passes in 30 seconds!',
+                        steps: ['Set up 5 hoops or cones in a line about 50cm apart','Run through with quick small steps — one foot per space','Focus on light, fast feet — don\'t look down','Reach the end, turn around and come back','Count total lengths completed in 30 seconds'],
+                        video: '', reflect: 'What helped you move faster without tripping?' },
+                    hard: { title: 'Cone Weave Sprint', goal: 'Weave through 10 cones and back — time yourself!',
+                        steps: ['Set up 10 cones in a line, 1 metre apart','Sprint and weave through all cones to the end','Touch the last cone, then weave back','Time your full run — both directions','Try 3 attempts and record your fastest time'],
+                        video: '', reflect: 'How did your line through the cones affect your speed?' }
+                }
+            },
+            {
+                id: 'tactical-observer',
+                name: 'Tactical Observer',
+                icon: '🧠',
+                desc: 'Analyse tactics and give coaching feedback',
+                unit: 'feedback points given',
+                levels: {
+                    easy: { title: 'Spot & Count', goal: 'Watch a game and count how many times a skill is done successfully',
+                        steps: ['Choose one skill to track — e.g. successful passes, goals scored','Watch the game or activity carefully for 3 minutes','Use tally marks on paper or iPad to count each success','At the end, share your total with the group','Bonus: also count how many were unsuccessful'],
+                        video: '', reflect: 'Was the skill performed more or less often than you expected?' },
+                    medium: { title: 'Skills Analyst', goal: 'Watch one player and note 2 strengths and 1 area to improve',
+                        steps: ['Choose one player to observe carefully for 5 minutes','Watch their technique, effort, and decision-making','Write down 2 things they are doing really well','Write down 1 thing that would make them better','Share your feedback with them kindly and specifically'],
+                        video: '', reflect: 'What is harder — spotting strengths or areas to improve? Why?' },
+                    hard: { title: 'Team Tactics', goal: 'Draw a tactics plan for a team and present it to them',
+                        steps: ['Watch a team play for 5 minutes','Identify one tactical problem — e.g. spacing, positioning','Draw a simple diagram on paper or iPad showing the problem','Design a solution — where should players move?','Present your tactic to the team and explain your thinking'],
+                        video: '', reflect: 'Did the team agree with your analysis? What did you learn from the discussion?' }
+                }
+            }
+        ]
+    },
+    sick: {
+        label: 'Feeling Under the Weather',
+        icon: '🤒',
+        cardClass: 'ec-sick',
+        desc: 'Low energy or unwell — gentle and meaningful activities',
+        activities: [
+            {
+                id: 'gentle-stretch',
+                name: 'Gentle Stretching',
+                icon: '🌿',
+                desc: 'Easy stretching and flexibility at your own pace',
+                unit: 'stretches completed',
+                levels: {
+                    easy: { title: '5 Key Stretches', goal: 'Complete 5 basic stretches, holding each for 15 seconds',
+                        steps: ['Neck rolls — slowly roll your head side to side, 5 times each way','Shoulder rolls — roll both shoulders forward 5 times, then backward','Seated toe reach — reach toward your toes and hold 15 seconds','Quad stretch — hold one foot behind you gently (near a wall for balance)','Child\'s pose — kneel and reach arms forward on the floor, hold 15 seconds','Count each completed stretch'],
+                        video: '', reflect: 'Which stretch felt most needed today? What does that tell you about your body?' },
+                    medium: { title: 'Full Body Routine', goal: 'Complete a 10-exercise full body stretch sequence',
+                        steps: ['Neck — side to side and front (30 seconds)','Shoulders and chest — clasp hands behind back (30 seconds)','Triceps — reach one arm overhead and pull elbow gently (each side)','Side stretch — reach arm overhead and lean (each side)','Hip flexor — low lunge position, hold each side','Hamstring — seated leg reach (each leg)','Calf stretch — against a wall, heel down (each leg)','Spinal twist — seated, twist gently each direction','Forward fold — standing, soften knees and hang forward','Finish with 5 deep breaths — in for 4 counts, out for 4'],
+                        video: '', reflect: 'How do you feel compared to before the stretching routine?' },
+                    hard: { title: 'Lead the Cool-Down', goal: 'Design and lead a 5-minute cool-down for the whole class',
+                        steps: ['Choose 6-8 stretches from what you know','Put them in a logical order — start standing, finish on the floor','Think about timing — 30-45 seconds each','Practice saying clear instructions out loud','Lead the class through it at the end of the lesson — speak clearly and slowly'],
+                        video: '', reflect: 'What was it like being in charge? What would you do differently next time?' }
+                }
+            },
+            {
+                id: 'mindfulness',
+                name: 'Breathing & Mindfulness',
+                icon: '🌬️',
+                desc: 'Breathing exercises and mental wellbeing',
+                unit: 'rounds completed',
+                levels: {
+                    easy: { title: 'Box Breathing', goal: 'Complete 5 rounds of box breathing',
+                        steps: ['Sit comfortably with a straight back','Breathe IN slowly for 4 counts','HOLD your breath for 4 counts','Breathe OUT slowly for 4 counts','HOLD again for 4 counts — that\'s 1 round!','Repeat 5 times. Notice how you feel afterwards'],
+                        video: '', reflect: 'How did your mind and body feel after the 5 rounds?' },
+                    medium: { title: 'Body Scan', goal: 'Complete a 5-minute body scan relaxation',
+                        steps: ['Lie on your back or sit comfortably with eyes closed','Start at your feet — notice how they feel. Relax any tension','Move slowly up — calves, knees, thighs, hips','Continue to your stomach, chest, shoulders','Then arms, hands, fingers','Finish with your neck, face, and top of your head','Take 3 deep breaths and slowly open your eyes'],
+                        video: '', reflect: 'Where in your body did you hold the most tension? Were you surprised?' },
+                    hard: { title: 'Lead Mindfulness', goal: 'Guide a partner or small group through a breathing exercise',
+                        steps: ['Choose box breathing or another technique you know','Practise saying the instructions out loud first','Speak slowly, quietly, and calmly','Guide your partner through 5 rounds','Check in with them afterwards — did it help?'],
+                        video: '', reflect: 'How does your voice need to change when leading mindfulness? Why?' }
+                }
+            },
+            {
+                id: 'sports-knowledge',
+                name: 'Sports Knowledge',
+                icon: '📚',
+                desc: 'Rules, tactics and design challenges on the iPad',
+                unit: 'tasks completed',
+                levels: {
+                    easy: { title: '5 Rules', goal: 'Write down 5 rules of the sport being played today',
+                        steps: ['Open your iPad and go to a notes app or use paper','Think about or look up today\'s sport','Write down 5 rules — try to think of them yourself first','Check them against a reliable source if you can','Share your 5 rules with a partner — did they agree?'],
+                        video: '', reflect: 'Were any of the rules surprising or confusing? Which ones and why?' },
+                    medium: { title: 'Design a Warm-Up', goal: 'Plan a 5-minute warm-up for today\'s sport and write it out',
+                        steps: ['Think about what muscles and skills today\'s sport uses','Plan 5 warm-up activities — 1 minute each','Include a pulse-raiser, stretches, and a sport-specific drill','Write it out clearly with timing','Share it with your teacher — they might use it next lesson!'],
+                        video: '', reflect: 'How does a good warm-up help performance and prevent injury?' },
+                    hard: { title: 'Sport Presentation', goal: 'Research one interesting fact about today\'s sport and present it to the class',
+                        steps: ['Use your iPad to research today\'s sport — history, rules, or famous players','Find one fact that most people probably don\'t know','Write a short 1-minute talk about it','Include: what the fact is, why it\'s interesting, and what you think about it','Present it to the class or your teacher at the end of the lesson'],
+                        video: '', reflect: 'What made your fact interesting? How did presenting feel?' }
+                }
+            }
+        ]
+    }
+};
+
+// ═══════════════════════════════════════════
+//  CONFIG — paste your Apps Script URL below
+// ═══════════════════════════════════════════
+const APPS_SCRIPT_URL = 'PASTE_YOUR_URL_HERE';
+const TEACHER_PIN     = '7333';
+const TEACHER_AUTH    = 'pe_teacher_7333';
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let currentCat  = null;
+let currentAct  = null;
+let currentLv   = null;
+let navStack    = ['home'];
+let selectedStars = 0;
+
+// ═══════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+    document.getElementById('backBtn').style.display = id === 'home' ? 'none' : 'flex';
+    if (id === 'home') document.getElementById('headerTitle').textContent = '🏆 PE Challenges';
+}
+
+function navigate(id) {
+    navStack.push(id);
+    showScreen(id);
+}
+
+function goBack() {
+    navStack.pop();
+    const prev = navStack[navStack.length - 1];
+    if (prev === 'home')              { showScreen('home'); }
+    else if (prev === 'category')     { renderCategory();       showScreen('category'); }
+    else if (prev === 'level')        { renderLevel();          showScreen('level'); }
+    else if (prev === 'results')      { renderResults();        showScreen('results'); }
+    else if (prev === 'pin')          { showScreen('pin'); }
+    else if (prev === 'teacher')      { renderTeacher();        showScreen('teacher'); }
+    else if (prev === 'game')         { showScreen('game'); }
+    else if (prev === 'learn')        { showScreen('learn'); }
+    else if (prev === 'everyone')     { showScreen('everyone'); }
+    else if (prev === 'everyone-sub') { showScreen('everyone-sub'); }
+}
+
+// ═══════════════════════════════════════════
+//  CATEGORY SCREEN
+// ═══════════════════════════════════════════
+function showCategory(catId) {
+    currentCat = catId;
+    renderCategory();
+    navigate('category');
+}
+
+function isLearned(actId) {
+    return localStorage.getItem('pe_learned_' + actId) === 'true';
+}
+function isDone(actId, level) {
+    return localStorage.getItem(`pe_done_${actId}_${level}`) === 'true';
+}
+function markDone(actId, level) {
+    localStorage.setItem(`pe_done_${actId}_${level}`, 'true');
+}
+
+function renderCategory() {
+    const cat = DATA[currentCat];
+    document.getElementById('headerTitle').textContent = cat.label;
+    let html = `<div class="${cat.bgClass}">`;
+    html += `<div class="section-label">${cat.icon} Choose a Challenge</div>`;
+    cat.activities.forEach(act => {
+        const hasLearn = !!LEARN[act.id];
+        const learned  = hasLearn && isLearned(act.id);
+        const badge    = hasLearn
+            ? (learned
+                ? `<span class="learn-badge learn-badge-done">✅ Learned</span>`
+                : `<span class="learn-badge learn-badge-locked">📖 Learn It First</span>`)
+            : '';
+        html += `
+            <div class="activity-card" onclick="handleActivityTap('${act.id}')">
+                <div class="act-icon">${act.icon}</div>
+                <div style="flex:1">
+                    <div class="act-name">${act.name}</div>
+                    <div class="act-desc">${act.desc}</div>
+                    ${badge ? `<div style="margin-top:6px">${badge}</div>` : ''}
+                </div>
+                <div class="act-arrow">›</div>
+            </div>`;
+    });
+    html += '</div>';
+    document.getElementById('category-content').innerHTML = html;
+}
+
+function handleActivityTap(actId) {
+    const hasLearn = !!LEARN[actId];
+    if (hasLearn && !isLearned(actId)) {
+        showLearnIt(actId);
+    } else {
+        showLevel(actId);
+    }
+}
+
+// ═══════════════════════════════════════════
+//  LEVEL SCREEN
+// ═══════════════════════════════════════════
+function showLevel(actId) {
+    currentAct = DATA[currentCat].activities.find(a => a.id === actId);
+    renderLevel();
+    navigate('level');
+}
+
+function renderLevel() {
+    document.getElementById('headerTitle').textContent = currentAct.name;
+    const actId = currentAct.id;
+    const easyDone   = isDone(actId, 'easy');
+    const mediumDone = isDone(actId, 'medium');
+    const hardDone   = isDone(actId, 'hard');
+
+    const lvls = [
+        { key:'easy',   emoji:'🟢', label:'Easy',   badgeClass:'badge-easy',   cardClass:'level-easy',   blurb:'Great for building confidence', locked: false },
+        { key:'medium', emoji:'🟡', label:'Medium', badgeClass:'badge-medium', cardClass:'level-medium', blurb:'Complete Easy first to unlock', locked: !easyDone },
+        { key:'hard',   emoji:'🔴', label:'Hard',   badgeClass:'badge-hard',   cardClass:'level-hard',   blurb:'Complete Medium first to unlock', locked: !mediumDone }
+    ];
+    let html = `<div class="section-label">${currentAct.icon} ${currentAct.name}</div>`;
+    html += `<p style="color:#718096;font-size:15px;margin-bottom:18px;">${currentAct.desc}</p>`;
+    html += `<div class="section-label">Solo Challenges</div>`;
+    lvls.forEach(lv => {
+        const d = currentAct.levels[lv.key];
+        const doneCheck = isDone(actId, lv.key) ? ' ✅' : '';
+        if (lv.locked) {
+            html += `
+                <div class="level-card ${lv.cardClass} locked">
+                    <div class="lock-icon">🔒</div>
+                    <div style="flex:1">
+                        <div class="lv-name">${lv.label} <span class="level-badge ${lv.badgeClass}">${d.title}</span></div>
+                        <div class="lock-msg">${lv.blurb}</div>
+                    </div>
+                </div>`;
+        } else {
+            html += `
+                <div class="level-card ${lv.cardClass}" onclick="showChallenge('${lv.key}')">
+                    <div class="lv-emoji">${lv.emoji}</div>
+                    <div style="flex:1">
+                        <div class="lv-name">${lv.label}${doneCheck} <span class="level-badge ${lv.badgeClass}">${d.title}</span></div>
+                        <div class="lv-sub">${lv.blurb}</div>
+                    </div>
+                    <div style="color:#cbd5e0;font-size:22px;">›</div>
+                </div>`;
+        }
+    });
+
+    // Game variations (sport skills only)
+    const games = GAMES[currentAct.id];
+    if (games) {
+        const gamesLocked = !hardDone;
+        html += `<div class="section-label">🎮 Game Variations</div>`;
+        if (gamesLocked) {
+            html += `<div style="background:white;border-radius:16px;padding:18px;border:3px solid #e2e8f0;opacity:0.6;margin-bottom:12px;text-align:center">
+                <div style="font-size:32px;margin-bottom:8px">🔒</div>
+                <div style="font-weight:700;color:#4a5568;font-size:15px;">Games Locked</div>
+                <div style="color:#a0aec0;font-size:13px;margin-top:4px">Complete Easy, Medium &amp; Hard to unlock game variations</div>
+            </div>`;
+        } else {
+            games.forEach(game => {
+                html += `
+                    <div class="game-card" onclick="showGame('${currentAct.id}','${game.id}')">
+                        <div class="game-card-header">
+                            <div class="game-card-icon">${game.icon}</div>
+                            <div>
+                                <div class="game-card-title">${game.name}</div>
+                                <div class="game-players">👥 ${game.players}</div>
+                            </div>
+                        </div>
+                        <div class="game-card-desc">${game.tagline}</div>
+                    </div>`;
+            });
+        }
+    }
+
+    document.getElementById('level-content').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+//  CHALLENGE SCREEN
+// ═══════════════════════════════════════════
+function showChallenge(lvKey) {
+    currentLv = lvKey;
+    selectedStars = 0;
+    renderChallenge();
+    navigate('challenge');
+}
+
+function renderChallenge() {
+    const act = currentAct;
+    const lv  = act.levels[currentLv];
+    const lvLabels = { easy:'🟢 Easy', medium:'🟡 Medium', hard:'🔴 Hard' };
+    document.getElementById('headerTitle').textContent = lvLabels[currentLv];
+
+    const videoHtml = lv.video
+        ? `<div class="video-wrap"><iframe src="${lv.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`
+        : `<div class="video-placeholder"><div style="font-size:40px">🎬</div><div style="font-size:14px">Video coming soon</div></div>`;
+
+    const stepsHtml = lv.steps.map((s,i) =>
+        `<li><span class="step-num">${i+1}</span><span>${s}</span></li>`
+    ).join('');
+
+    document.getElementById('challenge-content').innerHTML = `
+        <div class="challenge-top">
+            <span class="ch-emoji">${act.icon}</span>
+            <div class="ch-title">${act.name}</div>
+            <div class="ch-subtitle">${lv.title}</div>
+            <div class="goal-box">🎯 ${lv.goal}</div>
+        </div>
+
+        <div class="block">
+            <h3>📹 Watch the Demo</h3>
+            ${videoHtml}
+        </div>
+
+        <div class="block">
+            <h3>📋 How To Do It</h3>
+            <ul class="steps">${stepsHtml}</ul>
+        </div>
+
+        <div class="block">
+            <h3>📝 Log Your Result</h3>
+            <div class="form-gap">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <label class="form-label">Your name</label>
+                        <input type="text" class="name-input" id="studentName" placeholder="First name...">
+                    </div>
+                    <div>
+                        <label class="form-label">Homeroom class</label>
+                        <input type="text" class="name-input" id="studentHomeroom" placeholder="e.g. 4B...">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">Your score (${act.unit})</label>
+                    <div class="score-row">
+                        <input type="number" class="score-input" id="resultScore" placeholder="0" min="0">
+                        <span class="score-unit">${act.unit}</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">How hard did you try? ⬇️</label>
+                    <div class="star-row" id="starRow">
+                        ${[1,2,3,4,5].map(n=>`<button class="star-btn" onclick="setStars(${n})">⭐</button>`).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="block">
+            <h3>💭 Reflect</h3>
+            <p style="color:#718096;font-size:14px;margin-bottom:10px;">${lv.reflect}</p>
+            <textarea class="reflection-input" id="reflectionText" placeholder="Type your answer here..."></textarea>
+        </div>
+
+        <button class="save-btn" onclick="saveResult()">✅ Save My Result</button>
+        <div class="spacer"></div>
+    `;
+}
+
+function setStars(n) {
+    selectedStars = n;
+    document.querySelectorAll('.star-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i < n);
+    });
+}
+
+// ═══════════════════════════════════════════
+//  SAVE RESULT
+// ═══════════════════════════════════════════
+function saveResult() {
+    const score = document.getElementById('resultScore').value;
+    if (!score) { alert('Please enter your score first! 🎯'); return; }
+
+    const result = {
+        id:           Date.now(),
+        name:         document.getElementById('studentName').value.trim() || 'Anonymous',
+        homeroom:     document.getElementById('studentHomeroom').value.trim() || '—',
+        category:     currentCat,
+        activityId:   currentAct.id,
+        activityName: currentAct.name,
+        level:        currentLv,
+        levelTitle:   currentAct.levels[currentLv].title,
+        score:        score,
+        unit:         currentAct.unit,
+        stars:        selectedStars,
+        reflection:   document.getElementById('reflectionText').value.trim(),
+        date:         new Date().toLocaleDateString('en-GB')
+    };
+
+    // Mark this level as completed (for progressive unlock)
+    markDone(currentAct.id, currentLv);
+
+    // Save locally
+    const all = JSON.parse(localStorage.getItem('pe_results') || '[]');
+    all.unshift(result);
+    localStorage.setItem('pe_results', JSON.stringify(all));
+
+    // Send to Google Sheets (if URL is configured)
+    if (APPS_SCRIPT_URL !== 'PASTE_YOUR_URL_HERE') {
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(result)
+        }).catch(() => {}); // silently fail — local save already done
+    }
+
+    // Reset form
+    document.getElementById('resultScore').value    = '';
+    document.getElementById('reflectionText').value = '';
+    document.getElementById('studentName').value    = '';
+    document.getElementById('studentHomeroom').value = '';
+    setStars(0);
+    showToast();
+}
+
+// ═══════════════════════════════════════════
+//  TEACHER PIN
+// ═══════════════════════════════════════════
+function showPinScreen() {
+    navigate('pin');
+    document.getElementById('headerTitle').textContent = '👩‍🏫 Teacher View';
+    setTimeout(() => {
+        const el = document.getElementById('pinInput');
+        if (el) { el.value = ''; el.focus(); }
+        const err = document.getElementById('pinError');
+        if (err) err.textContent = '';
+    }, 100);
+}
+
+function checkPin() {
+    const entered = document.getElementById('pinInput').value.trim();
+    if (entered === TEACHER_PIN) {
+        document.getElementById('pinError').textContent = '';
+        renderTeacher();
+        navigate('teacher');
+    } else {
+        document.getElementById('pinError').textContent = '❌ Incorrect PIN — try again';
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinInput').focus();
+    }
+}
+
+// ═══════════════════════════════════════════
+//  TEACHER DASHBOARD
+// ═══════════════════════════════════════════
+function renderTeacher() {
+    document.getElementById('headerTitle').textContent = '👩‍🏫 Class Results';
+    const setupBanner = APPS_SCRIPT_URL === 'PASTE_YOUR_URL_HERE'
+        ? `<div class="setup-banner">
+               <strong>⚠️ Google Sheets not connected yet</strong>
+               Showing device-only results. To see all students' results, follow the setup guide in
+               <em>google-apps-script.js</em> and paste your URL into the app.
+           </div>`
+        : '';
+
+    document.getElementById('teacher-content').innerHTML = `
+        ${setupBanner}
+        <div class="teacher-bar">
+            <select class="filter-select" id="filterActivity" onchange="applyFilter()">
+                <option value="">All Activities</option>
+                ${getAllActivityNames().map(n => `<option value="${n}">${n}</option>`).join('')}
+            </select>
+            <select class="filter-select" id="filterHomeroom" onchange="applyFilter()">
+                <option value="">All Homerooms</option>
+            </select>
+            <select class="filter-select" id="filterLevel" onchange="applyFilter()">
+                <option value="">All Levels</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <button class="refresh-btn" onclick="loadSheetResults()">🔄 Refresh</button>
+        </div>
+        <div id="teacher-stats"></div>
+        <div class="block">
+            <div class="t-table-wrap">
+                <table class="t-table" id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Student</th>
+                            <th>Homeroom</th>
+                            <th>Activity</th>
+                            <th>Level</th>
+                            <th>Score</th>
+                            <th>Effort</th>
+                            <th>Reflection</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <tr><td colspan="8" style="text-align:center;color:#a0aec0;padding:30px;">Loading results…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="height:20px"></div>
+    `;
+
+    loadSheetResults();
+}
+
+function getAllActivityNames() {
+    const names = [];
+    Object.values(DATA).forEach(cat => cat.activities.forEach(a => names.push(a.name)));
+    return names;
+}
+
+function loadSheetResults() {
+    // Always load local results first
+    let localResults = JSON.parse(localStorage.getItem('pe_results') || '[]');
+
+    if (APPS_SCRIPT_URL === 'PASTE_YOUR_URL_HERE') {
+        displayTeacherResults(localResults);
+        return;
+    }
+
+    // Try to fetch from Google Sheets
+    const url = `${APPS_SCRIPT_URL}?auth=${TEACHER_AUTH}`;
+    fetch(url)
+        .then(r => r.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                // Map sheet rows to our result format
+                const sheetResults = data.map(row => ({
+                    date:         row['Date'] || '',
+                    name:         row['Student Name'] || 'Anonymous',
+                    activityName: row['Activity'] || '',
+                    levelTitle:   row['Level'] || '',
+                    score:        row['Score'] || '',
+                    unit:         row['Unit'] || '',
+                    stars:        (row['Effort (⭐)'] || '').length,
+                    reflection:   row['Reflection'] || ''
+                }));
+                displayTeacherResults(sheetResults);
+            } else {
+                displayTeacherResults(localResults);
+            }
+        })
+        .catch(() => {
+            displayTeacherResults(localResults);
+        });
+}
+
+function displayTeacherResults(results) {
+    allTeacherResults = results;
+    applyFilter();
+}
+
+let allTeacherResults = [];
+
+function applyFilter() {
+    const actFilter  = (document.getElementById('filterActivity') || {}).value || '';
+    const hrFilter   = (document.getElementById('filterHomeroom') || {}).value || '';
+    const lvFilter   = (document.getElementById('filterLevel')    || {}).value || '';
+
+    let filtered = allTeacherResults;
+    if (actFilter) filtered = filtered.filter(r => r.activityName === actFilter);
+    if (hrFilter)  filtered = filtered.filter(r => (r.homeroom || r['Homeroom'] || '—') === hrFilter);
+    if (lvFilter)  filtered = filtered.filter(r => (r.level || '').toLowerCase() === lvFilter);
+
+    // Populate homeroom filter dynamically
+    const hrSelect = document.getElementById('filterHomeroom');
+    if (hrSelect && hrSelect.options.length <= 1) {
+        const homerooms = [...new Set(allTeacherResults.map(r => r.homeroom || r['Homeroom'] || '—').filter(h => h && h !== '—'))].sort();
+        homerooms.forEach(hr => {
+            const opt = document.createElement('option');
+            opt.value = hr; opt.textContent = hr;
+            hrSelect.appendChild(opt);
+        });
+    }
+
+    // Update stats
+    const statsEl = document.getElementById('teacher-stats');
+    if (statsEl) {
+        const students = new Set(filtered.map(r => r.name)).size;
+        const homerooms = new Set(filtered.map(r => r.homeroom || r['Homeroom'] || '—').filter(h => h !== '—')).size;
+        const avgScore  = filtered.length
+            ? Math.round(filtered.reduce((s, r) => s + parseFloat(r.score || 0), 0) / filtered.length)
+            : 0;
+        statsEl.innerHTML = `
+            <div class="stats-row">
+                <div class="stat-card"><div class="stat-num">${filtered.length}</div><div class="stat-label">Results</div></div>
+                <div class="stat-card"><div class="stat-num">${students}</div><div class="stat-label">Students</div></div>
+                <div class="stat-card"><div class="stat-num">${homerooms || '—'}</div><div class="stat-label">Homerooms</div></div>
+            </div>`;
+    }
+
+    // Update table
+    const tbody = document.getElementById('resultsBody');
+    if (!tbody) return;
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#a0aec0;padding:30px;">No results found</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(r => {
+        const lv = (r.level || r.levelTitle || '').toLowerCase();
+        const lvClass = lv === 'easy'   ? 'lv-easy'
+                      : lv === 'medium' ? 'lv-medium'
+                      : 'lv-hard';
+        const stars      = r.stars > 0 ? '⭐'.repeat(Math.min(r.stars, 5)) : '—';
+        const reflection = r.reflection ? `<span title="${r.reflection}">${r.reflection.substring(0,40)}${r.reflection.length>40?'…':''}</span>` : '—';
+        const homeroom   = r.homeroom || r['Homeroom'] || '—';
+        return `
+            <tr>
+                <td>${r.date}</td>
+                <td style="font-weight:600">${r.name}</td>
+                <td><span style="background:#ebf4ff;color:#3182ce;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:700">${homeroom}</span></td>
+                <td>${r.activityName}</td>
+                <td><span class="lv-chip ${lvClass}">${r.levelTitle || r['Level'] || ''}</span></td>
+                <td style="font-weight:700;color:#667eea">${r.score} <span style="font-size:11px;color:#a0aec0">${r.unit || r['Unit'] || ''}</span></td>
+                <td>${stars}</td>
+                <td style="color:#718096;font-size:13px">${reflection}</td>
+            </tr>`;
+    }).join('');
+}
+
+function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════════
+//  RESULTS SCREEN
+// ═══════════════════════════════════════════
+function showResults() {
+    renderResults();
+    navigate('results');
+}
+
+function renderResults() {
+    document.getElementById('headerTitle').textContent = '📊 My Results';
+    const all = JSON.parse(localStorage.getItem('pe_results') || '[]');
+
+    let html = '<div class="section-label">📊 Saved Results</div>';
+    if (all.length === 0) {
+        html += `<div class="empty-state"><div class="em-icon">🏅</div><div>No results yet — complete a challenge to see your scores here!</div></div>`;
+    } else {
+        html += '<div class="block">';
+        all.forEach(r => {
+            const stars = r.stars > 0 ? '⭐'.repeat(r.stars) : '';
+            const quote = r.reflection ? `<div class="result-quote">"${r.reflection.substring(0,90)}${r.reflection.length>90?'…':''}"</div>` : '';
+            html += `
+                <div class="result-row">
+                    <div style="flex:1;padding-right:12px">
+                        <div class="result-name">${r.activityName}</div>
+                        <div class="result-meta">${r.name} · ${r.levelTitle} · ${r.date}</div>
+                        ${stars ? `<div style="font-size:13px;margin-top:2px">${stars}</div>` : ''}
+                        ${quote}
+                    </div>
+                    <div class="result-score">${r.score}<div class="result-unit-sm">${r.unit}</div></div>
+                </div>`;
+        });
+        html += '</div>';
+        html += `<button class="clear-btn" onclick="clearResults()">🗑️ Clear All Results</button>`;
+    }
+    document.getElementById('results-content').innerHTML = html;
+}
+
+function clearResults() {
+    if (confirm('Clear all results? This cannot be undone.')) {
+        localStorage.removeItem('pe_results');
+        renderResults();
+    }
+}
+
+// ═══════════════════════════════════════════
+//  LEARN IT
+// ═══════════════════════════════════════════
+let learnActId   = null;
+let quizAnswers  = {};
+let quizCorrect  = 0;
+
+function showLearnIt(actId) {
+    learnActId  = actId;
+    quizAnswers = {};
+    quizCorrect = 0;
+    const act   = DATA[currentCat].activities.find(a => a.id === actId);
+    const learn = LEARN[actId];
+    document.getElementById('headerTitle').textContent = '📖 Learn It';
+
+    const videoHtml = learn.video
+        ? `<div class="video-wrap"><iframe src="${learn.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`
+        : `<div class="video-placeholder"><div style="font-size:40px">🎬</div><div style="font-size:14px">Your video goes here — add URL in the app</div></div>`;
+
+    const pointsHtml = learn.points.map(p =>
+        `<div class="coaching-point"><span class="cp-icon">${p.icon}</span><span>${p.text}</span></div>`
+    ).join('');
+
+    const mistakesHtml = learn.mistakes.map(m =>
+        `<div class="mistake-item"><span class="cp-icon">${m.icon}</span><span>${m.text}</span></div>`
+    ).join('');
+
+    const quizHtml = learn.quiz.map((q, qi) => `
+        <div class="quiz-q">Q${qi+1}: ${q.q}</div>
+        <div class="quiz-options">
+            ${q.options.map((opt, oi) =>
+                `<button class="quiz-opt" id="qopt_${qi}_${oi}" onclick="answerQuiz(${qi},${oi})">${opt}</button>`
+            ).join('')}
+        </div>
+        <div class="quiz-feedback" id="qfb_${qi}"></div>
+    `).join('');
+
+    document.getElementById('learn-content').innerHTML = `
+        <div class="learn-top">
+            <span class="lt-icon">${act.icon}</span>
+            <div class="lt-title">📖 Learn It — ${act.name}</div>
+            <div class="lt-sub">Watch, read, and pass the quiz to unlock the challenges</div>
+        </div>
+
+        <div class="block">
+            <h3>🎬 Watch the Skill</h3>
+            ${videoHtml}
+        </div>
+
+        <div class="block">
+            <h3>✅ Key Coaching Points</h3>
+            ${pointsHtml}
+        </div>
+
+        <div class="block">
+            <h3>⚠️ Common Mistakes to Avoid</h3>
+            ${mistakesHtml}
+        </div>
+
+        <div class="block">
+            <h3>❓ Quick Quiz — unlock the challenges!</h3>
+            <p style="color:#718096;font-size:14px;margin-bottom:16px;">Answer both questions correctly to unlock Practice It and Play It.</p>
+            ${quizHtml}
+            <button class="unlock-btn" id="unlockBtn" onclick="unlockActivity()">🔓 Challenges Unlocked — Let's Go!</button>
+        </div>
+        <div class="spacer"></div>
+    `;
+    navigate('learn');
+}
+
+function answerQuiz(qi, oi) {
+    if (quizAnswers[qi] !== undefined) return; // already answered
+    const q       = LEARN[learnActId].quiz[qi];
+    const correct = oi === q.answer;
+    quizAnswers[qi] = correct;
+
+    // Style buttons
+    q.options.forEach((_, idx) => {
+        const btn = document.getElementById(`qopt_${qi}_${idx}`);
+        btn.classList.add('disabled');
+        if (idx === q.answer) btn.classList.add('correct');
+        else if (idx === oi && !correct) btn.classList.add('wrong');
+    });
+
+    // Show feedback
+    const fb = document.getElementById(`qfb_${qi}`);
+    fb.classList.add('show');
+    if (correct) {
+        fb.classList.add('good');
+        fb.textContent = q.explanation;
+    } else {
+        fb.classList.add('bad');
+        fb.textContent = `❌ Not quite! The correct answer was: "${q.options[q.answer]}" — ${q.explanation.replace('✅ Correct! ','')}`;
+    }
+
+    // Check if all answered correctly
+    const totalQ  = LEARN[learnActId].quiz.length;
+    const allDone = Object.keys(quizAnswers).length === totalQ;
+    const allPass = allDone && Object.values(quizAnswers).every(v => v);
+
+    if (allDone && allPass) {
+        document.getElementById('unlockBtn').classList.add('show');
+    } else if (allDone && !allPass) {
+        // Show retry option
+        const fb2 = document.getElementById(`qfb_${LEARN[learnActId].quiz.length - 1}`);
+        const retryDiv = document.createElement('div');
+        retryDiv.style.cssText = 'margin-top:14px;text-align:center';
+        retryDiv.innerHTML = `<p style="color:#c53030;font-weight:700;margin-bottom:10px;">Try again — re-read the coaching points above!</p>
+            <button onclick="showLearnIt('${learnActId}')" style="background:#667eea;color:white;border:none;border-radius:12px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Retry Quiz</button>`;
+        document.querySelector('.unlock-btn').parentNode.insertBefore(retryDiv, document.getElementById('unlockBtn'));
+    }
+}
+
+function unlockActivity() {
+    localStorage.setItem('pe_learned_' + learnActId, 'true');
+    showLevel(learnActId);
+}
+
+// ═══════════════════════════════════════════
+//  GAME VARIATIONS
+// ═══════════════════════════════════════════
+function showGame(actId, gameId) {
+    const game = GAMES[actId].find(g => g.id === gameId);
+    document.getElementById('headerTitle').textContent = game.name;
+    const stepsHtml = game.steps.map((s,i) =>
+        `<li><span class="step-num">${i+1}</span><span>${s}</span></li>`
+    ).join('');
+
+    const videoHtml = game.video
+        ? `<div class="video-wrap"><iframe src="${game.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`
+        : `<div class="video-placeholder">
+               <div style="font-size:40px">🎬</div>
+               <div style="font-size:14px;font-weight:600">Your game video coming soon!</div>
+               <div style="font-size:12px;margin-top:4px">Film it in your gym &amp; send the YouTube link</div>
+           </div>`;
+
+    document.getElementById('game-content').innerHTML = `
+        <div class="game-detail-top">
+            <span class="gd-icon">${game.icon}</span>
+            <div class="gd-title">${game.name}</div>
+            <div class="gd-sub">${game.tagline}</div>
+            <div class="gd-players-badge">👥 ${game.players}</div>
+        </div>
+        <div class="block">
+            <h3>🎬 Watch How to Play</h3>
+            ${videoHtml}
+        </div>
+        <div class="block">
+            <h3>📋 How to Play</h3>
+            <ul class="steps">${stepsHtml}</ul>
+        </div>
+        ${game.tip ? `<div class="block"><p style="font-size:15px;color:#4a5568;line-height:1.6">${game.tip}</p></div>` : ''}
+        <div class="spacer"></div>
+    `;
+    navigate('game');
+}
+
+// ═══════════════════════════════════════════
+//  EVERYONE PLAYS
+// ═══════════════════════════════════════════
+let currentEveryone = null;
+let currentEveryoneAct = null;
+
+function showEveryonePlays() {
+    document.getElementById('headerTitle').textContent = '🌟 Everyone Plays';
+    document.getElementById('everyone-content').innerHTML = `
+        <div class="section-label">🌟 Choose your situation</div>
+        <p style="color:#718096;font-size:15px;margin-bottom:18px;">Everyone can take part — just choose the right challenge for you today.</p>
+        <div class="everyone-card ec-leg" onclick="showEveryoneSub('leg')">
+            <div class="ec-icon">🦵</div>
+            <div style="flex:1">
+                <div class="ec-name">Lower Body Injury</div>
+                <div class="ec-desc">Leg, knee or ankle injury — seated &amp; upper body challenges</div>
+            </div>
+            <div style="color:#cbd5e0;font-size:22px">›</div>
+        </div>
+        <div class="everyone-card ec-arm" onclick="showEveryoneSub('arm')">
+            <div class="ec-icon">💪</div>
+            <div style="flex:1">
+                <div class="ec-name">Upper Body Injury</div>
+                <div class="ec-desc">Arm, wrist or shoulder injury — footwork &amp; balance challenges</div>
+            </div>
+            <div style="color:#cbd5e0;font-size:22px">›</div>
+        </div>
+        <div class="everyone-card ec-sick" onclick="showEveryoneSub('sick')">
+            <div class="ec-icon">🤒</div>
+            <div style="flex:1">
+                <div class="ec-name">Feeling Under the Weather</div>
+                <div class="ec-desc">Low energy or unwell — gentle, meaningful activities</div>
+            </div>
+            <div style="color:#cbd5e0;font-size:22px">›</div>
+        </div>
+        <div class="spacer"></div>
+    `;
+    navigate('everyone');
+}
+
+function showEveryoneSub(subId) {
+    currentEveryone = subId;
+    const sub = EVERYONE[subId];
+    document.getElementById('headerTitle').textContent = sub.label;
+    let html = `<div class="section-label">${sub.icon} Choose a Challenge</div>`;
+    sub.activities.forEach(act => {
+        html += `
+            <div class="activity-card" onclick="showEveryoneLevel('${act.id}')">
+                <div class="act-icon">${act.icon}</div>
+                <div style="flex:1">
+                    <div class="act-name">${act.name}</div>
+                    <div class="act-desc">${act.desc}</div>
+                </div>
+                <div class="act-arrow">›</div>
+            </div>`;
+    });
+    document.getElementById('everyone-sub-content').innerHTML = html;
+    navigate('everyone-sub');
+}
+
+function showEveryoneLevel(actId) {
+    currentEveryoneAct = EVERYONE[currentEveryone].activities.find(a => a.id === actId);
+    // Reuse the existing level + challenge flow by temporarily swapping currentAct
+    currentAct = currentEveryoneAct;
+    currentCat = 'everyone-' + currentEveryone;
+    renderLevel();
+    navigate('level');
+}
+</script>
+</body>
+</html>
