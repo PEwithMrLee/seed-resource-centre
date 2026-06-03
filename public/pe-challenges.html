@@ -594,21 +594,22 @@ const DATA = {
                 unit: 'baskets / 10 shots',
                 levels: {
                     easy: {
-                        title: 'Closer Shot',
-                        goal: 'Score as many baskets as you can — shoot from halfway to the hoop (about 2 metres). 10 shots!',
+                        title: 'Close Range',
+                        passScore: 5,
+                        goal: 'Stand on the small arc under the net. Take 10 shots — score 5 or more to unlock the next level!',
                         steps: [
-                            'Stand halfway between the hoop and the free throw line',
-                            'Hold the ball with both hands at chest height',
-                            'Bend your knees slightly and push up as you shoot',
-                            'Aim for the back of the ring',
-                            'Take 10 shots and count how many go in'
+                            'Find the small u-shaped arc directly under the basket',
+                            'Stand anywhere on or behind that arc — this is your shooting zone',
+                            'Take 10 shots and count every basket you score',
+                            'You need 5 or more to unlock Medium — good luck!'
                         ],
-                        video: 'https://www.youtube.com/embed/FsJaHt7R2is',
-                        reflect: 'What did you change between shots to improve your aim?'
+                        video: 'https://drive.google.com/file/d/1Im68L_qUUfJskNVQoyXsADzG1aRjVa3U/preview',
+                        reflect: 'What did you adjust between shots to score more?'
                     },
                     medium: {
                         title: 'Free Throw Line',
-                        goal: 'Score as many baskets as you can from the free throw line. 10 shots!',
+                        passScore: 5,
+                        goal: 'Score as many baskets as you can from the free throw line. Score 5+ to unlock Hard! 10 shots!',
                         steps: [
                             'Stand on the free throw line',
                             'Place your shooting hand under the ball, other hand on the side',
@@ -616,21 +617,24 @@ const DATA = {
                             'Follow through — fingers should point at the hoop after release',
                             'Take 10 shots and count how many go in'
                         ],
-                        video: 'https://www.youtube.com/embed/FsJaHt7R2is',
+                        video: 'https://drive.google.com/file/d/1BL8twVMm1_TkH49gV_qfpB6Z6yQSb9rj/preview',
                         reflect: 'How does your follow-through affect where the ball goes?'
                     },
                     hard: {
-                        title: 'Step Back',
-                        goal: 'Shoot from one big step behind the free throw line. 10 shots!',
+                        title: 'Layup from 3-Point Line',
+                        passScore: 4,
+                        goal: 'Start at the 3-point line, dribble in and score a layup. Hit 4+ out of 10 to unlock the Games!',
                         steps: [
-                            'Stand one big step behind the free throw line',
-                            'Use full technique — knee bend, push, follow through',
-                            'Aim slightly higher to give the ball more arc',
-                            'Focus and reset after each shot',
-                            'Take 10 shots and count how many go in'
+                            'Start in ready position at the 3-point line — feet shoulder-width apart, knees slightly bent, ball held in both hands',
+                            'Dribble toward the basket — aim for 3 dribbles to build momentum',
+                            'On your last dribble, pick the ball up and take your TWO steps toward the hoop',
+                            '⚠️ Once you stop dribbling you can only take 2 steps — no more!',
+                            'Option 1 — aim for the top corner of the backboard square and let it bounce in',
+                            'Option 2 — drive straight to the hoop and lay it in directly',
+                            'Complete 10 attempts and count how many go in'
                         ],
-                        video: 'https://www.youtube.com/embed/FsJaHt7R2is',
-                        reflect: 'What mental strategy helped you stay focused for all 10 shots?'
+                        video: 'https://drive.google.com/file/d/1mICq8p-QPPOClwEsbWhkRauxlZyNvosf/preview',
+                        reflect: 'Did you find it easier to use the backboard or go straight to the hoop? Why?'
                     }
                 }
             },
@@ -643,7 +647,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Big Goal',
-                        goal: 'Score as many goals as you can — kick from 5 metres into the full goal. 10 kicks!',
+                        passScore: 6,
+                        goal: 'Score as many goals as you can from 5 metres. Score 6+ to unlock Medium! 10 kicks!',
                         steps: [
                             'Place the ball 5 metres from the goal',
                             'Take 3 steps back from the ball',
@@ -656,7 +661,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Corner Target',
-                        goal: 'Aim for the corners of the goal — kick from 8 metres. 10 kicks!',
+                        passScore: 5,
+                        goal: 'Aim for the corners from 8 metres. Score 5+ to unlock Hard! 10 kicks!',
                         steps: [
                             'Place the ball 8 metres from the goal',
                             'Decide before you kick which corner you are targeting',
@@ -669,7 +675,8 @@ const DATA = {
                     },
                     hard: {
                         title: 'Power & Placement',
-                        goal: 'Kick from 11 metres — aim for the top corners! 10 kicks!',
+                        passScore: 4,
+                        goal: 'Kick from 11 metres — top corners only! Score 4+ to unlock the Games! 10 kicks!',
                         steps: [
                             'Place the ball at full penalty spot distance (11 metres)',
                             'Choose top left or top right corner as your target',
@@ -691,7 +698,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Close Range',
-                        goal: 'Hit the target as many times as you can from 3 metres. 10 throws!',
+                        passScore: 6,
+                        goal: 'Hit the target from 3 metres. Score 6+ to unlock Medium! 10 throws!',
                         steps: [
                             'Stand 3 metres from the target',
                             'Hold the beanbag or ball in your dominant hand',
@@ -704,7 +712,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Mid Range',
-                        goal: 'Hit the inner circle from 6 metres. Only inner circle hits count! 10 throws!',
+                        passScore: 5,
+                        goal: 'Hit the inner circle from 6 metres. Score 5+ to unlock Hard! 10 throws!',
                         steps: [
                             'Stand 6 metres from the target',
                             'Use an overarm throwing technique',
@@ -717,7 +726,8 @@ const DATA = {
                     },
                     hard: {
                         title: 'Long Range',
-                        goal: 'Bullseye only from 9 metres. 10 throws — can you hit 5?',
+                        passScore: 3,
+                        goal: 'Bullseye only from 9 metres. Hit 3+ to unlock the Games! 10 throws!',
                         steps: [
                             'Stand 9 metres from the target',
                             'Wind up fully — elbow up, shoulder square to target',
@@ -739,7 +749,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Jump & Land',
-                        goal: 'Jump as far as you can — focus on a safe landing. Best of 3 jumps!',
+                        passScore: 80,
+                        goal: 'Jump as far as you can — best of 3 jumps! Hit 80cm+ to unlock Medium!',
                         steps: [
                             'Stand with feet shoulder-width apart behind the line',
                             'Bend your knees and swing your arms back',
@@ -752,7 +763,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Power Jump',
-                        goal: 'Maximise your distance with a full arm swing and explosive push. Best of 3!',
+                        passScore: 110,
+                        goal: 'Maximise your distance — full arm swing and explosive push. Hit 110cm+ to unlock Hard! Best of 3!',
                         steps: [
                             'Start with feet together at the line',
                             'Drop into a half-squat — thighs almost parallel to the floor',
@@ -765,7 +777,8 @@ const DATA = {
                     },
                     hard: {
                         title: 'Consistency Challenge',
-                        goal: 'Do 5 jumps and record each one. What is your average distance?',
+                        passScore: 120,
+                        goal: 'Do 5 jumps — record your average. Hit 120cm+ average to unlock the Games!',
                         steps: [
                             'Complete 5 standing long jumps with maximum effort',
                             'Measure and note each jump distance in cm',
@@ -787,7 +800,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Bounce & Hit',
-                        goal: 'Hit the wall, let it bounce once, then hit again. How many in a row?',
+                        passScore: 5,
+                        goal: 'Hit the wall, let it bounce once, then hit again. Get 5+ in a row to unlock Medium!',
                         steps: [
                             'Stand 2 metres from the wall',
                             'Hit the ball against the wall with your hand or a bat',
@@ -800,7 +814,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Direct Rally',
-                        goal: 'Keep the ball going without letting it bounce. How many consecutive hits?',
+                        passScore: 8,
+                        goal: 'Keep the ball going without a bounce. Get 8+ consecutive to unlock Hard!',
                         steps: [
                             'Stand 2–3 metres from the wall',
                             'Use a bat or racket to hit the ball against the wall',
@@ -813,7 +828,8 @@ const DATA = {
                     },
                     hard: {
                         title: 'Alternating Hands',
-                        goal: 'Rally against the wall alternating left and right hand each time. Max in a row!',
+                        passScore: 5,
+                        goal: 'Alternate left and right hand each hit. Get 5+ in a row to unlock the Games!',
                         steps: [
                             'Hit the wall and alternate which hand you use each return',
                             'Left, right, left, right — or forehand, backhand',
@@ -843,7 +859,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Knee Push-Ups',
-                        goal: 'Do as many knee push-ups as you can in 30 seconds!',
+                        passScore: 8,
+                        goal: 'Knee push-ups in 30 seconds. Hit 8+ to unlock Medium!',
                         steps: [
                             'Start on hands and knees — hands shoulder-width apart',
                             'Lower your chest toward the floor by bending your elbows',
@@ -856,7 +873,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Full Push-Ups',
-                        goal: 'Do as many full push-ups as you can in 30 seconds!',
+                        passScore: 6,
+                        goal: 'Full push-ups in 30 seconds. Hit 6+ to unlock Hard!',
                         steps: [
                             'Start in a high plank — hands under shoulders, body straight',
                             'Lower your chest to just above the floor',
@@ -891,7 +909,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Crunches',
-                        goal: 'Do as many crunches as you can in 30 seconds!',
+                        passScore: 10,
+                        goal: 'Crunches in 30 seconds. Hit 10+ to unlock Medium!',
                         steps: [
                             'Lie on your back, knees bent, feet flat on the floor',
                             'Cross arms over your chest or hands lightly behind ears',
@@ -904,7 +923,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Full Sit-Ups',
-                        goal: 'Do as many full sit-ups as you can in 30 seconds!',
+                        passScore: 8,
+                        goal: 'Full sit-ups in 30 seconds. Hit 8+ to unlock Hard!',
                         steps: [
                             'Lie on your back, knees bent, feet flat (partner holds feet or hook under something)',
                             'Place hands behind your head lightly — don\'t pull your neck',
@@ -939,7 +959,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Slow & Steady',
-                        goal: 'Do as many star jumps as you can in 30 seconds — full arms AND legs every time!',
+                        passScore: 15,
+                        goal: 'Star jumps in 30 seconds. Hit 15+ to unlock Medium!',
                         steps: [
                             'Start standing with feet together and arms at your sides',
                             'Jump and spread your feet wide while lifting arms up over your head',
@@ -952,7 +973,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Fast Star Jumps',
-                        goal: 'Go as fast as you can — maximum star jumps in 30 seconds!',
+                        passScore: 25,
+                        goal: 'Fast star jumps in 30 seconds. Hit 25+ to unlock Hard!',
                         steps: [
                             'Same technique — but push for maximum speed',
                             'Stay on the balls of your feet for quicker movement',
@@ -988,7 +1010,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Knee Plank',
-                        goal: 'Hold a knee plank for as long as you can. Record your time in seconds!',
+                        passScore: 20,
+                        goal: 'Knee plank hold — record your time! Hit 20+ seconds to unlock Medium!',
                         steps: [
                             'Start on hands and knees on the floor',
                             'Walk your hands forward until your body is straight from knees to shoulders',
@@ -1001,7 +1024,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Full Plank',
-                        goal: 'Hold a full plank on hands or forearms for as long as possible!',
+                        passScore: 30,
+                        goal: 'Full plank hold — record your time! Hit 30+ seconds to unlock Hard!',
                         steps: [
                             'Start in a push-up position — straight arms or forearms on floor',
                             'Your body must be a straight line from head to heels',
@@ -1036,7 +1060,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Steady Skip',
-                        goal: 'Skip steadily for 30 seconds — count every successful jump!',
+                        passScore: 20,
+                        goal: 'Skip for 30 seconds — count every jump. Hit 20+ to unlock Medium!',
                         steps: [
                             'Hold one end of the rope in each hand',
                             'Start with the rope behind you on the ground',
@@ -1049,7 +1074,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Fast Skip',
-                        goal: 'Skip as fast as you can for 30 seconds — max jumps!',
+                        passScore: 35,
+                        goal: 'Fast skipping — max jumps in 30 seconds. Hit 35+ to unlock Hard!',
                         steps: [
                             'Stay on the balls of your feet throughout',
                             'Keep jumps small — just enough to clear the rope',
@@ -1084,7 +1110,8 @@ const DATA = {
                 levels: {
                     easy: {
                         title: 'Step Burpee',
-                        goal: 'Modified burpees — step instead of jump. How many in 30 seconds?',
+                        passScore: 5,
+                        goal: 'Step burpees in 30 seconds. Hit 5+ to unlock Medium!',
                         steps: [
                             'Stand tall, then bend and place hands on the floor',
                             'Step one foot back, then the other into a plank position',
@@ -1097,7 +1124,8 @@ const DATA = {
                     },
                     medium: {
                         title: 'Full Burpee',
-                        goal: 'Full burpees with a jump at the top — how many in 30 seconds?',
+                        passScore: 4,
+                        goal: 'Full burpees in 30 seconds. Hit 4+ to unlock Hard!',
                         steps: [
                             'From standing, jump both hands down to the floor',
                             'Jump both feet back into a plank',
@@ -1133,13 +1161,14 @@ const DATA = {
 // ═══════════════════════════════════════════
 const LEARN = {
     basketball: {
-        video: '',
+        video: 'https://drive.google.com/file/d/1Im68L_qUUfJskNVQoyXsADzG1aRjVa3U/preview',
         points: [
             { icon: '🦵', text: 'Bend your knees — power comes from your legs, not just your arms' },
             { icon: '👁️', text: 'Focus on the back of the rim — not the front, not the backboard' },
             { icon: '🖐️', text: 'Shooting hand under the ball, guide hand on the side — not behind' },
             { icon: '💨', text: 'Follow through every time — fingers pointing at the hoop after you release' },
-            { icon: '🔁', text: 'Use the same routine every shot — consistency builds muscle memory' }
+            { icon: '🔁', text: 'Use the same routine every shot — consistency builds muscle memory' },
+            { icon: '👟', text: 'For layups — remember you can only take TWO steps after your last dribble' }
         ],
         mistakes: [
             { icon: '❌', text: 'Pushing the ball with two hands — one hand shoots, one hand guides' },
@@ -1298,10 +1327,9 @@ const GAMES = {
             tagline: 'First to complete all spots wins!',
             steps: [
                 'Set up 5 shooting spots in a semicircle around the hoop — close, left wing, top, right wing, and far',
-                'Player 1 shoots from spot 1. If they score, they move to spot 2. If they miss, their turn ends',
-                'Player 2 takes their turn from spot 1 — same rules',
-                'Take turns moving through the spots. You must complete them in order',
-                'First player to score from all 5 spots wins!'
+                'Take turns shooting from spot 1. Score = move to the next spot. Miss = turn ends',
+                'You must complete all 5 spots in order. First to finish wins!',
+                '🔄 Comeback Rule: If the player who knocked you out gets knocked out by someone else — you\'re back in, and they sit out!'
             ],
             tip: '💡 Tip: You can "chance it" after a miss — shoot again immediately. Score = move forward. Miss = go back one spot!'
         },
@@ -1854,7 +1882,7 @@ function renderChallenge() {
     document.getElementById('headerTitle').textContent = lvLabels[currentLv];
 
     const videoHtml = lv.video
-        ? `<div class="video-wrap"><iframe src="${lv.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`
+        ? `<div class="video-wrap"><iframe src="${lv.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div><a href="${lv.video.includes('drive.google') ? lv.video.replace('/preview','/view') : lv.video.replace('embed/','watch?v=')}" target="_blank" style="display:block;text-align:center;margin-top:8px;font-size:13px;color:#667eea;font-weight:600;">▶️ Not loading? Open video</a>`
         : `<div class="video-placeholder"><div style="font-size:40px">🎬</div><div style="font-size:14px">Video coming soon</div></div>`;
 
     const stepsHtml = lv.steps.map((s,i) =>
@@ -1867,6 +1895,7 @@ function renderChallenge() {
             <div class="ch-title">${act.name}</div>
             <div class="ch-subtitle">${lv.title}</div>
             <div class="goal-box">🎯 ${lv.goal}</div>
+        ${lv.passScore ? `<div style="background:rgba(255,255,255,0.2);border-radius:12px;padding:10px;margin-top:10px;font-size:14px;font-weight:600;">🔓 Score <strong>${lv.passScore}+</strong> to unlock the next level</div>` : ''}
         </div>
 
         <div class="block">
@@ -1949,8 +1978,12 @@ function saveResult() {
         date:         new Date().toLocaleDateString('en-GB')
     };
 
-    // Mark this level as completed (for progressive unlock)
-    markDone(currentAct.id, currentLv);
+    // Mark this level as completed if pass score is met (for progressive unlock)
+    const lv = currentAct.levels[currentLv];
+    const passScore = lv.passScore;
+    if (!passScore || parseFloat(score) >= passScore) {
+        markDone(currentAct.id, currentLv);
+    }
 
     // Save locally
     const all = JSON.parse(localStorage.getItem('pe_results') || '[]');
@@ -1973,7 +2006,8 @@ function saveResult() {
     document.getElementById('studentName').value    = '';
     document.getElementById('studentHomeroom').value = '';
     setStars(0);
-    showToast();
+    const passed = !passScore || parseFloat(score) >= passScore;
+    showToast(passed, passScore, score);
 }
 
 // ═══════════════════════════════════════════
@@ -2179,10 +2213,20 @@ function applyFilter() {
     }).join('');
 }
 
-function showToast() {
+function showToast(passed = true, passScore = null, score = null) {
     const t = document.getElementById('toast');
+    if (passScore && !passed) {
+        t.style.background = '#ed8936';
+        t.textContent = `📊 Score saved! You got ${score} — need ${passScore} to unlock next level. Keep trying!`;
+    } else if (passScore && passed) {
+        t.style.background = '#48bb78';
+        t.textContent = `🎉 ${score}/${passScore ? 10 : ''} — Level unlocked! Next challenge available!`;
+    } else {
+        t.style.background = '#48bb78';
+        t.textContent = '✅ Result saved!';
+    }
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    setTimeout(() => { t.classList.remove('show'); t.style.background = ''; }, 3500);
 }
 
 // ═══════════════════════════════════════════
@@ -2245,7 +2289,7 @@ function showLearnIt(actId) {
     document.getElementById('headerTitle').textContent = '📖 Learn It';
 
     const videoHtml = learn.video
-        ? `<div class="video-wrap"><iframe src="${learn.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`
+        ? `<div class="video-wrap"><iframe src="${learn.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div><a href="${learn.video.includes('drive.google') ? learn.video.replace('/preview','/view') : learn.video.replace('embed/','watch?v=')}" target="_blank" style="display:block;text-align:center;margin-top:8px;font-size:13px;color:#667eea;font-weight:600;">▶️ Not loading? Open video</a>`
         : `<div class="video-placeholder"><div style="font-size:40px">🎬</div><div style="font-size:14px">Your video goes here — add URL in the app</div></div>`;
 
     const pointsHtml = learn.points.map(p =>
@@ -2358,7 +2402,7 @@ function showGame(actId, gameId) {
     ).join('');
 
     const videoHtml = game.video
-        ? `<div class="video-wrap"><iframe src="${game.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`
+        ? `<div class="video-wrap"><iframe src="${game.video}" allowfullscreen allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe></div><a href="${game.video.includes('drive.google') ? game.video.replace('/preview','/view') : game.video.replace('embed/','watch?v=')}" target="_blank" style="display:block;text-align:center;margin-top:8px;font-size:13px;color:#667eea;font-weight:600;">▶️ Not loading? Open video</a>`
         : `<div class="video-placeholder">
                <div style="font-size:40px">🎬</div>
                <div style="font-size:14px;font-weight:600">Your game video coming soon!</div>
