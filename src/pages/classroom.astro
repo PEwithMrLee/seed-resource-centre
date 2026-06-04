@@ -114,31 +114,30 @@ import { withBase } from "../utils/withBase";
 
   <section class="section section-soft">
     <div class="shell">
-      <div class="tech-intro">
-        <div class="stack">
+
+      <!-- ROW 1: Text left + iPad right (Option A style) -->
+      <div class="tech-top">
+        <div class="tech-text stack">
           <span class="eyebrow">Tech Integration in PE</span>
-          <h2>Using technology to enhance movement and learning.</h2>
-          <p>A student-facing app built for the gym — challenges, difficulty levels, video demos, score logging, and reflection. Runs on any device, no login required.</p>
+          <h2>A PE challenge app students actually want to use.</h2>
+          <p>Built for the gym. Runs on any iPad or laptop. No login, no setup — just open and go. Four challenge categories, progressive difficulty levels, video demos, and built-in score logging.</p>
+          <ul class="tech-feature-list">
+            <li>Easy → Medium → Hard progression per challenge</li>
+            <li>Video demo filmed in a real gym for every challenge</li>
+            <li>Score logging + reflection built in</li>
+            <li>No app download — works in any browser</li>
+          </ul>
+          <div class="tech-intro-actions">
+            <a class="button" href="/pe-challenges.html" target="_blank">Open the app →</a>
+            <a class="button-secondary" href={withBase("/say-hello")}>Request a demo</a>
+          </div>
         </div>
-        <div class="tech-intro-actions">
-          <a class="button" href="/pe-challenges.html" target="_blank">Open the app →</a>
-          <a class="button-secondary" href={withBase("/say-hello")}>Request a demo</a>
-        </div>
-      </div>
-
-      <!-- Main showcase -->
-      <div class="app-showcase">
-
-        <!-- iPad in the middle -->
-        <div class="showcase-ipad">
+        <div class="tech-ipad">
           <div class="ipad-landscape">
             <div class="ipad-left-bar"><div class="ipad-camera-side"></div></div>
             <div class="ipad-screen-landscape">
               <div class="app-mockup">
-                <div class="app-header">
-                  <span class="app-trophy">🏆</span>
-                  <span class="app-title">PE Challenges</span>
-                </div>
+                <div class="app-header"><span class="app-trophy">🏆</span><span class="app-title">PE Challenges</span></div>
                 <p class="app-subtitle">Choose a category to get started</p>
                 <div class="app-categories">
                   <div class="app-cat orange"><span class="app-cat-icon">🏀</span><strong>Sport Skills</strong><span>Measurable sport challenges</span></div>
@@ -151,50 +150,27 @@ import { withBase } from "../utils/withBase";
             <div class="ipad-right-bar"><div class="ipad-home-side"></div></div>
           </div>
         </div>
+      </div>
 
-        <!-- Detail cards below -->
-        <div class="showcase-cards">
-
-          <!-- Challenge folder card -->
-          <div class="showcase-card">
-            <div class="sc-header orange-bg">
-              <span>🏀</span>
-              <div>
-                <p class="sc-label">BASKETBALL FREE THROW</p>
-                <p class="sc-sub">Shoot from the free throw line</p>
-              </div>
-            </div>
-            <div class="sc-body">
-              <p class="sc-section-label">SOLO CHALLENGES</p>
-              <div class="sc-level green-level"><span class="sc-dot green-dot"></span><strong>Easy ✅</strong><span class="sc-tag green-tag">Close Range</span><p>Great for building confidence</p></div>
-              <div class="sc-level orange-level"><span class="sc-dot orange-dot"></span><strong>Medium ✅</strong><span class="sc-tag orange-tag">Free Throw Line</span><p>Complete Easy first to unlock</p></div>
-              <div class="sc-level red-level"><span class="sc-dot red-dot"></span><strong>Hard ✅</strong><span class="sc-tag red-tag">3-Point Line</span><p>Complete Medium first to unlock</p></div>
-            </div>
-          </div>
-
-          <!-- Log result card -->
-          <div class="showcase-card">
-            <div class="sc-header purple-bg">
-              <span>📝</span>
-              <div>
-                <p class="sc-label">LOG YOUR RESULT</p>
-                <p class="sc-sub">Basketball Free Throw · Close Range</p>
-              </div>
-            </div>
-            <div class="sc-body">
-              <div class="sc-form-row">
-                <div class="sc-field"><label>Your name</label><div class="sc-input">First name...</div></div>
-                <div class="sc-field"><label>Homeroom class</label><div class="sc-input">e.g. 4B...</div></div>
-              </div>
-              <div class="sc-field"><label>Your score (baskets / 10 shots)</label><div class="sc-input sc-score">0 <span>baskets / 10 shots</span></div></div>
-              <div class="sc-field"><label>How hard did you try? ⬇️</label><div class="sc-stars">★ ★ ★ ★ ★</div></div>
-              <div class="sc-field"><label>Reflect — What did you adjust between shots?</label><div class="sc-textarea">Type your answer here...</div></div>
-              <div class="sc-save-btn">✅ Save My Result</div>
-            </div>
-          </div>
-
+      <!-- ROW 2: 3 feature cards (Option B style) -->
+      <div class="tech-features">
+        <div class="tech-feat-card green-top">
+          <span class="tech-feat-icon">🎯</span>
+          <h4>Progressive Difficulty</h4>
+          <p>Easy, Medium and Hard challenges unlock in sequence — students stay motivated and challenged at their own level.</p>
+        </div>
+        <div class="tech-feat-card orange-top">
+          <span class="tech-feat-icon">📹</span>
+          <h4>Video Demonstrations</h4>
+          <p>Every challenge includes a real classroom video demo so students know exactly what to do before they start.</p>
+        </div>
+        <div class="tech-feat-card purple-top">
+          <span class="tech-feat-icon">📝</span>
+          <h4>Score & Reflect</h4>
+          <p>Students log their score, rate their effort, and write a short reflection — building self-assessment habits every lesson.</p>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -241,191 +217,91 @@ import { withBase } from "../utils/withBase";
     color: var(--accent-deep);
   }
 
-  /* ── Tech intro ── */
-  .tech-intro {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 2rem;
+  /* ── Tech top row (A style) ── */
+  .tech-top {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 3rem;
+    align-items: center;
     margin-bottom: 2.5rem;
-    flex-wrap: wrap;
+  }
+
+  .tech-text { }
+
+  .tech-feature-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tech-feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    padding-left: 0;
+  }
+
+  .tech-feature-list li::before {
+    content: "✓";
+    color: #27ae60;
+    font-weight: 700;
+    flex-shrink: 0;
   }
 
   .tech-intro-actions {
     display: flex;
     gap: 1rem;
-    flex-shrink: 0;
     flex-wrap: wrap;
+    margin-top: 1.5rem;
   }
 
-  /* ── App showcase ── */
-  .app-showcase {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+  .tech-ipad { }
 
-  .showcase-ipad {
-    width: 100%;
-  }
-
-  .showcase-cards {
+  /* ── Feature cards (B style) ── */
+  .tech-features {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
   }
 
-  .showcase-card {
+  .tech-feat-card {
     background: #fff;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-    border: 1px solid rgba(0,0,0,0.07);
-  }
-
-  .sc-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1.1rem;
-    font-size: 1.3rem;
-  }
-
-  .orange-bg { background: #fff3ed; border-bottom: 1px solid #ffe0cc; }
-  .purple-bg { background: #f0eeff; border-bottom: 1px solid #ddd6ff; }
-
-  .sc-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: #555;
-    margin: 0;
-    max-width: none;
-    line-height: 1.3;
-    font-family: "DM Sans", sans-serif;
-  }
-
-  .sc-sub {
-    font-size: 0.82rem;
-    color: #888;
-    margin: 0;
-    max-width: none;
-    line-height: 1.3;
-    font-family: "DM Sans", sans-serif;
-  }
-
-  .sc-body {
-    padding: 1rem 1.1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .sc-section-label {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #999;
-    margin: 0 0 0.25rem;
-    max-width: none;
-    font-family: "DM Sans", sans-serif;
-  }
-
-  .sc-level {
-    display: flex;
-    align-items: center;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-soft);
+    display: grid;
     gap: 0.5rem;
-    padding: 0.6rem 0.85rem;
-    border-radius: 10px;
-    border: 1.5px solid transparent;
-    flex-wrap: wrap;
+    transition: box-shadow 200ms ease, transform 200ms ease;
   }
 
-  .sc-level p { font-size: 0.75rem; color: #888; margin: 0; max-width: none; flex-basis: 100%; font-family: "DM Sans", sans-serif; line-height: 1.3; }
-  .sc-level strong { font-size: 0.88rem; font-family: "DM Sans", sans-serif; color: #2c2c2c; }
+  .tech-feat-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+  }
 
-  .green-level  { background: #f0fff4; border-color: #27ae60; }
-  .orange-level { background: #fff8f0; border-color: #e67e22; }
-  .red-level    { background: #fff0f0; border-color: #e74c3c; }
+  .green-top  { border-top: 3px solid #27ae60; }
+  .orange-top { border-top: 3px solid #ff6b35; }
+  .purple-top { border-top: 3px solid #6c5ce7; }
 
-  .sc-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-  .green-dot  { background: #27ae60; }
-  .orange-dot { background: #e67e22; }
-  .red-dot    { background: #e74c3c; }
+  .tech-feat-icon { font-size: 1.75rem; }
 
-  .sc-tag {
-    font-size: 0.72rem;
+  .tech-feat-card h4 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.25rem;
     font-weight: 600;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    font-family: "DM Sans", sans-serif;
+    color: var(--text);
   }
 
-  .green-tag  { background: #27ae60; color: #fff; }
-  .orange-tag { background: #e67e22; color: #fff; }
-  .red-tag    { background: #e74c3c; color: #fff; }
-
-  .sc-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-  .sc-field { display: flex; flex-direction: column; gap: 0.25rem; }
-  .sc-field label { font-size: 0.72rem; color: #888; font-family: "DM Sans", sans-serif; }
-
-  .sc-input {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 0.45rem 0.65rem;
-    font-size: 0.78rem;
-    color: #bbb;
-    background: #fafafa;
-    font-family: "DM Sans", sans-serif;
-  }
-
-  .sc-score { display: flex; justify-content: space-between; align-items: center; }
-  .sc-score span { font-size: 0.7rem; color: #bbb; }
-
-  .sc-stars { color: #ddd; font-size: 1.1rem; letter-spacing: 2px; }
-
-  .sc-textarea {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 0.5rem 0.65rem;
-    font-size: 0.78rem;
-    color: #bbb;
-    background: #fafafa;
-    min-height: 50px;
-    font-family: "DM Sans", sans-serif;
-  }
-
-  .sc-save-btn {
-    background: linear-gradient(135deg, #6c5ce7, #8e7cf0);
-    color: #fff;
-    text-align: center;
-    padding: 0.65rem;
-    border-radius: 10px;
-    font-size: 0.88rem;
-    font-weight: 700;
-    margin-top: 0.25rem;
-    font-family: "DM Sans", sans-serif;
-  }
-
-  .tech-badge {
-    display: inline-flex;
-    width: fit-content;
-    background: var(--terra);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 0.3rem 0.8rem;
-    border-radius: 999px;
-    margin-bottom: 0.5rem;
-  }
-
-  .tech-actions {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
+  .tech-feat-card p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    max-width: none;
   }
 
   /* ── Landscape iPad ── */
@@ -565,20 +441,9 @@ import { withBase } from "../utils/withBase";
   }
 
   @media (max-width: 900px) {
-    .classroom-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .showcase-cards {
-      grid-template-columns: 1fr;
-    }
-
-    .tech-intro {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .sc-form-row {
+    .classroom-grid,
+    .tech-top,
+    .tech-features {
       grid-template-columns: 1fr;
     }
   }
