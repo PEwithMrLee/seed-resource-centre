@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>PE Circle — Opening & Closing</title>
+<style>
+/* ── LOCK SCREEN ── */
+#v-lock {
+  background: linear-gradient(160deg,#3730a3,#6366f1,#8b5cf6);
+  flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; text-align: center; padding: 40px 24px;
+}
+.lock-logo { font-size: 3.5rem; margin-bottom: 12px; }
+.lock-title { font-size: 1.6rem; font-weight: 800; color: white; margin-bottom: 4px; }
+.lock-sub { font-size: .85rem; color: rgba(255,255,255,.7); margin-bottom: 40px; }
+.lock-box {
+  background: rgba(255,255,255,.12); border-radius: 22px;
+  padding: 28px 24px; width: 100%; max-width: 340px; margin: 0 auto;
+  backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.2);
+}
+.lock-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: rgba(255,255,255,.7); margin-bottom: 10px; }
+.lock-input {
+  width: 100%; background: rgba(255,255,255,.15);
+  border: 2px solid rgba(255,255,255,.25); border-radius: 14px;
+  padding: 14px 16px; font-size: 1.1rem; font-family: inherit;
+  color: white; outline: none; text-align: center; letter-spacing: 4px;
+  transition: border-color .2s; margin-bottom: 14px;
+}
+.lock-input::placeholder { letter-spacing: 1px; color: rgba(255,255,255,.4); font-size: .85rem; }
+.lock-input:focus { border-color: rgba(255,255,255,.7); }
+.lock-btn {
+  width: 100%; padding: 14px; background: white; color: #4f46e5;
+  border: none; border-radius: 14px; font-size: 1rem; font-weight: 800;
+  cursor: pointer; font-family: inherit; transition: opacity .2s;
+}
+.lock-btn:active { opacity: .85; }
+.lock-err { color: #fca5a5; font-size: .8rem; margin-top: 10px; min-height: 20px; }
+.lock-sync-note { color: rgba(255,255,255,.5); font-size: .72rem; margin-top: 16px; }
+
+/* ── SYNC STATUS ── */
+.sync-badge {
+  font-size: .68rem; font-weight: 700; padding: 4px 9px;
+  border-radius: 999px; background: rgba(255,255,255,.18);
+  color: white; white-space: nowrap; border: none; cursor: default;
+}
+.sync-badge.ok   { background: rgba(34,197,94,.3); }
+.sync-badge.err  { background: rgba(239,68,68,.3); }
+.sync-badge.busy { background: rgba(245,158,11,.3); }
+</style>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --fly:#22c55e; --fly-l:#dcfce7;
+  --grow:#f59e0b; --grow-l:#fef3c7;
+  --pit:#ef4444;  --pit-l:#fee2e2;
+  --bg:#f0f4f8; --card:#fff;
+  --text:#1e293b; --muted:#94a3b8;
+  --accent:#6366f1; --accent2:#8b5cf6;
+  --border:#e2e8f0;
+  --open-grad: linear-gradient(135deg,#6366f1,#8b5cf6);
+  --close-grad: linear-gradient(135deg,#0ea5e9,#6366f1);
+}
+body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+
+/* ════════════════════════════════
+   VIEWS
+════════════════════════════════ */
+.view { display:none; flex-direction:column; min-height:100vh; }
+.view.active { display:flex; }
+
+/* ════════════════════════════════
+   HOME VIEW
+════════════════════════════════ */
+.home-header {
+  background: var(--open-grad);
+  color:white; padding:20px 18px 18px;
+  text-align:center;
+}
+.home-header .logo { font-size:2rem; margin-bottom:4px; }
+.home-header h1 { font-size:1.35rem; font-weight:800; letter-spacing:-.5px; }
+.home-header p { font-size:.8rem; opacity:.8; margin-top:4px; }
+
+.home-date-bar {
+  background:white; border-bottom:1px solid var(--border);
+  padding:10px 16px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.home-date-bar .dl { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); }
+.date-in {
+  border:2px solid var(--border); border-radius:9px;
+  padding:5px 10px; font-size:.82rem; font-family:inherit;
+  color:var(--text); background:#f8fafc; outline:none; font-weight:600;
+  transition:border-color .2s;
+}
+.date-in:focus { border-color:var(--accent); }
+.set-btn {
+  background:var(--open-grad); color:white; border:none;
+  border-radius:9px; padding:6px 12px; font-size:.74rem; font-weight:700;
+  cursor:pointer; font-family:inherit;
+}
+
+.home-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+  gap:12px; padding:14px 14px 100px;
+}
+.home-section-label {
+  grid-column:1/-1;
+  font-size:.65rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.8px; color:var(--muted); padding:6px 2px 0;
+}
+
+.class-card {
+  background:var(--card); border-radius:16px;
+  padding:16px 14px 14px; cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  border:2px solid transparent;
+  transition:transform .15s, box-shadow .15s, border-color .15s;
+  display:flex; flex-direction:column; gap:4px;
+}
+.class-card:active { transform:scale(.97); }
+.class-card:hover { box-shadow:0 4px 16px rgba(99,102,241,.15); border-color:var(--accent); }
+.cc-name { font-size:1.05rem; font-weight:800; }
+.cc-count { font-size:.72rem; color:var(--muted); }
+.cc-last { font-size:.68rem; color:var(--muted); margin-top:4px; }
+.cc-dots { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; }
+.cc-dot { width:12px; height:12px; border-radius:50%; }
+.cc-dot.fly  { background:var(--fly); }
+.cc-dot.grow { background:var(--grow); }
+.cc-dot.pit  { background:var(--pit); }
+.cc-dot.none { background:#e2e8f0; }
+
+.home-add-btn {
+  position:fixed; bottom:22px; right:16px;
+  background:var(--open-grad); color:white; border:none;
+  border-radius:50%; width:52px; height:52px; font-size:1.4rem;
+  cursor:pointer; box-shadow:0 4px 14px rgba(99,102,241,.4);
+  display:flex; align-items:center; justify-content:center;
+  z-index:150;
+}
+
+/* ════════════════════════════════
+   CLASS HUB VIEW
+════════════════════════════════ */
+.hub-header {
+  background:var(--open-grad); color:white;
+  padding:14px 16px 12px;
+  display:flex; align-items:center; gap:12px;
+}
+.back-btn {
+  background:rgba(255,255,255,.22); border:none; color:white;
+  border-radius:10px; padding:7px 13px; font-size:.82rem;
+  cursor:pointer; font-weight:600; font-family:inherit;
+}
+.hub-header h2 { font-size:1.1rem; font-weight:800; flex:1; }
+.hub-header .hdate { font-size:.72rem; opacity:.75; }
+
+.hub-body { padding:18px 16px 80px; flex:1; }
+
+.hub-meta {
+  background:white; border-radius:14px;
+  padding:14px 16px; margin-bottom:16px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.hub-meta-row { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+.hub-stat { text-align:center; }
+.hub-stat .sv { font-size:1.4rem; font-weight:800; }
+.hub-stat .sl { font-size:.62rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); }
+
+.atl-unit-bar {
+  background:white; border-radius:14px; padding:14px 16px;
+  margin-bottom:16px; box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.atl-unit-bar .aul { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin-bottom:8px; }
+.atl-chips-row { display:flex; gap:7px; flex-wrap:wrap; }
+.atl-ch {
+  padding:6px 14px; border-radius:999px; border:2px solid var(--border);
+  background:#f8fafc; font-size:.76rem; font-weight:600;
+  cursor:pointer; font-family:inherit; transition:all .15s;
+}
+.atl-ch.on { background:#eef2ff; border-color:var(--accent); color:var(--accent); }
+
+.hub-circles { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+.circle-card {
+  border-radius:18px; padding:22px 16px 20px; cursor:pointer;
+  color:white; text-align:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.15);
+  transition:transform .15s;
+  border:none; font-family:inherit;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.circle-card:active { transform:scale(.96); }
+.circle-card.opening { background:var(--open-grad); }
+.circle-card.closing { background:var(--close-grad); }
+.circle-card .cc-icon { font-size:2rem; }
+.circle-card .cc-title { font-size:1rem; font-weight:800; }
+.circle-card .cc-sub { font-size:.72rem; opacity:.8; }
+
+/* ════════════════════════════════
+   SHARED HEADER FOR CIRCLE VIEWS
+════════════════════════════════ */
+.circle-header {
+  color:white; padding:11px 14px;
+  display:flex; align-items:center; gap:10px;
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.circle-header.opening { background:var(--open-grad); }
+.circle-header.closing { background:var(--close-grad); }
+.circle-header h2 { font-size:.95rem; font-weight:700; flex:1; }
+.hbtn {
+  background:rgba(255,255,255,.2); border:none; color:white;
+  border-radius:18px; padding:6px 11px; font-size:.74rem;
+  cursor:pointer; font-weight:600; font-family:inherit; white-space:nowrap;
+}
+.hbtn:active { background:rgba(255,255,255,.35); }
+
+/* session bar */
+.sbar {
+  background:white; border-bottom:1px solid var(--border);
+  padding:8px 12px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+}
+.slbl { font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); white-space:nowrap; }
+.pulse-chips { display:flex; gap:4px; align-items:center; flex-wrap:wrap; margin-left:auto; }
+.pc { display:flex; align-items:center; gap:3px; padding:3px 8px; border-radius:999px; font-size:.68rem; font-weight:700; }
+.pc.fly  { background:var(--fly-l);  color:#15803d; }
+.pc.grow { background:var(--grow-l); color:#92400e; }
+.pc.pit  { background:var(--pit-l);  color:#991b1b; }
+.pc .dot { width:6px; height:6px; border-radius:50%; }
+.pc.fly .dot  { background:var(--fly); }
+.pc.grow .dot { background:var(--grow); }
+.pc.pit .dot  { background:var(--pit); }
+.ck-lbl { font-size:.68rem; color:var(--muted); font-weight:600; white-space:nowrap; }
+
+/* ════════════════════════════════
+   OPENING CIRCLE REGISTER
+════════════════════════════════ */
+.twrap { padding:10px 10px 100px; }
+.tgrid { grid-template-columns: 110px 34px 108px 78px 1fr; }
+.thead { display:grid; padding:0 2px 5px; gap:0; }
+.th { font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); padding:0 4px; }
+.th.c { text-align:center; }
+.row {
+  display:grid; align-items:stretch; background:white;
+  border-radius:11px; margin-bottom:6px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  border:2px solid transparent; overflow:hidden; min-height:48px;
+  transition:border-color .2s;
+}
+.row.fly  { border-color:var(--fly); }
+.row.grow { border-color:var(--grow); }
+.row.pit  { border-color:var(--pit); }
+.c-name {
+  display:flex; align-items:center; gap:7px; padding:8px 8px;
+  cursor:pointer; user-select:none; border-right:1px solid var(--border);
+  transition:background .15s; overflow:hidden;
+}
+.c-name:active { background:#f8fafc; }
+.c-flag { font-size:1.1rem; flex-shrink:0; }
+.c-nm { font-weight:700; font-size:.84rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.c-alerts { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:3px 2px; border-right:1px solid var(--border); font-size:.66rem; line-height:1.4; }
+.c-lights { display:flex; align-items:center; justify-content:center; gap:4px; padding:6px 4px; border-right:1px solid var(--border); }
+.lb { width:28px; height:28px; border-radius:50%; border:2.5px solid transparent; cursor:pointer; transition:transform .12s; display:flex; align-items:center; justify-content:center; font-size:.68rem; font-weight:900; color:transparent; }
+.lb:active { transform:scale(.82); }
+.lb.g { background:#d1fae5; border-color:#a7f3d0; }
+.lb.a { background:#fef3c7; border-color:#fde68a; }
+.lb.r { background:#fee2e2; border-color:#fca5a5; }
+.lb.g.on { background:var(--fly);  border-color:#16a34a; color:white; box-shadow:0 0 0 3px rgba(34,197,94,.2); }
+.lb.a.on { background:var(--grow); border-color:#d97706; color:white; box-shadow:0 0 0 3px rgba(245,158,11,.2); }
+.lb.r.on { background:var(--pit);  border-color:#dc2626; color:white; box-shadow:0 0 0 3px rgba(239,68,68,.2); animation:pr 1.5s infinite; }
+@keyframes pr { 0%,100%{box-shadow:0 0 0 3px rgba(239,68,68,.2)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)} }
+.c-status { display:flex; align-items:center; justify-content:center; padding:4px 3px; border-right:1px solid var(--border); }
+.chip { font-size:.6rem; font-weight:800; text-transform:uppercase; letter-spacing:.3px; padding:3px 7px; border-radius:999px; }
+.chip.fly  { background:var(--fly-l);  color:#15803d; }
+.chip.grow { background:var(--grow-l); color:#92400e; }
+.chip.pit  { background:var(--pit-l);  color:#991b1b; }
+.chip.none { background:#f1f5f9; color:var(--muted); }
+.c-hist { display:flex; align-items:center; gap:5px; padding:6px 8px; overflow-x:auto; scrollbar-width:none; }
+.c-hist::-webkit-scrollbar { display:none; }
+.hd { display:flex; flex-direction:column; align-items:center; gap:1px; flex-shrink:0; }
+.hc { width:18px; height:18px; border-radius:50%; border:1.5px solid rgba(0,0,0,.08); }
+.hc.fly  { background:var(--fly); }
+.hc.grow { background:var(--grow); }
+.hc.pit  { background:var(--pit); }
+.hc.none { background:#e2e8f0; }
+.hl { font-size:.48rem; color:var(--muted); font-weight:700; line-height:1; }
+
+.fab { position:fixed; bottom:20px; right:16px; width:50px; height:50px; background:var(--open-grad); border-radius:50%; border:none; color:white; font-size:1.35rem; cursor:pointer; box-shadow:0 4px 14px rgba(99,102,241,.4); display:flex; align-items:center; justify-content:center; z-index:150; transition:transform .15s; }
+.fab:active { transform:scale(.9); }
+
+/* ════════════════════════════════
+   CLOSING CIRCLE
+════════════════════════════════ */
+.closing-body { padding:12px 14px 80px; flex:1; }
+
+/* Tab bar */
+.tab-bar {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  background:white; border-radius:14px; padding:4px;
+  margin-bottom:14px; box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.tab {
+  padding:9px 4px; border-radius:10px; border:none;
+  background:transparent; cursor:pointer; font-family:inherit;
+  font-size:.68rem; font-weight:700; color:var(--muted);
+  text-align:center; transition:all .2s;
+}
+.tab .ti { font-size:1.1rem; display:block; margin-bottom:2px; }
+.tab.active { background:var(--close-grad); color:white; }
+
+/* Tab panels */
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* PROTOCOL PANEL */
+.protocol-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.proto-card {
+  background:white; border-radius:14px; padding:14px 12px;
+  cursor:pointer; border:2px solid transparent;
+  box-shadow:0 1px 4px rgba(0,0,0,.06); transition:all .15s;
+  text-align:center; font-family:inherit;
+}
+.proto-card:active { transform:scale(.96); }
+.proto-card.selected { border-color:var(--accent); background:#eef2ff; }
+.proto-icon { font-size:1.6rem; display:block; margin-bottom:6px; }
+.proto-name { font-size:.82rem; font-weight:800; display:block; margin-bottom:4px; }
+.proto-desc { font-size:.68rem; color:var(--muted); line-height:1.4; }
+
+/* PROMPT PANEL */
+.prompt-controls { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+.cat-btn {
+  padding:5px 12px; border-radius:999px; border:2px solid var(--border);
+  background:#f8fafc; font-size:.7rem; font-weight:700;
+  cursor:pointer; font-family:inherit; transition:all .15s; white-space:nowrap;
+}
+.cat-btn.active { background:var(--close-grad); color:white; border-color:transparent; }
+
+.prompt-display {
+  background:white; border-radius:18px; padding:22px 18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.07); margin-bottom:12px;
+  min-height:130px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  cursor:pointer; transition:transform .15s;
+  border:2px solid var(--border);
+}
+.prompt-display:active { transform:scale(.98); }
+.prompt-emoji { font-size:2rem; margin-bottom:10px; }
+.prompt-text { font-size:1rem; font-weight:700; line-height:1.5; color:var(--text); }
+.prompt-hint { font-size:.72rem; color:var(--muted); margin-top:8px; }
+
+.protocol-label {
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  margin-bottom:12px; font-size:.75rem; font-weight:600; color:var(--muted);
+}
+.sharing-badge {
+  background:#eef2ff; color:var(--accent); border-radius:999px;
+  padding:3px 10px; font-size:.7rem; font-weight:700;
+}
+
+.spin-btn {
+  width:100%; padding:14px; background:var(--close-grad);
+  color:white; border:none; border-radius:14px; font-size:.92rem;
+  font-weight:700; cursor:pointer; font-family:inherit;
+  transition:opacity .2s;
+}
+.spin-btn:active { opacity:.85; }
+
+/* CHECKOUT PANEL */
+.checkout-row {
+  display:grid; grid-template-columns:110px 1fr 90px;
+  background:white; border-radius:11px; margin-bottom:6px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05); border:2px solid transparent;
+  overflow:hidden; min-height:48px; align-items:stretch;
+  transition:border-color .2s;
+}
+.checkout-row.exc { border-color:#8b5cf6; }
+.checkout-row.mee { border-color:var(--fly); }
+.checkout-row.dev { border-color:var(--grow); }
+.checkout-row.beg { border-color:var(--pit); }
+.co-name {
+  display:flex; align-items:center; gap:7px; padding:8px;
+  border-right:1px solid var(--border); cursor:pointer;
+  user-select:none; transition:background .15s;
+}
+.co-name:active { background:#f8fafc; }
+.co-levels {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border-right:1px solid var(--border);
+}
+.co-lvl {
+  display:flex; align-items:center; justify-content:center;
+  padding:4px 2px; cursor:pointer; border:none; background:transparent;
+  font-size:.58rem; font-weight:700; color:var(--muted);
+  transition:background .15s; font-family:inherit;
+  border-right:1px solid var(--border);
+}
+.co-lvl:last-child { border-right:none; }
+.co-lvl:active { background:#f8fafc; }
+.co-lvl.beg.on { background:var(--pit-l); color:#991b1b; }
+.co-lvl.dev.on { background:var(--grow-l); color:#92400e; }
+.co-lvl.mee.on { background:var(--fly-l); color:#15803d; }
+.co-lvl.exc.on { background:#f3e8ff; color:#7e22ce; }
+.co-feel {
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem; padding:4px;
+}
+
+/* ENERGIZER PANEL */
+.energizer-display {
+  background:white; border-radius:18px; padding:22px 18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.08); margin-bottom:12px;
+  text-align:center; border:2px solid var(--border);
+  transition:transform .15s; cursor:pointer;
+  min-height:160px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.energizer-display:active { transform:scale(.98); }
+.en-icon { font-size:2.8rem; margin-bottom:10px; display:block; }
+.en-name { font-size:1.05rem; font-weight:800; margin-bottom:8px; }
+.en-how { font-size:.78rem; color:var(--muted); line-height:1.6; max-width:300px; }
+.en-time { font-size:.68rem; background:var(--fly-l); color:#15803d; border-radius:999px; padding:3px 10px; font-weight:700; margin-top:8px; display:inline-block; }
+
+.en-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+.en-mini {
+  background:white; border-radius:12px; padding:10px 6px;
+  border:2px solid transparent; cursor:pointer; text-align:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.06); font-family:inherit;
+  transition:all .15s;
+}
+.en-mini:active { transform:scale(.95); }
+.en-mini.sel { border-color:var(--accent); background:#eef2ff; }
+.en-mini .emi { font-size:1.3rem; display:block; margin-bottom:3px; }
+.en-mini .eml { font-size:.64rem; font-weight:700; color:var(--text); }
+
+.celebration-btn {
+  width:100%; padding:16px; border:none; border-radius:14px;
+  font-size:1rem; font-weight:800; cursor:pointer; font-family:inherit;
+  background:linear-gradient(135deg,#f59e0b,#ef4444,#8b5cf6);
+  color:white; letter-spacing:.5px; transition:opacity .2s;
+  animation:rainbow 4s linear infinite;
+}
+@keyframes rainbow { 0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)} }
+.celebration-btn:active { opacity:.85; }
+
+/* ════════════════════════════════
+   SHEETS / OVERLAYS
+════════════════════════════════ */
+.ovl { display:none; position:fixed; inset:0; background:rgba(15,23,42,.5); z-index:200; align-items:flex-end; justify-content:center; backdrop-filter:blur(4px); }
+.ovl.open { display:flex; }
+.sheet { background:white; border-radius:24px 24px 0 0; width:100%; max-width:640px; max-height:90vh; overflow-y:auto; padding:18px 16px 44px; animation:su .22s ease; }
+@keyframes su { from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1} }
+.hdl { width:36px;height:4px;background:#e2e8f0;border-radius:2px;margin:0 auto 14px; }
+
+/* Detail sheet */
+.sh-hd { display:flex;align-items:center;gap:10px;margin-bottom:16px; }
+.sh-flag{font-size:2rem;}
+.sh-name{font-size:1.2rem;font-weight:800;}
+.sh-sub{font-size:.76rem;color:var(--muted);margin-top:1px;}
+
+.sec{margin-bottom:16px;}
+.sl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:7px;}
+.srow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.sbtn{padding:11px 4px;border-radius:12px;border:3px solid #e2e8f0;background:#f8fafc;cursor:pointer;text-align:center;transition:all .15s;font-family:inherit;}
+.sbtn .si{font-size:1.2rem;display:block;}
+.sbtn .sl2{font-size:.68rem;font-weight:700;display:block;margin-top:3px;}
+.sbtn.fly-btn.on{background:var(--fly-l);border-color:var(--fly);}
+.sbtn.grow-btn.on{background:var(--grow-l);border-color:var(--grow);}
+.sbtn.pit-btn.on{background:var(--pit-l);border-color:var(--pit);}
+.sbtn:active{transform:scale(.95);}
+.frow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.fbtn{padding:9px 2px;border-radius:11px;border:3px solid #e2e8f0;background:#f8fafc;cursor:pointer;text-align:center;transition:all .15s;font-family:inherit;}
+.fbtn .fi{font-size:1.3rem;display:block;}
+.fbtn .fl{font-size:.58rem;font-weight:600;color:var(--muted);display:block;margin-top:2px;}
+.fbtn.on{border-color:var(--accent);background:#eef2ff;}
+.fbtn:active{transform:scale(.95);}
+.trow{display:flex;align-items:center;justify-content:space-between;background:#f8fafc;border-radius:11px;padding:11px 12px;margin-bottom:6px;}
+.ti strong{font-size:.84rem;display:block;}
+.ti span{font-size:.72rem;color:var(--muted);}
+.tog{width:42px;height:24px;background:#cbd5e1;border-radius:999px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none;}
+.tog.on{background:var(--accent);}
+.tog::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.tog.on::after{transform:translateX(18px);}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.ac{padding:8px 10px;background:#f8fafc;border-radius:10px;border:2px solid transparent;cursor:pointer;font-size:.76rem;font-weight:600;transition:all .15s;font-family:inherit;text-align:left;}
+.ac.on{background:#eef2ff;border-color:var(--accent);color:var(--accent);}
+.lrow{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;}
+.lvb{padding:7px 2px;border-radius:8px;border:2px solid #e2e8f0;background:#f8fafc;cursor:pointer;font-size:.66rem;font-weight:700;text-align:center;transition:all .15s;font-family:inherit;}
+.lvb.on{background:var(--accent);border-color:var(--accent);color:white;}
+.ntf{width:100%;background:#f8fafc;border:2px solid #e2e8f0;border-radius:11px;padding:11px;font-family:inherit;font-size:.84rem;resize:none;outline:none;color:var(--text);transition:border-color .2s;min-height:66px;}
+.ntf:focus{border-color:var(--accent);}
+.svbtn{width:100%;padding:13px;background:var(--open-grad);color:white;border:none;border-radius:13px;font-size:.9rem;font-weight:700;cursor:pointer;margin-top:5px;font-family:inherit;}
+.svbtn:active{opacity:.85;}
+
+/* Note history */
+.note-hist { max-height:140px; overflow-y:auto; }
+.note-entry { background:#f8fafc; border-radius:9px; padding:8px 10px; margin-bottom:6px; }
+.note-date { font-size:.6rem; font-weight:700; color:var(--muted); margin-bottom:3px; }
+.note-text { font-size:.78rem; color:var(--text); line-height:1.4; }
+
+/* Add class / add student */
+.as-sheet{background:white;border-radius:24px 24px 0 0;width:100%;max-width:640px;padding:18px 16px 44px;animation:su .22s ease;}
+.as-sheet h2{font-size:1.05rem;font-weight:800;margin-bottom:14px;}
+.fg{margin-bottom:11px;}
+.fg label{display:block;font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px;}
+.fg input,.fg select{width:100%;padding:10px 12px;border:2px solid #e2e8f0;border-radius:11px;font-size:.88rem;font-family:inherit;outline:none;color:var(--text);background:#f8fafc;transition:border-color .2s;}
+.fg input:focus,.fg select:focus{border-color:var(--accent);}
+
+.empty-s{text-align:center;padding:40px 14px;color:var(--muted);}
+.empty-s .ei{font-size:2.2rem;display:block;margin-bottom:8px;}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     VIEW 0: LOCK SCREEN
+══════════════════════════════════════ -->
+<div class="view active" id="v-lock">
+  <div class="lock-logo">🏃</div>
+  <div class="lock-title">PE Circle</div>
+  <div class="lock-sub">Opening &amp; Closing Circle — IB PYP</div>
+  <div class="lock-box">
+    <div class="lock-label">Enter password to continue</div>
+    <input class="lock-input" type="password" id="lockInput" placeholder="Password" autocomplete="off"
+      onkeydown="if(event.key==='Enter')unlock()">
+    <button class="lock-btn" onclick="unlock()">Unlock</button>
+    <div class="lock-err" id="lockErr"></div>
+    <div class="lock-sync-note" id="lockSyncNote"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     VIEW 1: HOME
+══════════════════════════════════════ -->
+<div class="view" id="v-home">
+  <div class="home-header">
+    <div class="logo">🏃</div>
+    <h1>PE Circle</h1>
+    <p>Opening &amp; Closing Circle — IB PYP</p>
+    <div style="margin-top:8px;display:flex;gap:6px;justify-content:center;align-items:center;">
+      <span class="sync-badge" id="syncBadge">☁️ …</span>
+      <button class="sync-badge" style="cursor:pointer;" onclick="manualSync()" title="Sync now">↻ Sync</button>
+    </div>
+  </div>
+  <div class="home-date-bar">
+    <span class="dl">Session date</span>
+    <input type="date" class="date-in" id="homeDateIn">
+    <button class="set-btn" onclick="setGlobalDate()">Set</button>
+  </div>
+  <div class="home-grid" id="homeGrid"></div>
+  <button class="home-add-btn" onclick="openAddClass()" title="Add class">+</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     VIEW 2: CLASS HUB
+══════════════════════════════════════ -->
+<div class="view" id="v-hub">
+  <div class="hub-header">
+    <button class="back-btn" onclick="goHome()">← Home</button>
+    <div style="flex:1">
+      <h2 id="hubClassName"></h2>
+      <div class="hdate" id="hubDate"></div>
+    </div>
+  </div>
+  <div class="hub-body">
+    <div class="hub-meta">
+      <div class="hub-meta-row">
+        <div class="hub-stat"><div class="sv" id="hubStudents">0</div><div class="sl">Students</div></div>
+        <div class="hub-stat"><div class="sv fly" id="hubFly" style="color:var(--fly)">0</div><div class="sl">Fly</div></div>
+        <div class="hub-stat"><div class="sv" id="hubGrow" style="color:var(--grow)">0</div><div class="sl">Grow</div></div>
+        <div class="hub-stat"><div class="sv" id="hubPit" style="color:var(--pit)">0</div><div class="sl">Pit Stop</div></div>
+        <div class="hub-stat"><div class="sv" id="hubChecked">0</div><div class="sl">Checked in</div></div>
+      </div>
+    </div>
+
+    <div class="atl-unit-bar">
+      <div class="aul">Unit ATL Focus (applies to whole class)</div>
+      <div class="atl-chips-row">
+        <button class="atl-ch" onclick="setUnitATL('Communication')">💬 Communication</button>
+        <button class="atl-ch" onclick="setUnitATL('Social')">🤝 Social</button>
+        <button class="atl-ch" onclick="setUnitATL('Self-Management')">🎯 Self-Management</button>
+        <button class="atl-ch" onclick="setUnitATL('Research')">🔍 Research</button>
+        <button class="atl-ch" onclick="setUnitATL('Thinking')">🧠 Thinking</button>
+      </div>
+    </div>
+
+    <div class="hub-circles">
+      <button class="circle-card opening" onclick="goOpening()">
+        <span class="cc-icon">🌅</span>
+        <span class="cc-title">Opening Circle</span>
+        <span class="cc-sub">Check-in &amp; Readiness</span>
+      </button>
+      <button class="circle-card closing" onclick="goClosing()">
+        <span class="cc-icon">🌙</span>
+        <span class="cc-title">Closing Circle</span>
+        <span class="cc-sub">Reflect &amp; Celebrate</span>
+      </button>
+    </div>
+
+    <button class="svbtn" style="background:transparent;color:var(--muted);border:2px solid var(--border);margin-top:4px;" onclick="openAddStudent()">+ Add Student</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     VIEW 3: OPENING CIRCLE
+══════════════════════════════════════ -->
+<div class="view" id="v-opening">
+  <div class="circle-header opening">
+    <button class="back-btn" onclick="goHub()">← Hub</button>
+    <h2>🌅 Opening Circle — <span id="opClassName"></span></h2>
+    <button class="hbtn" onclick="openSummary('opening')">📋</button>
+    <button class="hbtn" onclick="resetSession()">↺</button>
+  </div>
+  <div class="sbar">
+    <span class="slbl" id="opDateLabel"></span>
+    <div class="pulse-chips">
+      <div class="pc fly"><div class="dot"></div><span id="cFly">0</span> Fly</div>
+      <div class="pc grow"><div class="dot"></div><span id="cGrow">0</span> Grow</div>
+      <div class="pc pit"><div class="dot"></div><span id="cPit">0</span> Pit Stop</div>
+      <span class="ck-lbl" id="cChecked">0/0</span>
+    </div>
+  </div>
+  <div class="twrap">
+    <div class="thead tgrid">
+      <div class="th">Student</div>
+      <div class="th c">⚑</div>
+      <div class="th c">Readiness</div>
+      <div class="th c">Today</div>
+      <div class="th">History</div>
+    </div>
+    <div id="regList"></div>
+  </div>
+  <button class="fab" onclick="openAddStudent()">+</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     VIEW 4: CLOSING CIRCLE
+══════════════════════════════════════ -->
+<div class="view" id="v-closing">
+  <div class="circle-header closing">
+    <button class="back-btn" onclick="goHub()">← Hub</button>
+    <h2>🌙 Closing Circle — <span id="clClassName"></span></h2>
+    <button class="hbtn" onclick="openSummary('closing')">📋</button>
+  </div>
+  <div class="closing-body">
+
+    <!-- TABS -->
+    <div class="tab-bar">
+      <button class="tab active" onclick="showTab(0)"><span class="ti">🤝</span>Protocol</button>
+      <button class="tab" onclick="showTab(1)"><span class="ti">💬</span>Prompt</button>
+      <button class="tab" onclick="showTab(2)"><span class="ti">📊</span>Check-out</button>
+      <button class="tab" onclick="showTab(3)"><span class="ti">⚡</span>Energizer</button>
+    </div>
+
+    <!-- PANEL 0: PROTOCOL -->
+    <div class="tab-panel active" id="tp-0">
+      <div class="protocol-grid" id="protoGrid"></div>
+    </div>
+
+    <!-- PANEL 1: PROMPT -->
+    <div class="tab-panel" id="tp-1">
+      <div class="protocol-label">
+        Sharing via: <span class="sharing-badge" id="sharingBadge">No protocol selected</span>
+      </div>
+      <div class="prompt-controls" id="catControls"></div>
+      <div class="prompt-display" onclick="spinPrompt()">
+        <div class="prompt-emoji" id="promptEmoji">💬</div>
+        <div class="prompt-text" id="promptText">Tap to get a reflection prompt</div>
+        <div class="prompt-hint">Tap anywhere to get a new prompt</div>
+      </div>
+      <button class="spin-btn" onclick="spinPrompt()">🎲 New Prompt</button>
+    </div>
+
+    <!-- PANEL 2: CHECK-OUT -->
+    <div class="tab-panel" id="tp-2">
+      <div style="background:white;border-radius:12px;padding:10px 12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.05);">
+        <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;">Today's Focus</div>
+        <div style="font-size:.82rem;font-weight:600;" id="coFocusLabel">—</div>
+      </div>
+      <div style="display:grid;grid-template-columns:110px 1fr 90px;margin-bottom:5px;padding:0 2px;">
+        <div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Student</div>
+        <div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);text-align:center;display:grid;grid-template-columns:repeat(4,1fr);">
+          <span>Beg</span><span>Dev</span><span>Meet</span><span>Exc</span>
+        </div>
+        <div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);text-align:center;">Feeling</div>
+      </div>
+      <div id="checkoutList"></div>
+    </div>
+
+    <!-- PANEL 3: ENERGIZER -->
+    <div class="tab-panel" id="tp-3">
+      <div class="energizer-display" onclick="spinEnergizer()">
+        <span class="en-icon" id="enIcon">⚡</span>
+        <div class="en-name" id="enName">Tap to pick a closing activity</div>
+        <div class="en-how" id="enHow">Random energizer or celebration game for your class</div>
+        <span class="en-time" id="enTime" style="display:none"></span>
+      </div>
+      <div class="en-grid" id="enGrid"></div>
+      <button class="celebration-btn" onclick="celebrate()">🎉 Class Celebration!</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     OVERLAYS
+══════════════════════════════════════ -->
+
+<!-- STUDENT DETAIL -->
+<div class="ovl" id="detOvl" onclick="oClose(event,'detOvl')">
+  <div class="sheet">
+    <div class="hdl"></div>
+    <div class="sh-hd">
+      <div class="sh-flag" id="dFlag"></div>
+      <div><div class="sh-name" id="dName"></div><div class="sh-sub" id="dSub"></div></div>
+    </div>
+    <div class="sec">
+      <div class="sl">Readiness Status</div>
+      <div class="srow">
+        <button class="sbtn fly-btn"  onclick="sStatus('fly')"><span class="si">🟢</span><span class="sl2">Fly</span></button>
+        <button class="sbtn grow-btn" onclick="sStatus('grow')"><span class="si">🟡</span><span class="sl2">Grow</span></button>
+        <button class="sbtn pit-btn"  onclick="sStatus('pit')"><span class="si">🔴</span><span class="sl2">Pit Stop</span></button>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sl">How are you feeling?</div>
+      <div class="frow">
+        <button class="fbtn" onclick="sFeeling('energised')"><span class="fi">⚡</span><span class="fl">Energised</span></button>
+        <button class="fbtn" onclick="sFeeling('ok')"><span class="fi">😊</span><span class="fl">OK</span></button>
+        <button class="fbtn" onclick="sFeeling('tired')"><span class="fi">😴</span><span class="fl">Tired</span></button>
+        <button class="fbtn" onclick="sFeeling('upset')"><span class="fi">😟</span><span class="fl">Something's up</span></button>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sl">Flags</div>
+      <div class="trow"><div class="ti"><strong>⚠️ Warning Issued</strong><span>One warning — Pit Stop</span></div><button class="tog" id="togW" onclick="sTog('warning')"></button></div>
+      <div class="trow"><div class="ti"><strong>👩‍🏫 Contact Class Teacher</strong><span>Flag for homeroom follow-up</span></div><button class="tog" id="togT" onclick="sTog('contactTeacher')"></button></div>
+      <div class="trow"><div class="ti"><strong>👨‍👩‍👧 Contact Parent</strong><span>Flag for parent communication</span></div><button class="tog" id="togP" onclick="sTog('contactParent')"></button></div>
+    </div>
+    <div class="sec">
+      <div class="sl">ATL Skill Focus</div>
+      <div class="ag">
+        <button class="ac" onclick="sATL('Communication')">💬 Communication</button>
+        <button class="ac" onclick="sATL('Social')">🤝 Social</button>
+        <button class="ac" onclick="sATL('Self-Management')">🎯 Self-Management</button>
+        <button class="ac" onclick="sATL('Research')">🔍 Research</button>
+        <button class="ac" onclick="sATL('Thinking')">🧠 Thinking</button>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sl">ATL Level</div>
+      <div class="lrow" id="atlRow">
+        <button class="lvb" onclick="sLevel('atl','Beginning')">Beginning</button>
+        <button class="lvb" onclick="sLevel('atl','Developing')">Developing</button>
+        <button class="lvb" onclick="sLevel('atl','Meeting')">Meeting</button>
+        <button class="lvb" onclick="sLevel('atl','Exceeding')">Exceeding</button>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sl">PE Skill Level</div>
+      <div class="lrow" id="peRow">
+        <button class="lvb" onclick="sLevel('pe','Beginning')">Beginning</button>
+        <button class="lvb" onclick="sLevel('pe','Developing')">Developing</button>
+        <button class="lvb" onclick="sLevel('pe','Meeting')">Meeting</button>
+        <button class="lvb" onclick="sLevel('pe','Exceeding')">Exceeding</button>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sl">Teacher Note (today)</div>
+      <textarea class="ntf" id="ntf" placeholder="Observations, context, follow-up..." rows="3"></textarea>
+    </div>
+    <div class="sec" id="noteHistSec" style="display:none">
+      <div class="sl">Note History</div>
+      <div class="note-hist" id="noteHist"></div>
+    </div>
+    <button class="svbtn" onclick="saveDet()">Save & Close</button>
+  </div>
+</div>
+
+<!-- ADD CLASS -->
+<div class="ovl" id="addClassOvl" onclick="oClose(event,'addClassOvl')">
+  <div class="as-sheet">
+    <div class="hdl"></div>
+    <h2>Add Class</h2>
+    <div class="fg"><label>Class Name</label><input type="text" id="newClassName" placeholder="e.g. Year 4A" autocomplete="off"></div>
+    <button class="svbtn" onclick="addClassConfirm()">Add Class</button>
+  </div>
+</div>
+
+<!-- ADD STUDENT -->
+<div class="ovl" id="addStuOvl" onclick="oClose(event,'addStuOvl')">
+  <div class="as-sheet">
+    <div class="hdl"></div>
+    <h2>Add Student</h2>
+    <div class="fg"><label>First Name</label><input type="text" id="nName" placeholder="e.g. Mei" autocomplete="off"></div>
+    <div class="fg"><label>Flag Emoji</label><input type="text" id="nFlag" placeholder="e.g. 🇯🇵" maxlength="4"></div>
+    <div class="fg">
+      <label>Starting Status</label>
+      <select id="nStatus">
+        <option value="unchecked">Not set yet</option>
+        <option value="fly">🟢 Fly</option>
+        <option value="grow">🟡 Grow</option>
+        <option value="pit">🔴 Pit Stop</option>
+      </select>
+    </div>
+    <button class="svbtn" onclick="addStudentConfirm()">Add to Register</button>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="ovl" id="sumOvl" onclick="oClose(event,'sumOvl')">
+  <div class="sheet">
+    <div class="hdl"></div>
+    <h2 style="font-size:1.05rem;font-weight:800;margin-bottom:12px;" id="sumTitle">Summary</h2>
+    <div id="sumContent" style="font-size:.82rem;line-height:2;white-space:pre-wrap;color:var(--text);"></div>
+    <button class="svbtn" style="margin-top:16px;" onclick="document.getElementById('sumOvl').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+<!-- CELEBRATION overlay -->
+<div id="celebOvl" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(15,23,42,.7);align-items:center;justify-content:center;backdrop-filter:blur(6px);" onclick="this.style.display='none'">
+  <div style="text-align:center;color:white;padding:40px 20px;">
+    <div style="font-size:4rem;margin-bottom:12px;" id="celebEmoji">🎉</div>
+    <div style="font-size:1.4rem;font-weight:800;margin-bottom:8px;" id="celebTitle">Great class!</div>
+    <div style="font-size:.9rem;opacity:.8;" id="celebSub">Tap anywhere to close</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ╔══════════════════════════════════════════╗
+// ║  CONFIG — change these two values        ║
+// ╚══════════════════════════════════════════╝
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzd-OZ-hAAR_rAjsqyYXveuxKtD5sJoIlPSudF49JWbuY6ghgN47n_AcFTHEfB98C8/exec';
+const AUTH_TOKEN      = 'circle_teacher_7742'; // must match Apps Script
+const APP_PASSWORD    = 'PE2026';              // your access password (change this!)
+// ═══════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════
+// LOCK / AUTH
+// ═══════════════════════════════════════════════════════
+async function unlock() {
+  const val = document.getElementById('lockInput').value.trim();
+  const err = document.getElementById('lockErr');
+  const note = document.getElementById('lockSyncNote');
+  if (val !== APP_PASSWORD) {
+    err.textContent = 'Incorrect password. Try again.';
+    document.getElementById('lockInput').value = '';
+    return;
+  }
+  err.textContent = '';
+  sessionStorage.setItem('pec_auth', '1');
+
+  // Try to load from cloud
+  if (APPS_SCRIPT_URL !== 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
+    note.textContent = '🔄 Loading your data from the cloud…';
+    const ok = await cloudLoad();
+    note.textContent = ok ? '✅ Data loaded!' : '⚠️ Offline — using local data';
+    await new Promise(r => setTimeout(r, 800));
+  }
+
+  showView('home');
+  renderHome();
+}
+
+// Check if already unlocked this session
+function checkAuth() {
+  return sessionStorage.getItem('pec_auth') === '1';
+}
+
+// ═══════════════════════════════════════════════════════
+// CLOUD SYNC
+// ═══════════════════════════════════════════════════════
+let syncTimer = null;
+let syncStatus = 'idle'; // idle | busy | ok | err
+
+function setSyncBadge(s) {
+  syncStatus = s;
+  const el = document.getElementById('syncBadge');
+  if (!el) return;
+  const map = {
+    idle: ['☁️ Ready',   ''],
+    busy: ['🔄 Saving…', 'busy'],
+    ok:   ['☁️ Synced',  'ok'],
+    err:  ['⚠️ Offline', 'err'],
+  };
+  const [txt, cls] = map[s] || map.idle;
+  el.textContent = txt;
+  el.className = 'sync-badge' + (cls ? ' ' + cls : '');
+}
+
+async function cloudLoad() {
+  if (APPS_SCRIPT_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') return false;
+  try {
+    const r = await fetch(`${APPS_SCRIPT_URL}?auth=${AUTH_TOKEN}`, { redirect: 'follow' });
+    const json = await r.json();
+    if (json && json.classes) {
+      D = json;
+      localStorage.setItem('pec4', JSON.stringify(D));
+      setSyncBadge('ok');
+      return true;
+    }
+    setSyncBadge('idle');
+    return false;
+  } catch {
+    setSyncBadge('err');
+    return false;
+  }
+}
+
+async function cloudSave() {
+  if (APPS_SCRIPT_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') return;
+  setSyncBadge('busy');
+
+  // Build a session log of today's entries for the Sheets log tab
+  const log = [];
+  Object.entries(D.classes).forEach(([cls, clsData]) => {
+    (clsData.students || []).forEach(s => {
+      const e = (s.history || []).find(h => h.date === curDate);
+      if (e && e.status !== 'unchecked') {
+        log.push([
+          e.date, cls, s.name, s.flag || '',
+          e.status || '', e.feeling || '',
+          s.atl || clsData.unitATL || '', s.atlLevel || '', s.peLevel || '',
+          e.warning ? 'Yes' : '', e.contactTeacher ? 'Yes' : '', e.contactParent ? 'Yes' : '',
+          e.notes || '', e.coLevel || ''
+        ]);
+      }
+    });
+  });
+
+  try {
+    await fetch(`${APPS_SCRIPT_URL}?auth=${AUTH_TOKEN}`, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state: D, log }),
+    });
+    setSyncBadge('ok');
+  } catch {
+    setSyncBadge('err');
+  }
+}
+
+function debouncedCloudSave() {
+  clearTimeout(syncTimer);
+  setSyncBadge('busy');
+  syncTimer = setTimeout(cloudSave, 3000); // 3s after last change
+}
+
+async function manualSync() {
+  setSyncBadge('busy');
+  const ok = await cloudLoad();
+  if (ok) { renderHome(); if (curView !== 'home' && curView !== 'lock') renderOpening(); }
+}
+
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+let D = JSON.parse(localStorage.getItem('pec4') || 'null');
+let curDate = localStorage.getItem('pec4_date') || todayStr();
+let curView = 'home';
+let curClass = null;
+let activeIdx = null;
+let tempData  = {};
+let selProto  = null;
+let selCat    = 'Skills';
+let selEnIdx  = null;
+
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function fmtDate(iso) { if(!iso)return''; const[,m,d]=iso.split('-'); return `${+d}/${+m}`; }
+function fmtFull(iso) {
+  if(!iso)return'';
+  return new Date(iso+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+}
+
+// DEFAULT CLASSES
+if (!D) {
+  const mk = (name) => ({ name, unitATL: null, students: [] });
+  D = {
+    classes: {
+      'Pre-K': mk('Pre-K'), 'K1': mk('K1'), 'K2': mk('K2'),
+      '1A': mk('1A'), '1B': mk('1B'),
+      '2A': mk('2A'), '2B': mk('2B'),
+      '3A': mk('3A'), '3B': mk('3B'),
+      '4A': {
+        name:'4A', unitATL:'Social',
+        students:[
+          {name:'Mei',   flag:'🇯🇵',atl:'Self-Management',atlLevel:'Meeting',  peLevel:'Exceeding',history:[
+            {date:'2026-05-22',status:'fly', feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+            {date:'2026-05-29',status:'fly', feeling:'ok',       warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+            {date:curDate,     status:'fly', feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+          ]},
+          {name:'Carlos',flag:'🇧🇷',atl:'Social',atlLevel:'Developing',peLevel:'Meeting',history:[
+            {date:'2026-05-22',status:'grow',feeling:'tired',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+            {date:'2026-05-29',status:'fly', feeling:'ok',   warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+            {date:curDate,     status:'grow',feeling:'ok',   warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+          ]},
+          {name:'Amara', flag:'🇬🇭',atl:'Communication',atlLevel:'Meeting',peLevel:'Meeting',history:[
+            {date:'2026-05-22',status:'fly',feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+            {date:curDate,     status:'fly',feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+          ]},
+          {name:'Luca',  flag:'🇮🇹',atl:'Self-Management',atlLevel:'Beginning',peLevel:'Developing',history:[
+            {date:'2026-05-22',status:'grow',feeling:'ok',   warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+            {date:'2026-05-29',status:'pit', feeling:'upset',warning:true, contactTeacher:true, contactParent:false,notes:'Dispute on pitch',coLevel:null},
+            {date:curDate,     status:'pit', feeling:'upset',warning:true, contactTeacher:true, contactParent:false,notes:'Argument at break',coLevel:null},
+          ]},
+          {name:'Priya', flag:'🇮🇳',atl:'Thinking',atlLevel:'Developing',peLevel:'Meeting',history:[
+            {date:'2026-05-29',status:'grow',feeling:'tired',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+            {date:curDate,     status:'grow',feeling:'tired',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
+          ]},
+          {name:'James', flag:'🇦🇺',atl:null,atlLevel:null,peLevel:null,history:[]},
+        ]
+      },
+      '4B': mk('4B'), '5A': mk('5A'), '5B': mk('5B'),
+    }
+  };
+  save();
+}
+
+// ═══════════════════════════════════════════════════════
+// CONTENT DATA
+// ═══════════════════════════════════════════════════════
+const PROTOCOLS = [
+  { id:'round-robin', icon:'🔄', name:'Round Robin', desc:'Everyone shares in turn — no one is skipped.' },
+  { id:'popcorn',     icon:'🍿', name:'Popcorn',     desc:'Students "pop up" to share whenever they\'re ready.' },
+  { id:'tps',         icon:'👥', name:'Think-Pair-Share', desc:'Think alone → share with a partner → share with class.' },
+  { id:'cold-call',   icon:'🎯', name:'Cold Call',   desc:'Teacher picks names at random — keeps everyone alert.' },
+  { id:'volunteers',  icon:'✋', name:'Volunteers',  desc:'Raise hand to share — lower pressure, student-led.' },
+  { id:'emoji-exit',  icon:'😎', name:'Emoji Exit',  desc:'Each student picks an emoji that sums up their lesson.' },
+];
+
+const PROMPTS = {
+  'Skills': [
+    { e:'🎯', t:'Name one skill you improved today. What made the difference?' },
+    { e:'🔑', t:'What strategy worked best for you? Would you use it again?' },
+    { e:'⏱️', t:'If you had one more minute of practice, what would you work on?' },
+    { e:'🧑‍🏫', t:'Teach it: explain today\'s main skill in 10 words or less.' },
+    { e:'💡', t:'What was harder than you expected today? What was easier?' },
+    { e:'⭐', t:'Rate your skill understanding 1–5. Hold up your fingers and explain.' },
+    { e:'🔁', t:'What\'s one thing you\'d do differently if you could replay today?' },
+  ],
+  'ATL': [
+    { e:'🎛️', t:'When did you have to manage yourself — your effort, emotions, or focus?' },
+    { e:'💬', t:'How did you communicate with your team? What worked well?' },
+    { e:'🧩', t:'What problem did you have to solve today? Walk me through it.' },
+    { e:'🤝', t:'How did you support someone else\'s learning today?' },
+    { e:'🧠', t:'Where did your best thinking happen today — and why?' },
+    { e:'📋', t:'Which ATL skill felt strongest for you today? Give an example.' },
+    { e:'🔍', t:'Were you an inquirer today? What questions came up as you played?' },
+  ],
+  'Learner Profile': [
+    { e:'🦁', t:'Complete this: "Today I was a RISK-TAKER when..."' },
+    { e:'⚖️', t:'How did you stay BALANCED between effort and enjoyment today?' },
+    { e:'💚', t:'How did you show CARING — for a teammate, opponent, or yourself?' },
+    { e:'🌏', t:'How were you OPEN-MINDED to a new strategy or a teammate\'s idea?' },
+    { e:'🪞', t:'How were you REFLECTIVE during the activity? What did you notice?' },
+    { e:'🏅', t:'How were you PRINCIPLED today — in competition or when things got tough?' },
+    { e:'🌱', t:'Complete this: "Today I felt like a lifelong LEARNER when..."' },
+  ],
+  'Social': [
+    { e:'🌟', t:'Give a specific shoutout to a classmate — name them and say what they did.' },
+    { e:'🏆', t:'Who showed great teamwork today? What exactly did they do?' },
+    { e:'🌈', t:'What did our class do really well together today?' },
+    { e:'🔧', t:'Was there a moment our class had to solve a problem together? What happened?' },
+    { e:'❤️', t:'Appreciation circle: "I\'d like to appreciate ___ for ___ today."' },
+    { e:'🤜', t:'Fist bump to someone who helped you today — tell the class why.' },
+  ],
+  'Rose 🌹 Bud 🌱 Thorn 🥀': [
+    { e:'🌹', t:'ROSE: What went really well today? Something you felt proud of.' },
+    { e:'🥀', t:'THORN: What was tricky, frustrating, or didn\'t go to plan?' },
+    { e:'🌱', t:'BUD: What do you want to grow or try differently next class?' },
+    { e:'🌹🥀🌱', t:'Full Rose-Bud-Thorn: share all three with the group.' },
+  ],
+  '3-2-1': [
+    { e:'3️⃣', t:'Name 3 things you practised or experienced today.' },
+    { e:'2️⃣', t:'Name 2 skills (PE or ATL) you used during the lesson.' },
+    { e:'1️⃣', t:'Share 1 question you still have — or 1 goal for next class.' },
+    { e:'🎯', t:'Full 3-2-1: 3 things practised · 2 skills used · 1 question or goal.' },
+  ],
+  'Goal Setting': [
+    { e:'🚀', t:'What\'s one thing you want to work on in the next class?' },
+    { e:'📌', t:'Set a micro-goal: "Next class I will..."' },
+    { e:'💌', t:'What advice would you give yourself before the next lesson?' },
+    { e:'📈', t:'Where are you on your own learning journey right now? What\'s next?' },
+  ],
+  'Sentence Starters': [
+    { e:'💪', t:'"Today I felt proud when..."' },
+    { e:'😲', t:'"I surprised myself by..."' },
+    { e:'🙌', t:'"I could help a friend with..."' },
+    { e:'🔮', t:'"Next time I want to try..."' },
+    { e:'🪞', t:'"Something I learned about myself today is..."' },
+    { e:'🌊', t:'"The moment I felt most in the flow today was..."' },
+  ],
+};
+
+const FEELINGS_MAP = { energised:'⚡', ok:'😊', tired:'😴', upset:'😟' };
+
+const ENERGIZERS = [
+  { icon:'🖐️', name:'High Five Train', time:'2 min', how:'Circle up. Each person gives a high five to their neighbour and says one word about today\'s lesson. Keep it moving!' },
+  { icon:'💬', name:'One Word Whip', time:'2 min', how:'Lightning round — each student says ONE word that describes how today\'s lesson felt. No repeats!' },
+  { icon:'🌹', name:'Rose & Thorn Share', time:'3 min', how:'Popcorn style: anyone who wants to, shares one rose (good) and one thorn (challenge) from today.' },
+  { icon:'👏', name:'Appreciation Shower', time:'1 min', how:'30 seconds of silent appreciation applause for the whole class. Then one person names someone specific to appreciate.' },
+  { icon:'✊', name:'Fist Bump Farewell', time:'1 min', how:'Everyone gives one fist bump to a classmate with the words "Good game." Travel around the group.' },
+  { icon:'🧊', name:'Silent Ball', time:'3 min', how:'Circle up. Toss a ball in silence. If you talk or drop it — sit down. Last person standing is champion!' },
+  { icon:'🪞', name:'Mirror Mirror', time:'2 min', how:'One student leads a cool movement. The class mirrors it exactly. After 10 seconds, pass leadership to the next person.' },
+  { icon:'✊✌️🖐️', name:'RPS Knockout', time:'3 min', how:'Rock-Paper-Scissors tournament! Loser joins winner\'s cheering squad. Keep going until one class champion remains.' },
+  { icon:'🧊', name:'Freeze Pose', time:'1 min', how:'On the count of 3, everyone strikes a pose that shows how they feel leaving today\'s class. Hold it. Scan the room.' },
+  { icon:'🌟', name:'Star of the Lesson', time:'2 min', how:'Teacher (or class vote) names one Star of the Lesson. That student stands while the class gives a 5-second cheer.' },
+  { icon:'🎵', name:'Class Chant', time:'1 min', how:'Teacher calls: "When I say [class name] you say GREAT!" Repeat ×3, getting louder. End with a big clap together.' },
+  { icon:'😂', name:'Joke of the Day', time:'1 min', how:'Teacher or a volunteer student shares a short PE/sports-themed joke. Class votes: funny 😂 or terrible 🙈?' },
+];
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('v-'+id).classList.add('active');
+  curView = id;
+  window.scrollTo(0,0);
+}
+function goHome()    { showView('home'); renderHome(); }
+function goHub()     { showView('hub'); renderHub(); }
+function goOpening() { showView('opening'); renderOpening(); }
+function goClosing() { showView('closing'); renderClosing(); }
+
+// ═══════════════════════════════════════════════════════
+// DATE
+// ═══════════════════════════════════════════════════════
+document.getElementById('homeDateIn').value = curDate;
+function setGlobalDate() {
+  const v = document.getElementById('homeDateIn').value;
+  if (!v) return;
+  curDate = v; localStorage.setItem('pec4_date', curDate);
+  renderHome();
+}
+
+// ═══════════════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════════════
+function renderHome() {
+  const grid = document.getElementById('homeGrid');
+  const groups = [
+    { label:'Early Years', keys:['Pre-K','K1','K2'] },
+    { label:'Lower Primary', keys:['1A','1B','2A','2B'] },
+    { label:'Middle Primary', keys:['3A','3B','4A','4B'] },
+    { label:'Upper Primary', keys:['5A','5B'] },
+  ];
+
+  const extras = Object.keys(D.classes).filter(k=>!['Pre-K','K1','K2','1A','1B','2A','2B','3A','3B','4A','4B','5A','5B'].includes(k));
+
+  let html = '';
+  groups.forEach(g => {
+    html += `<div class="home-section-label">${g.label}</div>`;
+    g.keys.forEach(k => {
+      if (!D.classes[k]) D.classes[k] = { name:k, unitATL:null, students:[] };
+      html += classCardHTML(k);
+    });
+  });
+  if (extras.length) {
+    html += `<div class="home-section-label">Custom Classes</div>`;
+    extras.forEach(k => { html += classCardHTML(k); });
+  }
+  grid.innerHTML = html;
+}
+
+function classCardHTML(key) {
+  const cls = D.classes[key];
+  const ss  = cls.students;
+  const lastEntries = ss.map(s => {
+    const hist = (s.history||[]).filter(h=>h.date===curDate);
+    return hist.length ? hist[0] : null;
+  }).filter(Boolean);
+
+  const fly  = lastEntries.filter(e=>e.status==='fly').length;
+  const grow = lastEntries.filter(e=>e.status==='grow').length;
+  const pit  = lastEntries.filter(e=>e.status==='pit').length;
+  const none = ss.length - fly - grow - pit;
+
+  const dots = [
+    ...Array(fly).fill('<div class="cc-dot fly"></div>'),
+    ...Array(grow).fill('<div class="cc-dot grow"></div>'),
+    ...Array(pit).fill('<div class="cc-dot pit"></div>'),
+    ...Array(Math.max(0,none)).fill('<div class="cc-dot none"></div>'),
+  ].join('');
+
+  const lastDate = ss.reduce((acc,s)=>{
+    const dates = (s.history||[]).map(h=>h.date).sort();
+    const last = dates[dates.length-1];
+    return last > acc ? last : acc;
+  }, '');
+
+  return `<div class="class-card" onclick="openClass('${key.replace(/'/g,"\\'")}')">
+    <div class="cc-name">${key}</div>
+    <div class="cc-count">${ss.length} student${ss.length!==1?'s':''}</div>
+    ${lastDate ? `<div class="cc-last">Last: ${fmtDate(lastDate)}</div>` : '<div class="cc-last">No sessions yet</div>'}
+    <div class="cc-dots">${dots||'<div class="cc-dot none"></div>'}</div>
+  </div>`;
+}
+
+function openClass(key) {
+  curClass = key;
+  goHub();
+}
+
+// ═══════════════════════════════════════════════════════
+// HUB
+// ═══════════════════════════════════════════════════════
+function renderHub() {
+  const cls = D.classes[curClass];
+  document.getElementById('hubClassName').textContent = curClass;
+  document.getElementById('hubDate').textContent = fmtFull(curDate);
+
+  const ss = cls.students;
+  const es = ss.map(s=>getEntry(s));
+  document.getElementById('hubStudents').textContent = ss.length;
+  document.getElementById('hubFly').textContent     = es.filter(e=>e.status==='fly').length;
+  document.getElementById('hubGrow').textContent    = es.filter(e=>e.status==='grow').length;
+  document.getElementById('hubPit').textContent     = es.filter(e=>e.status==='pit').length;
+  document.getElementById('hubChecked').textContent = es.filter(e=>e.status&&e.status!=='unchecked').length;
+
+  // Unit ATL
+  document.querySelectorAll('.atl-ch').forEach(b=>{
+    b.classList.toggle('on', b.textContent.includes(cls.unitATL||'__none__'));
+  });
+}
+
+function setUnitATL(val) {
+  const cls = D.classes[curClass];
+  cls.unitATL = cls.unitATL === val ? null : val;
+  save();
+  document.querySelectorAll('.atl-ch').forEach(b=>{
+    b.classList.toggle('on', cls.unitATL && b.textContent.includes(cls.unitATL));
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// OPENING CIRCLE
+// ═══════════════════════════════════════════════════════
+function renderOpening() {
+  const cls = D.classes[curClass];
+  document.getElementById('opClassName').textContent = curClass;
+  document.getElementById('opDateLabel').textContent = fmtFull(curDate);
+
+  const ss = cls.students;
+  const list = document.getElementById('regList');
+
+  if (!ss.length) {
+    list.innerHTML = `<div class="empty-s"><span class="ei">👟</span><p>No students yet — tap + to add.</p></div>`;
+    updateOpeningPulse(); return;
+  }
+
+  list.innerHTML = ss.map((s,i) => {
+    const e  = getEntry(s);
+    const st = e.status || 'unchecked';
+    const alerts = [e.warning?'⚠️':'', e.contactTeacher?'👩‍🏫':'', e.contactParent?'👨‍👩‍👧':'', e.notes?'📝':''].filter(Boolean);
+    const past = (s.history||[]).filter(h=>h.date!==curDate).sort((a,b)=>a.date.localeCompare(b.date)).slice(-6);
+    const dots = past.length
+      ? past.map(h=>`<div class="hd"><div class="hc ${h.status||'none'}"></div><div class="hl">${fmtDate(h.date)}</div></div>`).join('')
+      : `<span style="font-size:.58rem;color:var(--muted)">—</span>`;
+
+    return `<div class="row tgrid ${st}">
+      <div class="c-name" onclick="openDet(${i},'opening')">
+        <div class="c-flag">${s.flag||'🏳️'}</div>
+        <div class="c-nm">${s.name}</div>
+      </div>
+      <div class="c-alerts">${alerts.map(a=>`<span>${a}</span>`).join('')}</div>
+      <div class="c-lights">
+        <button class="lb g ${st==='fly' ?'on':''}" onclick="qStatus(${i},'fly')" >✓</button>
+        <button class="lb a ${st==='grow'?'on':''}" onclick="qStatus(${i},'grow')">✓</button>
+        <button class="lb r ${st==='pit' ?'on':''}" onclick="qStatus(${i},'pit')" >✓</button>
+      </div>
+      <div class="c-status"><div class="chip ${st}">${st==='unchecked'?'—':({fly:'Fly',grow:'Grow',pit:'Pit'}[st])}</div></div>
+      <div class="c-hist">${dots}</div>
+    </div>`;
+  }).join('');
+
+  updateOpeningPulse();
+}
+
+function updateOpeningPulse() {
+  const ss = D.classes[curClass]?.students || [];
+  const es = ss.map(s=>getEntry(s));
+  document.getElementById('cFly').textContent  = es.filter(e=>e.status==='fly').length;
+  document.getElementById('cGrow').textContent = es.filter(e=>e.status==='grow').length;
+  document.getElementById('cPit').textContent  = es.filter(e=>e.status==='pit').length;
+  const chk = es.filter(e=>e.status&&e.status!=='unchecked').length;
+  document.getElementById('cChecked').textContent = `${chk}/${ss.length}`;
+}
+
+function qStatus(i,v) {
+  const e=getEntry(D.classes[curClass].students[i]);
+  e.status = e.status===v ? 'unchecked' : v;
+  save(); renderOpening();
+}
+
+function resetSession() {
+  if(!confirm(`Clear today's check-in for ${curClass}?`)) return;
+  D.classes[curClass].students.forEach(s=>{
+    const i=s.history.findIndex(h=>h.date===curDate);
+    if(i>=0) s.history.splice(i,1);
+  });
+  save(); renderOpening();
+}
+
+// ═══════════════════════════════════════════════════════
+// CLOSING CIRCLE
+// ═══════════════════════════════════════════════════════
+function renderClosing() {
+  const cls = D.classes[curClass];
+  document.getElementById('clClassName').textContent = curClass;
+
+  // ATL focus label
+  const atl = cls.unitATL || 'No unit ATL set';
+  document.getElementById('coFocusLabel').textContent = cls.unitATL ? `ATL: ${cls.unitATL}` : 'No unit ATL set — go to Hub to set one';
+
+  renderProtocols();
+  renderCats();
+  renderCheckout();
+  renderEnGrid();
+}
+
+// Protocols
+function renderProtocols() {
+  document.getElementById('protoGrid').innerHTML = PROTOCOLS.map(p=>`
+    <button class="proto-card ${selProto===p.id?'selected':''}" onclick="selectProto('${p.id}')">
+      <span class="proto-icon">${p.icon}</span>
+      <span class="proto-name">${p.name}</span>
+      <span class="proto-desc">${p.desc}</span>
+    </button>`).join('');
+}
+
+function selectProto(id) {
+  selProto = selProto===id ? null : id;
+  renderProtocols();
+  const p = PROTOCOLS.find(x=>x.id===id);
+  const badge = document.getElementById('sharingBadge');
+  badge.textContent = p ? `${p.icon} ${p.name}` : 'No protocol selected';
+}
+
+// Categories + Prompts
+function renderCats() {
+  const cats = Object.keys(PROMPTS);
+  document.getElementById('catControls').innerHTML = cats.map(c=>`
+    <button class="cat-btn ${selCat===c?'active':''}" onclick="setCat('${c.replace(/'/g,"\\'")}')">
+      ${c}
+    </button>`).join('');
+}
+function setCat(c) { selCat=c; renderCats(); }
+
+function spinPrompt() {
+  const pool = PROMPTS[selCat] || PROMPTS['Skills'];
+  const p = pool[Math.floor(Math.random()*pool.length)];
+  document.getElementById('promptEmoji').textContent = p.e;
+  document.getElementById('promptText').textContent  = p.t;
+
+  const proto = PROTOCOLS.find(x=>x.id===selProto);
+  document.getElementById('sharingBadge').textContent = proto ? `${proto.icon} ${proto.name}` : 'No protocol selected';
+}
+
+// Checkout
+function renderCheckout() {
+  const ss = D.classes[curClass]?.students || [];
+  if (!ss.length) {
+    document.getElementById('checkoutList').innerHTML = `<div class="empty-s"><span class="ei">👟</span><p>No students yet.</p></div>`;
+    return;
+  }
+
+  const LEVELS = ['beg','dev','mee','exc'];
+  const LEVEL_LABELS = ['Beg','Dev','Meet','Exc'];
+
+  document.getElementById('checkoutList').innerHTML = ss.map((s,i)=>{
+    const e  = getEntry(s);
+    const cl = e.coLevel || null;
+    const rowCls = cl ? cl : '';
+    const feel = e.feeling ? FEELINGS_MAP[e.feeling] : '—';
+
+    return `<div class="checkout-row ${rowCls}" id="cor-${i}">
+      <div class="co-name" onclick="openDet(${i},'closing')">
+        <div class="c-flag">${s.flag||'🏳️'}</div>
+        <div class="c-nm">${s.name}</div>
+      </div>
+      <div class="co-levels">
+        ${LEVELS.map((lv,li)=>`<button class="co-lvl ${lv} ${cl===lv?'on':''}" onclick="setCoLevel(${i},'${lv}')">${LEVEL_LABELS[li]}</button>`).join('')}
+      </div>
+      <div class="co-feel">${feel}</div>
+    </div>`;
+  }).join('');
+}
+
+function setCoLevel(i, lv) {
+  const e = getEntry(D.classes[curClass].students[i]);
+  e.coLevel = e.coLevel === lv ? null : lv;
+  save(); renderCheckout();
+}
+
+// Energizers
+function renderEnGrid() {
+  document.getElementById('enGrid').innerHTML = ENERGIZERS.map((en,i)=>`
+    <button class="en-mini ${selEnIdx===i?'sel':''}" onclick="pickEnergizer(${i})">
+      <span class="emi">${en.icon}</span>
+      <span class="eml">${en.name}</span>
+    </button>`).join('');
+}
+
+function spinEnergizer() {
+  selEnIdx = Math.floor(Math.random()*ENERGIZERS.length);
+  showEnergizer(selEnIdx);
+  renderEnGrid();
+}
+
+function pickEnergizer(i) {
+  selEnIdx = i;
+  showEnergizer(i);
+  renderEnGrid();
+}
+
+function showEnergizer(i) {
+  const en = ENERGIZERS[i];
+  document.getElementById('enIcon').textContent = en.icon;
+  document.getElementById('enName').textContent = en.name;
+  document.getElementById('enHow').textContent  = en.how;
+  const t = document.getElementById('enTime');
+  t.textContent = `⏱ ${en.time}`; t.style.display='inline-block';
+}
+
+// Tabs
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+
+// Celebration
+const CHEERS = [
+  { e:'🏆', t:'Champions!', s:'That was a class of excellence!' },
+  { e:'🎉', t:'Amazing work!', s:'Every single person gave their best today.' },
+  { e:'🔥', t:'On fire!', s:'The energy today was incredible.' },
+  { e:'🌟', t:'Superstars!', s:'You all shone brightly today.' },
+  { e:'💪', t:'Strong finish!', s:'You pushed through and finished well.' },
+  { e:'🙌', t:'Great class!', s:'See you next time — keep practising!' },
+];
+function celebrate() {
+  const c = CHEERS[Math.floor(Math.random()*CHEERS.length)];
+  document.getElementById('celebEmoji').textContent = c.e;
+  document.getElementById('celebTitle').textContent = c.t;
+  document.getElementById('celebSub').textContent   = c.s + ' — Tap to close';
+  document.getElementById('celebOvl').style.display='flex';
+}
+
+// ═══════════════════════════════════════════════════════
+// STUDENT DETAIL SHEET
+// ═══════════════════════════════════════════════════════
+function openDet(i, mode) {
+  activeIdx = i;
+  const s = D.classes[curClass].students[i];
+  const e = getEntry(s);
+  tempData = { ...JSON.parse(JSON.stringify(s)), _e: JSON.parse(JSON.stringify(e)) };
+
+  document.getElementById('dFlag').textContent = s.flag||'🏳️';
+  document.getElementById('dName').textContent = s.name;
+  document.getElementById('dSub').textContent  = s.atl ? `ATL: ${s.atl}` : (D.classes[curClass].unitATL ? `Unit ATL: ${D.classes[curClass].unitATL}` : 'No ATL set');
+  document.getElementById('ntf').value = e.notes||'';
+
+  // Note history
+  const pastNotes = (s.history||[]).filter(h=>h.date!==curDate&&h.notes).sort((a,b)=>b.date.localeCompare(a.date));
+  const nhSec = document.getElementById('noteHistSec');
+  if (pastNotes.length) {
+    nhSec.style.display='block';
+    document.getElementById('noteHist').innerHTML = pastNotes.map(h=>`
+      <div class="note-entry">
+        <div class="note-date">${fmtFull(h.date)}</div>
+        <div class="note-text">${h.notes}</div>
+      </div>`).join('');
+  } else { nhSec.style.display='none'; }
+
+  // Reset selectors
+  ['sbtn','fbtn','ac','#atlRow .lvb','#peRow .lvb'].forEach(sel=>{
+    document.querySelectorAll(sel).forEach(b=>b.classList.remove('on'));
+  });
+
+  if(e.status) document.querySelector(`.${e.status}-btn`)?.classList.add('on');
+  if(e.feeling) document.querySelectorAll('.fbtn').forEach(b=>{if(b.getAttribute('onclick').includes(e.feeling))b.classList.add('on');});
+
+  const atl = s.atl || D.classes[curClass].unitATL;
+  if(atl) document.querySelectorAll('.ac').forEach(b=>{if(b.textContent.includes(atl))b.classList.add('on');});
+  document.querySelectorAll('#atlRow .lvb').forEach(b=>{if(b.textContent===s.atlLevel)b.classList.add('on');});
+  document.querySelectorAll('#peRow  .lvb').forEach(b=>{if(b.textContent===s.peLevel) b.classList.add('on');});
+
+  togSt('togW',e.warning); togSt('togT',e.contactTeacher); togSt('togP',e.contactParent);
+  document.getElementById('detOvl').classList.add('open');
+}
+
+function togSt(id,v){const el=document.getElementById(id);v?el.classList.add('on'):el.classList.remove('on');}
+function sStatus(v){tempData._e.status=v;document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('on'));document.querySelector(`.${v}-btn`).classList.add('on');}
+function sFeeling(v){tempData._e.feeling=v;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.fbtn').forEach(b=>{if(b.getAttribute('onclick').includes(v))b.classList.add('on');});}
+function sATL(v){tempData.atl=v;document.querySelectorAll('.ac').forEach(b=>b.classList.remove('on'));document.querySelectorAll('.ac').forEach(b=>{if(b.textContent.includes(v))b.classList.add('on');});document.getElementById('dSub').textContent=`ATL: ${v}`;}
+function sLevel(t,v){
+  if(t==='atl'){tempData.atlLevel=v;document.querySelectorAll('#atlRow .lvb').forEach(b=>b.classList.toggle('on',b.textContent===v));}
+  else{tempData.peLevel=v;document.querySelectorAll('#peRow .lvb').forEach(b=>b.classList.toggle('on',b.textContent===v));}
+}
+function sTog(f){tempData._e[f]=!tempData._e[f];const m={warning:'togW',contactTeacher:'togT',contactParent:'togP'};togSt(m[f],tempData._e[f]);}
+function saveDet(){
+  tempData._e.notes=document.getElementById('ntf').value;
+  const s=D.classes[curClass].students[activeIdx];
+  s.atl=tempData.atl; s.atlLevel=tempData.atlLevel; s.peLevel=tempData.peLevel;
+  const ei=s.history.findIndex(h=>h.date===curDate);
+  if(ei>=0) s.history[ei]=tempData._e; else s.history.push(tempData._e);
+  save();
+  if(curView==='opening') renderOpening();
+  else if(curView==='closing') renderCheckout();
+  document.getElementById('detOvl').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════
+// ADD CLASS / STUDENT
+// ═══════════════════════════════════════════════════════
+function openAddClass() { document.getElementById('newClassName').value=''; document.getElementById('addClassOvl').classList.add('open'); setTimeout(()=>document.getElementById('newClassName').focus(),300); }
+function addClassConfirm() {
+  const n=document.getElementById('newClassName').value.trim();
+  if(!n||D.classes[n]) return;
+  D.classes[n]={name:n,unitATL:null,students:[]};
+  save(); renderHome();
+  document.getElementById('addClassOvl').classList.remove('open');
+}
+function openAddStudent() {
+  document.getElementById('nName').value=''; document.getElementById('nFlag').value=''; document.getElementById('nStatus').value='unchecked';
+  document.getElementById('addStuOvl').classList.add('open');
+  setTimeout(()=>document.getElementById('nName').focus(),300);
+}
+function addStudentConfirm() {
+  const name=document.getElementById('nName').value.trim();
+  if(!name) return;
+  const s={name,flag:document.getElementById('nFlag').value.trim()||'🏳️',atl:null,atlLevel:null,peLevel:null,history:[]};
+  const e={date:curDate,status:document.getElementById('nStatus').value,feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};
+  s.history.push(e);
+  D.classes[curClass].students.push(s);
+  save();
+  if(curView==='opening') renderOpening();
+  else if(curView==='closing') renderCheckout();
+  else renderHub();
+  document.getElementById('addStuOvl').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════
+// SUMMARY
+// ═══════════════════════════════════════════════════════
+function openSummary(mode) {
+  const dateLabel = fmtFull(curDate);
+  const lines = [`📋 ${curClass} — ${dateLabel}`,`Mode: ${mode==='opening'?'Opening Circle':'Closing Circle'}`,''];
+  const ss = D.classes[curClass]?.students||[];
+  const g  = {pit:[],grow:[],fly:[],unchecked:[]};
+  ss.forEach(s=>{const e=getEntry(s);g[e.status||'unchecked'].push({s,e});});
+
+  const fmt=({s,e})=>{
+    const f=[e.warning?'⚠️':'',e.contactTeacher?'👩‍🏫':'',e.contactParent?'👨‍👩‍👧':''].filter(Boolean).join(' ');
+    const lvl = mode==='closing' && e.coLevel ? `[${e.coLevel.toUpperCase()}]` : '';
+    return `  ${s.flag} ${s.name}${lvl?' '+lvl:''}${f?' '+f:''}${e.notes?' — '+e.notes:''}`;
+  };
+
+  if(g.pit.length)      {lines.push('🔴 PIT STOP');lines.push(...g.pit.map(fmt));lines.push('');}
+  if(g.grow.length)     {lines.push('🟡 GROW');    lines.push(...g.grow.map(fmt));lines.push('');}
+  if(g.fly.length)      {lines.push('🟢 FLY');     lines.push(...g.fly.map(fmt));lines.push('');}
+  if(g.unchecked.length){lines.push('⬜ NOT CHECKED');lines.push(...g.unchecked.map(x=>`  ${x.s.flag} ${x.s.name}`));}
+
+  document.getElementById('sumTitle').textContent = `${curClass} — ${mode==='opening'?'Opening':'Closing'} Summary`;
+  document.getElementById('sumContent').textContent = lines.join('\n');
+  document.getElementById('sumOvl').classList.add('open');
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function getEntry(s) {
+  if(!s.history) s.history=[];
+  let e=s.history.find(h=>h.date===curDate);
+  if(!e){e={date:curDate,status:'unchecked',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};s.history.push(e);}
+  return e;
+}
+function oClose(e,id){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');}
+function save(){
+  localStorage.setItem('pec4',JSON.stringify(D));
+  debouncedCloudSave();
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+if (checkAuth()) {
+  // Already unlocked this session — go straight to home
+  showView('home');
+  renderHome();
+  setSyncBadge('idle');
+} else {
+  // Show lock screen (already active by default in HTML)
+  document.getElementById('lockInput').focus();
+}
+</script>
+</body>
+</html>

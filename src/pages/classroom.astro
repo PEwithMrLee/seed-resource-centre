@@ -174,7 +174,83 @@ import { withBase } from "../utils/withBase";
     </div>
   </section>
 
+  <!-- PE Circle -->
   <section class="section">
+    <div class="shell">
+      <div class="circle-section">
+
+        <div class="circle-text stack">
+          <div class="circle-badges">
+            <span class="badge-private">🔒 Teacher Only</span>
+            <span class="badge-tool">AI-Assisted Teacher Tool</span>
+          </div>
+          <span class="eyebrow">PE Circle</span>
+          <h2>What if the tools we use actually helped us be more present with students?</h2>
+          <p>
+            PE Circle is a teacher-facing app for opening and closing PE lessons with intention.
+            It tracks student readiness, wellbeing, and ATL skills in real time — and closes every
+            lesson with structured reflection, IB-aligned prompts, and a celebration moment.
+          </p>
+          <ul class="tech-feature-list">
+            <li>At-a-glance student readiness — who needs a check-in before class starts</li>
+            <li>Closing reflection linked to ATL skills and the IB Learner Profile</li>
+            <li>Structured sharing protocol and closing energiser built in</li>
+            <li>Works across all 13 classes — syncs history to Google Sheets</li>
+            <li>Password protected — completely private, built for your context</li>
+          </ul>
+          <p class="circle-quote">
+            "Built specifically for my school, my students, and my IB framework —
+            not an off-the-shelf product."
+          </p>
+        </div>
+
+        <div class="circle-visual">
+          <div class="circle-ipad">
+            <div class="ipad-landscape">
+              <div class="ipad-left-bar"><div class="ipad-camera-side"></div></div>
+              <div class="ipad-screen-landscape">
+                <div class="circle-mockup">
+                  <div class="circle-app-header">
+                    <span class="circle-app-icon">⭕</span>
+                    <span class="circle-app-title">PE Circle</span>
+                    <span class="circle-app-class">G4B — Morning</span>
+                  </div>
+                  <div class="circle-app-body">
+                    <div class="circle-phase">
+                      <p class="circle-phase-label">OPENING CHECK-IN</p>
+                      <div class="circle-students">
+                        <div class="cs green">😊<span>Ready</span></div>
+                        <div class="cs green">😊<span>Ready</span></div>
+                        <div class="cs amber">😐<span>Check in</span></div>
+                        <div class="cs green">😊<span>Ready</span></div>
+                        <div class="cs red">😔<span>Support</span></div>
+                        <div class="cs green">😊<span>Ready</span></div>
+                      </div>
+                    </div>
+                    <div class="circle-divider"></div>
+                    <div class="circle-phase">
+                      <p class="circle-phase-label">CLOSING REFLECTION</p>
+                      <div class="circle-atl">
+                        <div class="atl-tag">Self-Management</div>
+                        <div class="atl-tag">Communication</div>
+                        <div class="atl-tag">Reflective 🌱</div>
+                      </div>
+                      <div class="circle-prompt">"What did you adjust during the lesson to improve?"</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="ipad-right-bar"><div class="ipad-home-side"></div></div>
+            </div>
+          </div>
+          <p class="circle-caption">Password protected — teacher access only</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
     <div class="shell two-column">
       <div class="quote-card stack">
         <span class="eyebrow">More coming soon</span>
@@ -440,10 +516,172 @@ import { withBase } from "../utils/withBase";
     line-height: 1.2;
   }
 
+  /* ── PE Circle ── */
+  .circle-section {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .circle-badges {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .badge-private {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #2c2c2c;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+  }
+
+  .badge-tool {
+    display: inline-flex;
+    background: var(--terra-soft);
+    color: var(--terra-deep);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+  }
+
+  .circle-quote {
+    font-style: italic;
+    color: var(--text);
+    border-left: 3px solid var(--terra);
+    padding-left: 1rem;
+    font-size: 0.95rem;
+    max-width: 52ch;
+  }
+
+  .circle-caption {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.75rem;
+    max-width: none;
+  }
+
+  /* Circle app mockup */
+  .circle-mockup {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #f5f5fa;
+  }
+
+  .circle-app-header {
+    background: #2d3561;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .circle-app-icon { font-size: 1rem; }
+
+  .circle-app-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .circle-app-class {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.72rem;
+  }
+
+  .circle-app-body {
+    padding: 0.6rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .circle-phase-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin: 0 0 0.35rem;
+    max-width: none;
+  }
+
+  .circle-students {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.3rem;
+  }
+
+  .cs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.3rem 0.2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  .cs span {
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .cs.green  { background: #27ae60; }
+  .cs.amber  { background: #f39c12; }
+  .cs.red    { background: #e74c3c; }
+
+  .circle-divider {
+    height: 1px;
+    background: rgba(0,0,0,0.08);
+    margin: 0.1rem 0;
+  }
+
+  .circle-atl {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.4rem;
+  }
+
+  .atl-tag {
+    background: #2d3561;
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .circle-prompt {
+    background: #fff;
+    border-left: 3px solid #2d3561;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.72rem;
+    color: #555;
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+  }
+
   @media (max-width: 900px) {
     .classroom-grid,
     .tech-top,
-    .tech-features {
+    .tech-features,
+    .circle-section {
       grid-template-columns: 1fr;
     }
   }
