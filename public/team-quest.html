@@ -1,0 +1,3084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Team Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   TEACHER CONFIG (edit here)
+   Password: seed2025
+═══════════════════════════════════════ */
+
+:root {
+  --green-dark: #2D5016;
+  --green-mid:  #4A7C2F;
+  --green-light:#8DB87A;
+  --cream:      #F5F0E8;
+  --cream-dark: #E8DFC8;
+  --terracotta: #C4622D;
+  --terra-light:#E8916A;
+  --gold:       #D4A017;
+  --text:       #1A1A1A;
+  --text-light: #5C5C5C;
+  --white:      #FDFAF5;
+  --error:      #B91C1C;
+  --radius:     14px;
+  --shadow:     0 2px 12px rgba(0,0,0,.1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--cream);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;overflow-x:hidden}
+
+/* ── SCREENS ── */
+.screen{display:none;flex-direction:column;min-height:100dvh}
+.screen.active{display:flex}
+
+/* ── TYPOGRAPHY ── */
+h1,h2,h3,.brand{font-family:'Nunito',sans-serif}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 24px;border-radius:var(--radius);border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;
+  transition:opacity .15s,transform .1s;min-height:48px;touch-action:manipulation}
+.btn:active{opacity:.85;transform:scale(.97)}
+.btn-primary{background:var(--green-mid);color:#fff}
+.btn-secondary{background:var(--cream-dark);color:var(--green-dark)}
+.btn-terra{background:var(--terracotta);color:#fff}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-ghost{background:transparent;color:var(--green-mid);text-decoration:underline;padding:8px 12px}
+.btn-sm{padding:9px 16px;font-size:.85rem;min-height:38px}
+.btn-full{width:100%}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.card+.card{margin-top:12px}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{background:var(--cream-dark);border-radius:99px;overflow:hidden;height:10px}
+.prog-bar{height:100%;border-radius:99px;background:var(--green-light);
+  transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* ── LEVEL BADGE ── */
+.level-badge{display:inline-flex;align-items:center;gap:5px;
+  background:var(--green-mid);color:#fff;border-radius:99px;
+  padding:4px 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);
+  display:none;align-items:flex-end;justify-content:center;z-index:100;
+  padding:16px}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--white);border-radius:20px 20px 0 0;
+  width:100%;max-width:540px;max-height:88dvh;overflow-y:auto;
+  padding:24px 20px 32px}
+.modal-handle{width:40px;height:4px;background:var(--cream-dark);
+  border-radius:99px;margin:0 auto 18px}
+
+/* ── FORM ELEMENTS ── */
+.field-label{font-size:.78rem;font-weight:700;color:var(--text-light);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block}
+.field-input,.field-select,.field-textarea{
+  width:100%;padding:13px 14px;border:2px solid var(--cream-dark);
+  border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:1rem;
+  color:var(--text);background:var(--white);outline:none;
+  transition:border-color .2s}
+.field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--green-mid)}
+.field-textarea{resize:vertical;min-height:90px}
+.field-group{margin-bottom:16px}
+
+/* ── BACK BUTTON ── */
+.back-btn{background:none;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:6px;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;
+  color:var(--green-dark);padding:10px 0;min-height:44px}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);border-top:2px solid var(--cream-dark);
+  display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+.nav-tab{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:10px 4px;gap:3px;border:none;
+  background:transparent;cursor:pointer;font-family:'Inter',sans-serif;
+  font-size:.68rem;font-weight:600;color:var(--text-light);min-height:58px}
+.nav-tab.active{color:var(--green-mid)}
+.nav-tab .nav-icon{font-size:1.3rem}
+
+/* ════════════════════════════════
+   LANDING SCREEN
+════════════════════════════════ */
+#screen-landing{
+  background:linear-gradient(160deg,var(--green-dark) 0%,var(--green-mid) 100%);
+  align-items:center;justify-content:center;text-align:center;padding:32px 24px;
+}
+.landing-logo{font-size:3rem;margin-bottom:4px}
+.landing-title{font-family:'Nunito',sans-serif;font-weight:900;
+  font-size:2.8rem;color:#fff;letter-spacing:-1px;line-height:1.1}
+.landing-sub{font-family:'Nunito',sans-serif;font-weight:700;
+  font-size:1rem;color:rgba(255,255,255,.75);margin:6px 0 32px}
+.landing-unit{background:rgba(255,255,255,.12);border-radius:12px;
+  padding:10px 20px;color:rgba(255,255,255,.9);font-weight:600;
+  font-size:.9rem;margin-bottom:32px;border:1px solid rgba(255,255,255,.2)}
+.landing-no-unit{color:rgba(255,255,255,.6);font-size:.95rem;
+  padding:20px;border:2px dashed rgba(255,255,255,.3);border-radius:var(--radius);
+  margin-bottom:32px}
+.landing-actions{width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px}
+.landing-team-btn{
+  background:#fff;color:var(--green-dark);font-family:'Nunito',sans-serif;
+  font-weight:900;font-size:1.2rem;padding:18px 24px;border-radius:var(--radius);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:transform .1s,opacity .15s;
+  min-height:60px}
+.landing-team-btn:active{transform:scale(.97);opacity:.9}
+.landing-footer{margin-top:auto;padding-top:24px;
+  color:rgba(255,255,255,.45);font-size:.72rem}
+
+/* ════════════════════════════════
+   TEAM LOGIN SCREEN
+════════════════════════════════ */
+#screen-team-login{background:var(--cream)}
+.team-login-header{background:var(--green-dark);color:#fff;
+  padding:20px 20px 24px;text-align:center}
+.team-login-header h2{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.5rem}
+.team-login-header p{font-size:.85rem;opacity:.75;margin-top:4px}
+.team-grid{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding-bottom:24px}
+.team-card{background:var(--white);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);cursor:pointer;
+  transition:transform .15s,box-shadow .15s;border:2px solid transparent}
+.team-card:active{transform:scale(.97);box-shadow:none}
+.team-card-strip{height:8px}
+.team-card-body{padding:14px 12px 12px}
+.team-card-name{font-family:'Nunito',sans-serif;font-weight:800;
+  font-size:1.05rem;color:var(--green-dark);margin-bottom:6px}
+.team-card-level{margin-bottom:8px}
+.team-card-prog{margin-top:6px}
+.team-card-prog-label{font-size:.68rem;color:var(--text-light);margin-bottom:3px}
+
+/* ── SYNC STATUS ── */
+.sync-dot{display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--green-light);margin-right:5px}
+.sync-dot.warn{background:var(--gold)}
+.sync-dot.err{background:var(--error)}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     LANDING SCREEN
+════════════════════════════════ -->
+<div id="screen-landing" class="screen active">
+  <div class="landing-logo">🌱</div>
+  <div class="landing-title">Team Quest</div>
+  <div id="landing-unit-display" class="landing-sub"></div>
+
+  <div id="landing-unit-box"></div>
+
+  <div class="landing-actions">
+    <button class="landing-team-btn" onclick="showScreen('team-login')">
+      🏃 I'm a Team
+    </button>
+    <button class="btn btn-ghost" style="color:rgba(255,255,255,.8)"
+      onclick="showScreen('teacher-login')">
+      Teacher Dashboard →
+    </button>
+  </div>
+
+  <div class="landing-footer" id="landing-footer"></div>
+</div>
+
+<!-- ════════════════════════════════
+     TEAM LOGIN SCREEN
+════════════════════════════════ -->
+<div id="screen-team-login" class="screen">
+  <div class="team-login-header">
+    <button class="back-btn" style="color:rgba(255,255,255,.8);margin-bottom:8px"
+      onclick="showScreen('landing')">← Back</button>
+    <h2>Which team are you? 🤝</h2>
+    <p>Tap your team card to enter</p>
+  </div>
+  <div class="team-grid" id="team-grid"></div>
+</div>
+
+<!-- ════════════════════════════════
+     TEAM HOME SCREEN  (Part 2)
+════════════════════════════════ -->
+<div id="screen-team-home" class="screen">
+  <div id="team-home-content"></div>
+  <!-- bottom nav rendered by JS -->
+</div>
+
+<!-- ════════════════════════════════
+     CHALLENGES SCREEN (Part 2)
+════════════════════════════════ -->
+<div id="screen-challenges" class="screen">
+  <div id="challenges-content"></div>
+</div>
+
+<!-- ════════════════════════════════
+     GOALS / CHECK-IN / REFLECT (Part 3)
+════════════════════════════════ -->
+<div id="screen-goals" class="screen">
+  <div id="goals-content"></div>
+</div>
+<div id="screen-checkin" class="screen">
+  <div id="checkin-content"></div>
+</div>
+<div id="screen-reflect" class="screen">
+  <div id="reflect-content"></div>
+</div>
+
+<!-- ════════════════════════════════
+     BADGES SCREEN (Part 2)
+════════════════════════════════ -->
+<div id="screen-badges" class="screen">
+  <div id="badges-content"></div>
+</div>
+
+<!-- ════════════════════════════════
+     TEAM STORY SCREEN (Part 5)
+════════════════════════════════ -->
+<div id="screen-team-story" class="screen">
+  <div id="story-content"></div>
+</div>
+
+<!-- ════════════════════════════════
+     TEACHER LOGIN SCREEN (Part 4)
+════════════════════════════════ -->
+<div id="screen-teacher-login" class="screen"
+  style="background:var(--green-dark);align-items:center;justify-content:center;padding:32px 24px">
+  <div style="width:100%;max-width:360px">
+    <button class="back-btn" style="color:rgba(255,255,255,.7);margin-bottom:20px"
+      onclick="showScreen('landing')">← Back</button>
+    <div style="background:rgba(255,255,255,.1);border-radius:20px;padding:28px 24px;
+      border:1px solid rgba(255,255,255,.2)">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:2rem;margin-bottom:8px">🔐</div>
+        <h2 style="font-family:'Nunito',sans-serif;font-weight:900;color:#fff;font-size:1.4rem">
+          Teacher Dashboard</h2>
+        <p style="color:rgba(255,255,255,.6);font-size:.83rem;margin-top:4px">
+          Enter your password to continue</p>
+      </div>
+      <label class="field-label" style="color:rgba(255,255,255,.6)">Password</label>
+      <input id="teacher-pw-input" type="password" class="field-input"
+        style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;letter-spacing:3px;text-align:center"
+        placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')doTeacherLogin()">
+      <div id="teacher-pw-error" style="color:#fca5a5;font-size:.8rem;min-height:20px;margin:8px 0;text-align:center"></div>
+      <button class="btn btn-primary btn-full" style="background:#fff;color:var(--green-dark);margin-top:4px"
+        onclick="doTeacherLogin()">Login →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     TEACHER DASHBOARD (Part 4)
+════════════════════════════════ -->
+<div id="screen-teacher-dashboard" class="screen">
+  <div id="dashboard-content"></div>
+</div>
+<div id="screen-unit-setup" class="screen">
+  <div id="setup-content"></div>
+</div>
+<div id="screen-team-detail" class="screen">
+  <div id="team-detail-content"></div>
+</div>
+
+<!-- ════════════════════════════════
+     CHARTER SELECTION SCREEN (Part 2)
+════════════════════════════════ -->
+<div id="screen-charter" class="screen">
+  <div id="charter-content"></div>
+</div>
+
+<!-- ════════════════════════════════
+     MODALS
+════════════════════════════════ -->
+<!-- Log Challenge Modal -->
+<div class="modal-overlay" id="modal-log-challenge">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div id="modal-log-challenge-content"></div>
+  </div>
+</div>
+
+<!-- Badge Detail Modal -->
+<div class="modal-overlay" id="modal-badge-detail">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div id="modal-badge-content"></div>
+  </div>
+</div>
+
+<!-- Charter Read-Only Modal -->
+<div class="modal-overlay" id="modal-charter-view">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div id="modal-charter-view-content"></div>
+  </div>
+</div>
+
+<!-- Award Badge Modal (teacher) -->
+<div class="modal-overlay" id="modal-award-badge">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div id="modal-award-badge-content"></div>
+  </div>
+</div>
+
+<!-- Level Up Overlay -->
+<div id="overlay-levelup" style="display:none;position:fixed;inset:0;z-index:200;
+  align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:32px">
+  <div id="confetti-container" style="position:fixed;inset:0;pointer-events:none;overflow:hidden"></div>
+  <div id="levelup-content" style="position:relative;z-index:1"></div>
+</div>
+
+<!-- Badge Award Overlay -->
+<div id="overlay-badge" style="display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(45,80,22,.92);align-items:center;justify-content:center;
+  flex-direction:column;text-align:center;padding:32px">
+  <div id="overlay-badge-content"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  TEACHER CONFIG — edit before distributing
+// ═══════════════════════════════════════════
+const TEACHER_PASSWORD = 'seed2025';
+const DEFAULT_APPS_SCRIPT_URL = '';
+
+// ═══════════════════════════════════════════
+//  CONSTANTS
+// ═══════════════════════════════════════════
+const LEVELS = [
+  {level:1, name:'Seed',   icon:'🌱', physical:0,  collab:0},
+  {level:2, name:'Sprout', icon:'🌿', physical:3,  collab:2},
+  {level:3, name:'Growth', icon:'🌳', physical:6,  collab:4},
+  {level:4, name:'Bloom',  icon:'🌸', physical:10, collab:7},
+  {level:5, name:'Thrive', icon:'🌻', physical:15, collab:10},
+];
+
+const TEAM_COLOURS = [
+  {name:'Forest',    hex:'#2D6A4F'},
+  {name:'Sky',       hex:'#2196A8'},
+  {name:'Flame',     hex:'#E15C2D'},
+  {name:'Plum',      hex:'#7B3F96'},
+  {name:'Sunflower', hex:'#D4A017'},
+  {name:'Ocean',     hex:'#1565A8'},
+  {name:'Rose',      hex:'#C4506A'},
+  {name:'Slate',     hex:'#4A5568'},
+];
+
+const CHARTER_OPTIONS = [
+  {value:'Respect',    icon:'🤝'},
+  {value:'Kindness',   icon:'💚'},
+  {value:'Honesty',    icon:'✨'},
+  {value:'Courage',    icon:'🦁'},
+  {value:'Effort',     icon:'💪'},
+  {value:'Fairness',   icon:'⚖️'},
+  {value:'Inclusion',  icon:'🔄'},
+  {value:'Resilience', icon:'🔥'},
+  {value:'Curiosity',  icon:'🔍'},
+  {value:'Balance',    icon:'🌿'},
+];
+
+const LP_ATTRIBUTES = [
+  'Inquirer','Knowledgeable','Thinker','Communicator',
+  'Principled','Open-minded','Caring','Risk-taker','Balanced','Reflective'
+];
+
+const ATL_SKILLS = ['Communication','Collaboration','Self-Management','Social Skills','Research & Thinking'];
+
+// Physical challenge library
+const PHYSICAL_CHALLENGES = [
+  {id:'phys_jumps',   name:'100 Jump Rope Jumps', category:'Fitness',      tier:1, desc:'As a team, complete 100 total jumps (add everyone\'s up)', grade_band:['G1','G2','G3','G4','G5']},
+  {id:'phys_plank',   name:'Team Plank Record',    category:'Fitness',      tier:2, desc:'Hold a plank together — beat your team\'s previous time', grade_band:['G1','G2','G3','G4','G5']},
+  {id:'phys_50row',   name:'50 in a Row',          category:'Skill',        tier:1, desc:'Complete 50 consecutive successful passes, catches, or bounces', grade_band:['G1','G2','G3','G4','G5']},
+  {id:'phys_relay',   name:'Obstacle Relay',       category:'Movement',     tier:2, desc:'Every team member completes the obstacle course', grade_band:['G1','G2','G3','G4','G5']},
+  {id:'phys_silent',  name:'Silent Drill',         category:'Skill',        tier:3, desc:'Complete a 3-minute skill drill with no talking', grade_band:['G3','G4','G5']},
+  {id:'phys_pb',      name:'Personal Best Challenge', category:'Fitness',   tier:2, desc:'Every team member beats their own previous score in one activity', grade_band:['G2','G3','G4','G5']},
+  {id:'phys_endure',  name:'Team Endurance Run',   category:'Fitness',      tier:3, desc:'Complete laps as a team — total distance goal', grade_band:['G3','G4','G5']},
+  {id:'phys_trick',   name:'Trick Shot / Fancy Finish', category:'Skill',   tier:3, desc:'Create and execute a team trick play or celebration', grade_band:['G2','G3','G4','G5']},
+  {id:'phys_warmup',  name:'Movement Creation',    category:'Movement',     tier:2, desc:'Design and teach a warm-up to another team', grade_band:['G3','G4','G5']},
+  {id:'phys_fullpart',name:'Full Team Participation', category:'Team Performance', tier:1, desc:'Everyone participates actively for an entire session', grade_band:['G1','G2','G3','G4','G5']},
+  {id:'phys_teach',   name:'Teaching Moment',      category:'Team Performance', tier:2, desc:'One team member coaches a skill to the others', grade_band:['G2','G3','G4','G5']},
+  {id:'phys_crossteam',name:'Cross-Team Challenge', category:'Team Performance', tier:3, desc:'Compete fairly against another team, win or lose graciously', grade_band:['G3','G4','G5']},
+];
+
+// Collaboration challenge library
+const COLLAB_CHALLENGES = [
+  // G1-G2
+  {id:'collab_cheer',    name:'Cheer Squad',         atl:'Social Skills',   lp:'Caring',       tier:1, desc:'Cheer for every team member at least once today 📣', grade_band:['G1','G2']},
+  {id:'collab_turns',    name:'Take Turns Talking',  atl:'Communication',   lp:'Open-minded',  tier:1, desc:'Go around the circle — everyone says one thing 🗣️', grade_band:['G1','G2']},
+  {id:'collab_helpup',   name:'Help Up',             atl:'Social Skills',   lp:'Caring',       tier:1, desc:'If someone falls or drops something, help them 🤝', grade_band:['G1','G2']},
+  {id:'collab_breath',   name:'Deep Breath Together',atl:'Self-Management', lp:'Balanced',     tier:1, desc:'When things get hard, stop and breathe together 😤', grade_band:['G1','G2']},
+  {id:'collab_plan',     name:'Agree on a Plan',     atl:'Collaboration',   lp:'Communicator', tier:1, desc:'Before you start, talk and agree how you\'ll do it ✅', grade_band:['G1','G2']},
+  {id:'collab_noleftout',name:'No One Left Out',     atl:'Social Skills',   lp:'Principled',   tier:1, desc:'Make sure every teammate gets a turn 🔄', grade_band:['G1','G2']},
+  {id:'collab_signal',   name:'Quiet Signal',        atl:'Self-Management', lp:'Balanced',     tier:1, desc:'Stop and listen when the teacher signals — every time ✋', grade_band:['G1','G2']},
+  {id:'collab_kindwords',name:'Kind Words Only',     atl:'Communication',   lp:'Caring',       tier:1, desc:'Only say kind things — no put-downs 💚', grade_band:['G1','G2']},
+  {id:'collab_hifive',   name:'Team High Five',      atl:'Collaboration',   lp:'Caring',       tier:1, desc:'End every activity with a team high five 🙌', grade_band:['G1','G2']},
+  // G3-G4
+  {id:'collab_strategy', name:'Strategy Meeting',    atl:'Collaboration',   lp:'Thinker',      tier:2, desc:'Before the activity, make a plan together and assign roles', grade_band:['G3','G4']},
+  {id:'collab_feedback', name:'Constructive Feedback',atl:'Communication',  lp:'Communicator', tier:2, desc:'Give one teammate a specific, kind improvement tip', grade_band:['G3','G4']},
+  {id:'collab_conflict', name:'Conflict Resolution', atl:'Social Skills',   lp:'Principled',   tier:2, desc:'Have a disagreement? Talk it through without an adult', grade_band:['G3','G4']},
+  {id:'collab_goaltrack',name:'Goal Tracker',        atl:'Self-Management', lp:'Reflective',   tier:1, desc:'Check your progress on your team goal mid-session', grade_band:['G3','G4']},
+  {id:'collab_teachback',name:'Teach It Back',       atl:'Communication',   lp:'Communicator', tier:2, desc:'One person explains a rule or skill to the rest of the team', grade_band:['G3','G4']},
+  {id:'collab_encourage',name:'Encourage the Struggling',atl:'Social Skills',lp:'Caring',      tier:2, desc:'Spot a teammate who\'s finding it hard — support them specifically', grade_band:['G3','G4']},
+  {id:'collab_adapt',    name:'Adapt the Plan',      atl:'Collaboration',   lp:'Thinker',      tier:2, desc:'If your first plan isn\'t working, agree to change it', grade_band:['G3','G4']},
+  {id:'collab_time',     name:'Time Manager',        atl:'Self-Management', lp:'Balanced',     tier:2, desc:'Keep your team on task and finish in the time given', grade_band:['G3','G4']},
+  {id:'collab_celebrate',name:'Celebrate Others',    atl:'Social Skills',   lp:'Open-minded',  tier:1, desc:'Notice and praise another team\'s achievement', grade_band:['G3','G4']},
+  {id:'collab_research', name:'Research the Skill',  atl:'Research & Thinking',lp:'Inquirer',  tier:2, desc:'Find out one new fact or tip about today\'s skill and share it', grade_band:['G3','G4']},
+  // G5
+  {id:'collab_leadership',name:'Distributed Leadership',atl:'Collaboration',lp:'Knowledgeable',tier:3, desc:'Intentionally rotate who leads each activity — reflect on what changed', grade_band:['G5']},
+  {id:'collab_evfeedback',name:'Evidence-Based Feedback',atl:'Communication',lp:'Communicator',tier:3, desc:'Provide specific, evidence-based feedback using what you observed', grade_band:['G5']},
+  {id:'collab_ethical',  name:'Ethical Dilemma Response',atl:'Social Skills',lp:'Principled',  tier:3, desc:'Respond to an in-game fairness situation and justify your decision', grade_band:['G5']},
+  {id:'collab_metacog',  name:'Metacognitive Check', atl:'Self-Management', lp:'Reflective',   tier:2, desc:'Mid-activity: each person names one thing they\'re doing well and one to improve', grade_band:['G5']},
+  {id:'collab_peercoach',name:'Cross-Team Peer Coaching',atl:'Communication',lp:'Communicator',tier:3, desc:'Coach a peer from another team in a skill — adapt your language to their level', grade_band:['G5']},
+  {id:'collab_analysis', name:'Performance Analysis',atl:'Research & Thinking',lp:'Thinker',   tier:3, desc:'Observe and record data on your team\'s performance, then use it to set a new goal', grade_band:['G5']},
+  {id:'collab_resilience',name:'Resilience Under Pressure',atl:'Self-Management',lp:'Balanced',tier:3, desc:'When your team faces a setback, document your response and recovery', grade_band:['G5']},
+  {id:'collab_action',   name:'Action Planning',     atl:'Collaboration',   lp:'Thinker',      tier:3, desc:'Write a 3-step action plan to address a team weakness', grade_band:['G5']},
+  {id:'collab_appreciate',name:'Appreciate Difference',atl:'Social Skills',  lp:'Open-minded', tier:2, desc:'Identify how each team member\'s different strengths contributed to a result', grade_band:['G5']},
+  {id:'collab_protocol', name:'Unit Reflection Protocol',atl:'Research & Thinking',lp:'Reflective',tier:3, desc:'Use a structured reflection framework (What / So What / Now What) to evaluate team growth', grade_band:['G5']},
+];
+
+const SPECIAL_BADGES = [
+  {id:'comeback',    name:'Comeback Kings/Queens', icon:'🔥', desc:'Turned it around after a tough start'},
+  {id:'improved',    name:'Most Improved',         icon:'📈', desc:'Greatest growth across the unit'},
+  {id:'spirit',      name:'Team Spirit',           icon:'💚', desc:'Always positive, always together'},
+  {id:'ironcrew',    name:'Iron Crew',             icon:'💪', desc:'Completed the most physical challenges'},
+  {id:'thinkers',    name:'Deep Thinkers',         icon:'🧠', desc:'Outstanding reflection quality'},
+  {id:'fairness',    name:'Fairness First',        icon:'⚖️', desc:'Showed exceptional integrity in competition'},
+  {id:'challenger',  name:'Challenger',            icon:'⭐', desc:'Took on the hardest difficulty challenges'},
+  {id:'heart',       name:'Heart of the Unit',     icon:'❤️', desc:'Teacher\'s choice — exemplified unit values'},
+  {id:'rookie',      name:'Rookie Legends',        icon:'🌟', desc:'Most impressive debut'},
+  {id:'allin',       name:'All-In',                icon:'🎯', desc:'Full participation every session'},
+];
+
+const AUTO_BADGES = [
+  {id:'first_challenge', name:'First Challenge',  icon:'🏅', trigger:'first_approved'},
+  {id:'five_done',       name:'Five Done',         icon:'🖐️', trigger:'five_approved'},
+  {id:'double_digits',   name:'Double Digits',     icon:'🔟', trigger:'ten_approved'},
+  {id:'goal_getter',     name:'Goal Getter',       icon:'🎯', trigger:'goal_complete'},
+  {id:'reflector',       name:'Reflector',         icon:'🪞', trigger:'first_reflection'},
+  {id:'charter_team',    name:'Charter Team',      icon:'📜', trigger:'charter_set'},
+  {id:'halfway_hero',    name:'Halfway Hero',      icon:'🌳', trigger:'level3'},
+  {id:'thrive_crew',     name:'Thrive Crew',       icon:'🌻', trigger:'level5'},
+];
+
+// ═══════════════════════════════════════════
+//  GRADE CONFIG
+// ═══════════════════════════════════════════
+const GRADE_CONFIG = {
+  G1: {
+    fontSize:'18px',
+    strings:{
+      goalPhysical:'What do we want to try to do together? 🏃',
+      goalTeamwork:'How do we want to be a good team? 🤝',
+      reflectWell:'What did we do great? 🌟 (write or draw)',
+      reflectHard:'What was tricky? 😤',
+      challengeLog:'Tell us what happened! 🎉',
+      levelUp:'WOW! You\'re growing! 🌿🎉',
+      checkinTrack:'Are we on track? 👍',
+      checkinTogether:'Are we working well together? 🤝',
+    },
+    useGoalPresets:true,
+    goalPresets:{
+      physical:['Run for 1 minute','Jump rope 20 times','Do 10 jumps together','Try a new game','Finish the relay'],
+      teamwork:['Be kind','Take turns','Cheer for each other','Listen well','Try our best'],
+    },
+    showStudentName:false,
+  },
+  G2: {
+    fontSize:'18px',
+    strings:{
+      goalPhysical:'What\'s our big team challenge this week? 💪',
+      goalTeamwork:'What\'s one thing we\'ll do to work together better?',
+      reflectWell:'What are we most proud of this week?',
+      reflectHard:'What didn\'t go so well?',
+      challengeLog:'Tell us how your team did this challenge!',
+      levelUp:'Amazing! Your team just levelled up!',
+      checkinTrack:'Are we on track?',
+      checkinTogether:'Are we working well together?',
+    },
+    useGoalPresets:true,
+    goalPresets:{
+      physical:['Complete the obstacle course','Do 50 jumps as a team','Run 3 laps together','Beat our plank record','Do a relay race'],
+      teamwork:['Be kind','Take turns','Cheer for each other','Listen well','Try our best'],
+    },
+    showStudentName:false,
+  },
+  G3: {
+    fontSize:'16px',
+    strings:{
+      goalPhysical:'Set a physical goal your whole team can work toward.',
+      goalTeamwork:'Choose one teamwork skill to focus on this week.',
+      reflectWell:'Describe one thing your team did really well together.',
+      reflectHard:'What was a challenge for your team this week?',
+      challengeLog:'Describe how your team completed this challenge.',
+      levelUp:'Brilliant work — your team has reached a new level!',
+      checkinTrack:'Are we on track with our physical goal?',
+      checkinTogether:'How well are we working as a team?',
+    },
+    useGoalPresets:false,
+    goalPresets:{
+      teamwork:['Communicate clearly','Include everyone','Support each other','Stay positive','Manage time well'],
+    },
+    showStudentName:true,
+  },
+  G4: {
+    fontSize:'16px',
+    strings:{
+      goalPhysical:'Choose a physical goal that challenges everyone and is measurable.',
+      goalTeamwork:'Select an ATL skill area and describe how you\'ll demonstrate it.',
+      reflectWell:'What was your team\'s greatest success this week, and what made it possible?',
+      reflectHard:'Describe a difficulty your team faced and how you responded.',
+      challengeLog:'Explain what your team did and what you learned.',
+      levelUp:'Congratulations! Your team\'s hard work has paid off.',
+      checkinTrack:'Are we on track with our physical goal?',
+      checkinTogether:'How effectively are we demonstrating our ATL skills?',
+    },
+    useGoalPresets:false,
+    goalPresets:{
+      teamwork:['Communicate clearly','Include everyone','Support each other','Stay positive','Manage time well'],
+    },
+    showStudentName:true,
+  },
+  G5: {
+    fontSize:'15px',
+    strings:{
+      goalPhysical:'Define a SMART physical goal aligned to your team\'s current development area.',
+      goalTeamwork:'Identify a collaboration or communication skill to develop, with reference to IB ATL frameworks.',
+      reflectWell:'Analyse your team\'s most significant achievement and identify the factors that contributed to it.',
+      reflectHard:'Evaluate a setback your team encountered. What was your response, and what would you do differently?',
+      challengeLog:'Provide evidence of how your team met the challenge requirements and reflect on the process.',
+      levelUp:'Your team\'s commitment to physical excellence and ATL skills has earned you this milestone.',
+      checkinTrack:'Assess your team\'s progress against your stated physical goal.',
+      checkinTogether:'Evaluate how effectively your team is demonstrating the selected ATL skill.',
+    },
+    useGoalPresets:false,
+    goalPresets:{teamwork:[]},
+    showStudentName:true,
+  },
+};
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let appState = {
+  activeScreen:'landing',
+  activeTeamId:null,
+  activeTab:'home',
+  teacherAuth:false,
+  unit:{
+    name:'',grade:'G3',weeks:4,activeWeek:1,
+    goalWindowOpen:false,checkinWindowOpen:false,
+    reflectionWindowOpen:false,unitComplete:false,
+    appsScriptUrl:'',
+    availablePhysicalCategories:['Fitness','Skill','Movement','Team Performance'],
+    availableATLSkills:[...ATL_SKILLS],
+    availableCharterValues:[...CHARTER_OPTIONS.map(c=>c.value)],
+  },
+  teams:[],
+  pendingSync:[],
+};
+
+// ─── LocalStorage ───────────────────────────
+function loadState(){
+  try{
+    const saved = localStorage.getItem('teamquest_state');
+    if(saved){
+      const parsed = JSON.parse(saved);
+      appState = Object.assign(appState, parsed);
+      appState.teacherAuth = sessionStorage.getItem('tqTeacherAuth')==='true';
+    }
+  }catch(e){console.warn('State load failed',e)}
+}
+function saveState(){
+  try{
+    const toSave = {...appState, teacherAuth:false};
+    localStorage.setItem('teamquest_state', JSON.stringify(toSave));
+  }catch(e){console.warn('State save failed',e)}
+}
+function setState(patch){
+  Object.assign(appState, patch);
+  saveState();
+}
+function getTeam(id){ return appState.teams.find(t=>t.id===id) }
+function updateTeam(id, patch){
+  const idx = appState.teams.findIndex(t=>t.id===id);
+  if(idx<0) return;
+  appState.teams[idx] = {...appState.teams[idx], ...patch,
+    last_updated: new Date().toISOString()};
+  saveState();
+}
+function getGrade(){ return appState.unit.grade || 'G3' }
+function getText(key){ return (GRADE_CONFIG[getGrade()]?.strings?.[key]) || '' }
+function getChallenges(type){
+  const g = getGrade();
+  const lib = type==='physical' ? PHYSICAL_CHALLENGES : COLLAB_CHALLENGES;
+  return lib.filter(c=>c.grade_band.includes(g));
+}
+function makeLevelBadge(level, colour){
+  const lv = LEVELS[level-1] || LEVELS[0];
+  const bg = colour || 'var(--green-mid)';
+  return `<span class="level-badge" style="background:${bg}">${lv.icon} ${lv.name}</span>`;
+}
+function starsHTML(tier){
+  return '⭐'.repeat(tier) + '<span style="opacity:.25">⭐</span>'.repeat(3-tier);
+}
+function getNextLevel(team){
+  return LEVELS.find(l=>l.level > team.level) || null;
+}
+function teamProgress(team){
+  const next = getNextLevel(team);
+  if(!next) return {pct:100, physPct:100, collabPct:100, next:null};
+  const physPct  = Math.min(100, Math.round((team.approvedPhysical  / next.physical)*100));
+  const collabPct= Math.min(100, Math.round((team.approvedCollaboration / next.collab)*100));
+  const pct = Math.min(physPct, collabPct);
+  return {pct, physPct, collabPct, next};
+}
+
+// ─── Apps Script sync ────────────────────────
+function getScriptUrl(){
+  return appState.unit.appsScriptUrl || DEFAULT_APPS_SCRIPT_URL || '';
+}
+async function syncToSheets(payload){
+  const url = getScriptUrl();
+  if(!url) return;
+  try{
+    await fetch(url,{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)});
+  }catch(e){
+    console.warn('Sync failed — queuing',e);
+    appState.pendingSync.push({payload, ts:new Date().toISOString()});
+    saveState();
+  }
+}
+async function fetchFromSheets(){
+  const url = getScriptUrl();
+  if(!url) return null;
+  try{
+    const res = await fetch(url+'?action=read');
+    return await res.json();
+  }catch(e){console.warn('Fetch failed',e);return null}
+}
+async function replayPendingSync(){
+  if(!appState.pendingSync.length) return;
+  const queue = [...appState.pendingSync];
+  appState.pendingSync=[];
+  saveState();
+  for(const item of queue){ await syncToSheets(item.payload) }
+}
+
+// ─── ROUTER ─────────────────────────────────
+function showScreen(name, params={}){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById('screen-'+name);
+  if(el) el.classList.add('active');
+  appState.activeScreen = name;
+  // Render
+  const renderers = {
+    'landing': renderLanding,
+    'team-login': renderTeamLogin,
+    'team-home': ()=>renderTeamHome(params.teamId || appState.activeTeamId),
+    'challenges': ()=>renderChallenges(params.teamId || appState.activeTeamId, params.type||'physical'),
+    'goals': ()=>renderGoals(params.teamId || appState.activeTeamId),
+    'checkin': ()=>renderCheckin(params.teamId || appState.activeTeamId),
+    'reflect': ()=>renderReflect(params.teamId || appState.activeTeamId),
+    'badges': ()=>renderBadges(params.teamId || appState.activeTeamId),
+    'charter': ()=>renderCharter(params.teamId || appState.activeTeamId),
+    'team-story': ()=>renderTeamStory(params.teamId || appState.activeTeamId),
+    'teacher-login': ()=>{},
+    'teacher-dashboard': renderTeacherDashboard,
+    'unit-setup': renderUnitSetup,
+    'team-detail': ()=>renderTeamDetail(params.teamId),
+  };
+  if(renderers[name]) renderers[name]();
+  window.scrollTo(0,0);
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+}
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+}
+
+// ─── LANDING ─────────────────────────────────
+function renderLanding(){
+  const hasUnit = !!appState.unit.name;
+  document.getElementById('landing-unit-display').textContent =
+    hasUnit ? appState.unit.name : '';
+  const box = document.getElementById('landing-unit-box');
+  if(hasUnit){
+    box.innerHTML=`<div class="landing-unit">📚 ${appState.unit.name}</div>`;
+  } else {
+    box.innerHTML=`<div class="landing-no-unit">⏳ Waiting for teacher to set up this unit</div>`;
+  }
+  document.getElementById('landing-footer').textContent =
+    hasUnit ? `Active grade: ${appState.unit.grade} · Week ${appState.unit.activeWeek} of ${appState.unit.weeks}` : '';
+}
+
+// ─── TEAM LOGIN ───────────────────────────────
+function renderTeamLogin(){
+  const grid = document.getElementById('team-grid');
+  if(!appState.teams.length){
+    grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-light)">
+      <div style="font-size:2rem;margin-bottom:8px">🏗️</div>
+      No teams set up yet.<br>Ask your teacher to configure the unit.
+    </div>`;
+    return;
+  }
+  grid.innerHTML = appState.teams.map(team=>{
+    const prog = teamProgress(team);
+    const lv = LEVELS[team.level-1]||LEVELS[0];
+    const next = prog.next;
+    const progLabel = next
+      ? `${Math.min(team.approvedPhysical,next.physical)}/${next.physical} physical · ${Math.min(team.approvedCollaboration,next.collab)}/${next.collab} collab`
+      : 'Maximum level reached! 🌻';
+    return `<div class="team-card" onclick="selectTeam('${team.id}')" data-teamid="${team.id}">
+      <div class="team-card-strip" style="background:${team.colour}"></div>
+      <div class="team-card-body">
+        <div class="team-card-name">${esc(team.name)}</div>
+        <div class="team-card-level">${makeLevelBadge(team.level, team.colour)}</div>
+        <div class="team-card-prog">
+          <div class="team-card-prog-label">${progLabel}</div>
+          <div class="prog-wrap">
+            <div class="prog-bar" style="width:0%;background:${team.colour}"
+              data-target="${prog.pct}"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Animate progress bars
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.prog-bar[data-target]').forEach(bar=>{
+      bar.style.width = bar.dataset.target+'%';
+    });
+  });
+}
+
+function selectTeam(id){
+  appState.activeTeamId = id;
+  saveState();
+  const team = getTeam(id);
+  if(!team) return;
+  if(team.levelUpPending){
+    updateTeam(id,{levelUpPending:false});
+    showScreen('team-home',{teamId:id});
+    setTimeout(()=>triggerLevelUp(id),400);
+  } else if(team.badgePending){
+    const badge = team.badgePending;
+    updateTeam(id,{badgePending:null});
+    if(!team.charterSet){ showScreen('charter',{teamId:id}); }
+    else { showScreen('team-home',{teamId:id}); }
+    setTimeout(()=>triggerBadgeOverlay(badge, team.colour),400);
+  } else if(!team.charterSet){
+    showScreen('charter',{teamId:id});
+  } else {
+    showScreen('team-home',{teamId:id});
+  }
+}
+
+// ─── TEACHER LOGIN ────────────────────────────
+function doTeacherLogin(){
+  const pw = document.getElementById('teacher-pw-input').value;
+  const errEl = document.getElementById('teacher-pw-error');
+  const storedPw = localStorage.getItem('tqTeacherPassword') || TEACHER_PASSWORD;
+  if(pw === storedPw){
+    sessionStorage.setItem('tqTeacherAuth','true');
+    appState.teacherAuth = true;
+    document.getElementById('teacher-pw-input').value='';
+    errEl.textContent='';
+    showScreen('teacher-dashboard');
+  } else {
+    errEl.textContent='Incorrect password. Try again.';
+    const input = document.getElementById('teacher-pw-input');
+    input.classList.add('shake');
+    setTimeout(()=>input.classList.remove('shake'),500);
+  }
+}
+
+// ─── HELPERS ─────────────────────────────────
+function esc(str){ // basic XSS escape
+  return String(str||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function newUUID(){ return crypto.randomUUID() }
+function nowISO(){ return new Date().toISOString() }
+function fmtDate(iso){
+  if(!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+
+// ─── AUTO BADGE CHECK ─────────────────────────
+function checkAutoBadges(teamId){
+  const team = getTeam(teamId);
+  if(!team) return;
+  const total = (team.approvedPhysical||0)+(team.approvedCollaboration||0);
+  const existing = (team.badges||[]).map(b=>b.id);
+  const toAward = [];
+  if(total>=1  && !existing.includes('first_challenge')) toAward.push('first_challenge');
+  if(total>=5  && !existing.includes('five_done'))       toAward.push('five_done');
+  if(total>=10 && !existing.includes('double_digits'))   toAward.push('double_digits');
+  if(team.level>=3 && !existing.includes('halfway_hero'))toAward.push('halfway_hero');
+  if(team.level>=5 && !existing.includes('thrive_crew')) toAward.push('thrive_crew');
+  if(team.charterSet && !existing.includes('charter_team')) toAward.push('charter_team');
+  toAward.forEach(bid=>{
+    const def = AUTO_BADGES.find(b=>b.id===bid);
+    if(!def) return;
+    const badge = {id:newUUID(),badgeDefId:bid,name:def.name,icon:def.icon,
+      type:'auto',awardedAt:nowISO()};
+    const badges = [...(team.badges||[]), badge];
+    updateTeam(teamId,{badges});
+    syncToSheets({type:'badge_award',team_id:teamId,...badge});
+  });
+}
+
+// ─── LEVEL UP CHECK ───────────────────────────
+function checkLevelUp(teamId){
+  const team = getTeam(teamId);
+  if(!team || team.level>=5) return false;
+  const nextLv = LEVELS.find(l=>l.level === team.level+1);
+  if(!nextLv) return false;
+  const meetsPhys   = team.approvedPhysical >= nextLv.physical;
+  const meetsCollab = team.approvedCollaboration >= nextLv.collab;
+  // Extra unlock conditions
+  const goals = team.goals||[];
+  const hasGoalCheckin = goals.some(g=>g.goals_set_at && g.checkin_at);
+  const weeksWithGoals = new Set(goals.filter(g=>g.goals_set_at).map(g=>g.week_number)).size;
+  const hasReflection  = goals.some(g=>g.reflection_at);
+  const fullReflections= goals.filter(g=>g.reflection_wellbeing&&g.reflection_challenge&&g.lp_attribute_shown).length;
+  let meetsExtra = true;
+  if(nextLv.level===2) meetsExtra = hasGoalCheckin;
+  if(nextLv.level===3) meetsExtra = weeksWithGoals>=2;
+  if(nextLv.level===4) meetsExtra = hasReflection;
+  if(nextLv.level===5) meetsExtra = fullReflections>=2;
+  if(meetsPhys && meetsCollab && meetsExtra){
+    updateTeam(teamId,{level:nextLv.level, levelUpPending:true});
+    checkAutoBadges(teamId);
+    syncToSheets({type:'team_setup', team_id:teamId, current_level:nextLv.level});
+    return true;
+  }
+  return false;
+}
+
+// ─── CONFETTI / LEVEL UP ANIMATION ───────────
+function triggerLevelUp(teamId){
+  const team = getTeam(teamId);
+  if(!team) return;
+  const lv = LEVELS[team.level-1]||LEVELS[0];
+  const overlay = document.getElementById('overlay-levelup');
+  overlay.style.display='flex';
+  overlay.style.background = team.colour+'ee';
+
+  // Confetti
+  const cc = document.getElementById('confetti-container');
+  cc.innerHTML='';
+  const colours=['#fff','#FFD700','#FF6B6B','#8DB87A','#F5F0E8','#E8916A'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');
+    d.style.cssText=`position:absolute;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;
+      background:${colours[Math.floor(Math.random()*colours.length)]};
+      left:${Math.random()*100}%;top:-20px;border-radius:${Math.random()>0.5?'50%':'2px'};
+      animation:confettiFall ${1.5+Math.random()*2}s ${Math.random()*1.5}s ease-in forwards`;
+    cc.appendChild(d);
+  }
+
+  const msg = getText('levelUp');
+  document.getElementById('levelup-content').innerHTML=`
+    <div style="font-size:5rem;animation:bounceIn .5s ease">${lv.icon}</div>
+    <h1 style="font-family:'Nunito',sans-serif;font-weight:900;color:#fff;font-size:2rem;margin:12px 0">
+      Level Up!</h1>
+    <p style="color:rgba(255,255,255,.9);font-size:1.1rem;font-weight:700;margin-bottom:8px">
+      ${esc(team.name)} is now</p>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;color:#fff;font-size:2.4rem;margin-bottom:16px">
+      ${lv.icon} ${lv.name}</div>
+    <p style="color:rgba(255,255,255,.85);margin-bottom:28px;font-size:1rem">${msg}</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:24px">
+      <span style="font-size:1.8rem;animation:starPop .4s .2s both">⭐</span>
+      <span style="font-size:1.8rem;animation:starPop .4s .5s both">⭐</span>
+      <span style="font-size:1.8rem;animation:starPop .4s .8s both">⭐</span>
+    </div>
+    <button class="btn btn-primary" style="background:#fff;color:var(--green-dark);font-size:1.1rem;padding:16px 32px"
+      onclick="dismissLevelUp()">Awesome! 🎉</button>`;
+}
+function dismissLevelUp(){
+  document.getElementById('overlay-levelup').style.display='none';
+  document.getElementById('confetti-container').innerHTML='';
+}
+
+// ═══════════════════════════════════════════
+//  PART 2 — TEAM HOME, CHALLENGES, CHARTER, BADGES
+// ═══════════════════════════════════════════
+
+// ─── BOTTOM NAV ──────────────────────────────
+function renderBottomNav(teamId, activeTab){
+  return `<nav class="bottom-nav">
+    <button class="nav-tab ${activeTab==='home'?'active':''}"
+      onclick="goTeamTab('${teamId}','home')">
+      <span class="nav-icon">🏠</span>Home</button>
+    <button class="nav-tab ${activeTab==='challenges'?'active':''}"
+      onclick="goTeamTab('${teamId}','challenges')">
+      <span class="nav-icon">🏆</span>Challenges</button>
+    <button class="nav-tab ${activeTab==='goals'?'active':''}"
+      onclick="goTeamTab('${teamId}','goals')">
+      <span class="nav-icon">🎯</span>Goals</button>
+    <button class="nav-tab ${activeTab==='badges'?'active':''}"
+      onclick="goTeamTab('${teamId}','badges')">
+      <span class="nav-icon">🏅</span>Badges</button>
+  </nav>`;
+}
+function goTeamTab(teamId, tab){
+  appState.activeTab = tab;
+  if(tab==='home')       showScreen('team-home',{teamId});
+  else if(tab==='challenges') showScreen('challenges',{teamId,type:appState.challengeTab||'physical'});
+  else if(tab==='goals') showScreen('goals',{teamId});
+  else if(tab==='badges')showScreen('badges',{teamId});
+}
+
+// ─── TEAM HOME ────────────────────────────────
+function renderTeamHome(id){
+  const team = getTeam(id);
+  if(!id||!team){ document.getElementById('team-home-content').innerHTML='<p style="padding:20px">Team not found.</p>'; return; }
+  const lv = LEVELS[team.level-1]||LEVELS[0];
+  const prog = teamProgress(team);
+  const next = prog.next;
+  const grade = getGrade();
+  const cfg = GRADE_CONFIG[grade]||GRADE_CONFIG.G3;
+
+  // Apply grade font size
+  document.body.className = 'grade-'+grade.toLowerCase();
+
+  // Goals section
+  const thisWeek = (team.goals||[]).find(g=>g.week_number===appState.unit.activeWeek);
+  const goalWindowOpen = appState.unit.goalWindowOpen;
+  const checkinOpen    = appState.unit.checkinWindowOpen;
+  const reflectOpen    = appState.unit.reflectionWindowOpen;
+
+  let goalBtn = '';
+  if(!thisWeek && goalWindowOpen)
+    goalBtn=`<button class="btn btn-primary btn-full" onclick="showScreen('goals',{teamId:'${id}'})">📋 Set Our Goals</button>`;
+  else if(thisWeek && !thisWeek.checkin_at && checkinOpen)
+    goalBtn=`<button class="btn btn-primary btn-full" onclick="showScreen('checkin',{teamId:'${id}'})">✅ Check In</button>`;
+  else if(thisWeek && !thisWeek.reflection_at && reflectOpen)
+    goalBtn=`<button class="btn btn-terra btn-full" onclick="showScreen('reflect',{teamId:'${id}'})">🪞 Reflect</button>`;
+  else if(!goalWindowOpen && !thisWeek)
+    goalBtn=`<button class="btn btn-secondary btn-full" disabled style="opacity:.5;cursor:not-allowed">⏳ Waiting for teacher to open goals</button>`;
+
+  const physGoalCard = thisWeek
+    ? `<div class="card" style="border-left:4px solid var(--green-mid)">
+        <div style="font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Physical Goal</div>
+        <div style="font-weight:600">${esc(thisWeek.physical_goal||'Not set yet')}</div>
+        ${thisWeek.physical_difficulty?`<div style="font-size:.75rem;color:var(--text-light);margin-top:4px">${difficultyLabel(thisWeek.physical_difficulty)}</div>`:''}
+        ${goalStatusBadge(thisWeek,'physical')}
+      </div>`
+    : `<div class="card" style="opacity:.55;border:2px dashed var(--cream-dark);background:transparent">
+        <div style="color:var(--text-light);font-size:.9rem">No physical goal set this week yet</div>
+      </div>`;
+
+  const teamGoalCard = thisWeek
+    ? `<div class="card" style="border-left:4px solid var(--terracotta)">
+        <div style="font-size:.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Teamwork Goal</div>
+        <div style="font-weight:600">${esc(thisWeek.teamwork_goal||'Not set yet')}</div>
+        ${goalStatusBadge(thisWeek,'teamwork')}
+      </div>`
+    : `<div class="card" style="opacity:.55;border:2px dashed var(--cream-dark);background:transparent">
+        <div style="color:var(--text-light);font-size:.9rem">No teamwork goal set this week yet</div>
+      </div>`;
+
+  // Preview of physical challenges (3)
+  const physChallenges = getChallenges('physical').slice(0,3);
+  const collabChallenges = getChallenges('collaboration').slice(0,3);
+
+  const miniChallCards = physChallenges.map(c=>{
+    const status = challengeStatus(team,c.id);
+    return `<div class="card" style="flex:0 0 200px;margin-right:0" onclick="goTeamTab('${id}','challenges')">
+      <div style="font-size:.8rem;font-weight:700;color:var(--green-dark);margin-bottom:4px">${esc(c.name)}</div>
+      <div style="font-size:.72rem;color:var(--text-light);margin-bottom:4px">${starsHTML(c.tier)}</div>
+      <div style="font-size:.72rem">${statusChip(status)}</div>
+    </div>`;
+  }).join('');
+
+  // Badges row
+  const badges = team.badges||[];
+  const badgeRow = badges.length
+    ? badges.map(b=>`<div style="flex:0 0 auto;text-align:center;cursor:pointer"
+        onclick="openBadgeDetail(${JSON.stringify(b).replace(/"/g,'&quot;')})">
+        <div style="font-size:2rem">${b.icon||'🏅'}</div>
+        <div style="font-size:.62rem;color:var(--text-light);margin-top:2px;max-width:56px">${esc(b.name)}</div>
+      </div>`).join('')
+    : `<div style="color:var(--text-light);font-size:.85rem;padding:8px 0">Complete challenges to earn badges 🏅</div>`;
+
+  const thriveState = team.level>=5;
+
+  document.getElementById('team-home-content').innerHTML=`
+    <!-- Header -->
+    <div style="background:${team.colour};color:#fff;padding:20px 18px 16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <button class="back-btn" style="color:rgba(255,255,255,.8);padding:4px 0"
+          onclick="showScreen('team-login')">← Teams</button>
+        <button style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:99px;
+          padding:6px 14px;font-size:.75rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif"
+          onclick="openCharterModal('${id}')">📜 Charter</button>
+      </div>
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.6rem;margin-bottom:6px">
+        ${esc(team.name)}</h1>
+      ${makeLevelBadge(team.level,'rgba(255,255,255,.25)')}
+    </div>
+
+    <div style="padding:16px;padding-bottom:80px;overflow-y:auto;-webkit-overflow-scrolling:touch">
+
+      <!-- Progress Section -->
+      <div class="card" style="margin-bottom:12px">
+        ${thriveState
+          ? `<div style="text-align:center;padding:8px 0">
+              <div style="font-size:2rem">🌻</div>
+              <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;color:var(--green-dark)">
+                You've reached the top!</div>
+              <div style="font-size:.85rem;color:var(--text-light);margin-top:4px">Maximum level achieved — incredible work!</div>
+            </div>`
+          : `<div style="font-weight:700;color:var(--green-dark);margin-bottom:10px">
+              Progress to ${lv.icon} ${next?next.name:'Top'}</div>
+            <div style="margin-bottom:8px">
+              <div style="font-size:.75rem;color:var(--text-light);margin-bottom:3px">
+                Physical: ${team.approvedPhysical}/${next?next.physical:15}</div>
+              <div class="prog-wrap">
+                <div class="prog-bar" style="width:0%;background:var(--green-mid)"
+                  data-target="${prog.physPct}"></div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:.75rem;color:var(--text-light);margin-bottom:3px">
+                Collaboration: ${team.approvedCollaboration}/${next?next.collab:10}</div>
+              <div class="prog-wrap">
+                <div class="prog-bar" style="width:0%;background:var(--terracotta)"
+                  data-target="${prog.collabPct}"></div>
+              </div>
+            </div>`}
+      </div>
+
+      <!-- Goals Section -->
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;
+        color:var(--green-dark);margin:16px 0 8px">🎯 Week ${appState.unit.activeWeek} Goals</div>
+      ${physGoalCard}
+      <div style="margin-top:8px">${teamGoalCard}</div>
+      <div style="margin-top:10px">${goalBtn}</div>
+
+      <!-- Challenges Preview -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;color:var(--green-dark)">
+          🏆 Challenges</div>
+        <button class="btn btn-ghost btn-sm" onclick="goTeamTab('${id}','challenges')">See all →</button>
+      </div>
+      <div style="display:flex;gap:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px">
+        ${miniChallCards}
+      </div>
+
+      <!-- Badges Section -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;color:var(--green-dark)">
+          🏅 Badges Earned</div>
+        ${badges.length?`<button class="btn btn-ghost btn-sm" onclick="goTeamTab('${id}','badges')">See all →</button>`:''}
+      </div>
+      <div style="display:flex;gap:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 0">
+        ${badgeRow}
+      </div>
+
+      <!-- Team Story (unit complete only) -->
+      ${appState.unit.unitComplete ? `
+        <div class="card" style="background:var(--green-dark);color:#fff;text-align:center;margin-top:16px">
+          <div style="font-size:1.5rem;margin-bottom:6px">📖</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1.05rem;margin-bottom:8px">
+            Unit Complete!</div>
+          <button class="btn" style="background:#fff;color:var(--green-dark)"
+            onclick="showScreen('team-story',{teamId:'${id}'})">See Our Story →</button>
+        </div>` : ''}
+
+    </div>
+    ${renderBottomNav(id,'home')}`;
+
+  // Animate progress bars
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('#team-home-content .prog-bar[data-target]').forEach(bar=>{
+      bar.style.width = bar.dataset.target+'%';
+    });
+  });
+}
+
+function difficultyLabel(d){
+  const map={easy:'😊 Easy',medium:'💪 Medium',challenge:'🔥 Challenge'};
+  return map[d]||d;
+}
+function goalStatusBadge(goal, type){
+  const achieved = goal[type+'_achieved'];
+  const checkin  = goal[type+'_checkin'];
+  if(achieved) return `<span style="font-size:.72rem;background:var(--green-light);color:var(--green-dark);border-radius:99px;padding:3px 10px;display:inline-block;margin-top:6px">✓ ${achieved==='yes'?'Achieved':achieved==='partial'?'Partially':'Not achieved'}</span>`;
+  if(checkin)  return `<span style="font-size:.72rem;background:var(--cream-dark);color:var(--text-light);border-radius:99px;padding:3px 10px;display:inline-block;margin-top:6px">Checked in: ${checkin==='on_track'?'On track ✅':checkin==='sort_of'?'Sort of 🟡':'Need help 🆘'}</span>`;
+  return `<span style="font-size:.72rem;color:var(--text-light);display:inline-block;margin-top:4px">Set this week</span>`;
+}
+
+function challengeStatus(team, challengeId){
+  const pending  = (team.pendingChallenges||[]).find(c=>c.challenge_id===challengeId);
+  const approved = (team.approvedChallenges||[]).find(c=>c.challenge_id===challengeId);
+  if(approved) return 'approved';
+  if(pending)  return 'pending';
+  return 'available';
+}
+function statusChip(status){
+  if(status==='approved') return `<span style="font-size:.72rem;background:var(--green-light);color:var(--green-dark);border-radius:99px;padding:3px 10px">✓ Completed</span>`;
+  if(status==='pending')  return `<span style="font-size:.72rem;background:var(--cream-dark);color:var(--text-light);border-radius:99px;padding:3px 10px">⏳ Pending</span>`;
+  return `<span style="font-size:.72rem;background:var(--green-mid);color:#fff;border-radius:99px;padding:3px 10px">Available</span>`;
+}
+
+// ─── CHARTER MODAL (read-only view) ───────────
+function openCharterModal(teamId){
+  const team = getTeam(teamId);
+  if(!team) return;
+  const vals = team.charterValues||[];
+  const icons = Object.fromEntries(CHARTER_OPTIONS.map(c=>[c.value,c.icon]));
+  document.getElementById('modal-charter-view-content').innerHTML=`
+    <h2 style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);margin-bottom:4px">
+      📜 ${esc(team.name)}'s Charter</h2>
+    <p style="color:var(--text-light);font-size:.85rem;margin-bottom:18px">What this team stands for</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+      ${vals.map(v=>`<div style="background:${team.colour}22;border:2px solid ${team.colour};
+        border-radius:12px;padding:10px 16px;font-weight:700;font-size:1rem;color:var(--green-dark)">
+        ${icons[v]||'⭐'} ${esc(v)}</div>`).join('')}
+    </div>
+    <button class="btn btn-secondary btn-full" onclick="closeModal('modal-charter-view')">Close</button>`;
+  openModal('modal-charter-view');
+}
+
+// ─── CHARTER SELECTION (first time) ───────────
+function renderCharter(id){
+  const team = getTeam(id);
+  if(!team){ return; }
+  const availableValues = (appState.unit.availableCharterValues||CHARTER_OPTIONS.map(c=>c.value));
+  const options = CHARTER_OPTIONS.filter(c=>availableValues.includes(c.value));
+  let selected = [];
+
+  document.getElementById('charter-content').innerHTML=`
+    <div style="background:${team.colour};color:#fff;padding:20px 18px 16px">
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.5rem">
+        What does your team stand for?</h1>
+      <p style="opacity:.85;margin-top:4px">Pick 3 values that matter most to your team</p>
+    </div>
+    <div style="padding:16px;padding-bottom:100px">
+      <div id="charter-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+        ${options.map(c=>`
+          <div class="charter-val-card card" data-value="${esc(c.value)}"
+            onclick="toggleCharter(this,'${id}')"
+            style="text-align:center;cursor:pointer;transition:all .15s;border:2px solid transparent">
+            <div style="font-size:1.8rem;margin-bottom:4px">${c.icon}</div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem">${esc(c.value)}</div>
+          </div>`).join('')}
+      </div>
+      <div id="charter-count" style="text-align:center;font-size:.9rem;color:var(--text-light);margin-bottom:12px">
+        Select 3 values (0 selected)</div>
+      <button id="charter-confirm-btn" class="btn btn-primary btn-full" disabled
+        style="opacity:.4" onclick="confirmCharter('${id}')">
+        This is our team! ✊</button>
+    </div>`;
+
+  window._charterSelected = [];
+}
+
+function toggleCharter(el, teamId){
+  const team = getTeam(teamId);
+  const val = el.dataset.value;
+  const sel = window._charterSelected||[];
+  const idx = sel.indexOf(val);
+  if(idx>-1){
+    sel.splice(idx,1);
+    el.style.background='var(--white)';
+    el.style.borderColor='transparent';
+    el.style.transform='';
+  } else {
+    if(sel.length>=3) return;
+    sel.push(val);
+    el.style.background=team.colour+'22';
+    el.style.borderColor=team.colour;
+    el.style.transform='scale(1.04)';
+  }
+  window._charterSelected = sel;
+  const count = document.getElementById('charter-count');
+  const btn   = document.getElementById('charter-confirm-btn');
+  if(count) count.textContent=`Select 3 values (${sel.length} selected)`;
+  if(btn){ btn.disabled=sel.length!==3; btn.style.opacity=sel.length===3?'1':'.4'; }
+}
+
+function confirmCharter(teamId){
+  const vals = window._charterSelected||[];
+  if(vals.length!==3) return;
+  updateTeam(teamId,{charterValues:vals, charterSet:true});
+  checkAutoBadges(teamId);
+  syncToSheets({type:'team_setup',team_id:teamId,charter_values:vals.join('|')});
+  showScreen('team-home',{teamId});
+}
+
+// ─── CHALLENGES SCREEN ────────────────────────
+function renderChallenges(id, type){
+  const team = getTeam(id);
+  if(!id||!team){ return; }
+  appState.challengeTab = type||'physical';
+  const challenges = getChallenges(type);
+  const showMore = { physical: appState._showMorePhys||false, collaboration: appState._showMoreCollab||false };
+  const visible = showMore[type] ? challenges : challenges.slice(0,6);
+
+  document.getElementById('challenges-content').innerHTML=`
+    <div style="background:${team.colour};color:#fff;padding:20px 18px 0">
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.4rem;margin-bottom:14px">
+        🏆 Challenges</h1>
+      <div style="display:flex;border-bottom:2px solid rgba(255,255,255,.3)">
+        <button class="chall-tab ${type==='physical'?'chall-tab-active':''}"
+          onclick="renderChallenges('${id}','physical');appState.activeTab='challenges';"
+          style="flex:1;background:none;border:none;color:${type==='physical'?'#fff':'rgba(255,255,255,.6)'};
+          font-family:'Nunito',sans-serif;font-weight:800;padding:10px;cursor:pointer;
+          border-bottom:${type==='physical'?'3px solid #fff':'3px solid transparent'};font-size:.95rem">
+          🏃 Physical</button>
+        <button class="chall-tab ${type==='collaboration'?'chall-tab-active':''}"
+          onclick="renderChallenges('${id}','collaboration');appState.activeTab='challenges';"
+          style="flex:1;background:none;border:none;color:${type==='collaboration'?'#fff':'rgba(255,255,255,.6)'};
+          font-family:'Nunito',sans-serif;font-weight:800;padding:10px;cursor:pointer;
+          border-bottom:${type==='collaboration'?'3px solid #fff':'3px solid transparent'};font-size:.95rem">
+          🤝 Collaboration</button>
+      </div>
+    </div>
+
+    <div style="padding:14px;padding-bottom:80px;overflow-y:auto;-webkit-overflow-scrolling:touch">
+      ${visible.map(c=>{
+        const status = challengeStatus(team,c.id);
+        const isPhys = type==='physical';
+        return `<div class="card" style="margin-bottom:10px;border-left:4px solid ${status==='approved'?'var(--green-light)':status==='pending'?'var(--gold)':team.colour}">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+            <div style="flex:1">
+              <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;
+                color:var(--green-dark);margin-bottom:4px">${esc(c.name)}</div>
+              <div style="font-size:.82rem;color:var(--text-light);margin-bottom:6px;line-height:1.4">
+                ${esc(c.desc||c.description||'')}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+                <span style="font-size:.75rem">${starsHTML(c.tier)}</span>
+                ${isPhys
+                  ? `<span style="font-size:.7rem;background:var(--cream-dark);padding:2px 8px;border-radius:99px;color:var(--text-light)">${esc(c.category)}</span>`
+                  : `<span style="font-size:.7rem;background:var(--cream-dark);padding:2px 8px;border-radius:99px;color:var(--text-light)">${esc(c.atl)}</span>
+                     <span style="font-size:.7rem;background:var(--green-mid)22;padding:2px 8px;border-radius:99px;color:var(--green-dark)">${esc(c.lp)}</span>`}
+              </div>
+            </div>
+            <div style="flex:0 0 auto;text-align:right">
+              ${status==='approved'
+                ? `<div style="font-size:.75rem;background:var(--green-light);color:var(--green-dark);border-radius:99px;padding:6px 12px;font-weight:700">✓ Done</div>`
+                : status==='pending'
+                ? `<div style="font-size:.75rem;background:var(--cream-dark);color:var(--text-light);border-radius:99px;padding:6px 12px;font-weight:700">⏳ Pending</div>`
+                : `<button class="btn btn-primary btn-sm" onclick="openLogChallenge('${id}','${c.id}','${type}')">
+                    Log it!</button>`}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+
+      ${challenges.length > 6 && !showMore[type]
+        ? `<button class="btn btn-secondary btn-full"
+            onclick="appState._showMorePhys=${type==='physical'};appState._showMoreCollab=${type==='collaboration'};renderChallenges('${id}','${type}')">
+            See more challenges ↓</button>` : ''}
+    </div>
+    ${renderBottomNav(id,'challenges')}`;
+}
+
+// ─── LOG CHALLENGE MODAL ──────────────────────
+function openLogChallenge(teamId, challengeId, type){
+  const team = getTeam(teamId);
+  if(!team) return;
+  const lib  = type==='physical' ? PHYSICAL_CHALLENGES : COLLAB_CHALLENGES;
+  const ch   = lib.find(c=>c.id===challengeId);
+  if(!ch) return;
+  const grade = getGrade();
+  const cfg   = GRADE_CONFIG[grade]||GRADE_CONFIG.G3;
+  const prompt= getText('challengeLog');
+  const showName = cfg.showStudentName;
+  const roster = team.roster||[];
+
+  document.getElementById('modal-log-challenge-content').innerHTML=`
+    <h2 style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);font-size:1.2rem;margin-bottom:4px">
+      ${esc(ch.name)}</h2>
+    <p style="font-size:.85rem;color:var(--text-light);margin-bottom:16px;line-height:1.4">
+      ${esc(ch.desc||ch.description||'')}</p>
+    <div class="field-group">
+      <label class="field-label">${prompt}</label>
+      <textarea id="log-reflection" class="field-textarea" placeholder="Tell your teacher what happened..."></textarea>
+    </div>
+    ${roster.length && showName ? `
+      <div class="field-group">
+        <label class="field-label">Who helped most? (optional)</label>
+        <select id="log-helper" class="field-select">
+          <option value="">— choose a teammate —</option>
+          ${roster.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')}
+        </select>
+      </div>` : ''}
+    ${showName ? `
+      <div class="field-group">
+        <label class="field-label">Your name (optional)</label>
+        <input id="log-submitter" type="text" class="field-input" placeholder="Type your name">
+      </div>` : ''}
+    <div id="log-error" style="color:var(--error);font-size:.8rem;min-height:18px;margin-bottom:8px"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-secondary" style="flex:1" onclick="closeModal('modal-log-challenge')">Cancel</button>
+      <button class="btn btn-primary" style="flex:1"
+        onclick="submitChallenge('${teamId}','${challengeId}','${type}')">
+        Submit ✓</button>
+    </div>`;
+
+  window._logTarget = {teamId, challengeId, type, ch};
+  openModal('modal-log-challenge');
+}
+
+function submitChallenge(teamId, challengeId, type){
+  const reflection = document.getElementById('log-reflection')?.value?.trim();
+  if(!reflection){
+    document.getElementById('log-error').textContent='Please write something before submitting!';
+    return;
+  }
+  const helper    = document.getElementById('log-helper')?.value||'';
+  const submitter = document.getElementById('log-submitter')?.value?.trim()||'';
+  const team = getTeam(teamId);
+  const lib  = type==='physical' ? PHYSICAL_CHALLENGES : COLLAB_CHALLENGES;
+  const ch   = lib.find(c=>c.id===challengeId);
+  if(!team||!ch) return;
+
+  const submission = {
+    submission_id: newUUID(),
+    challenge_id: challengeId,
+    challenge_name: ch.name,
+    challenge_type: type,
+    atl_skill: ch.atl||'',
+    lp_attribute: ch.lp||'',
+    difficulty: ch.tier,
+    reflection_text: reflection,
+    submitted_by: submitter,
+    helper_name: helper,
+    submitted_at: nowISO(),
+    status: 'pending',
+  };
+
+  const pending = [...(team.pendingChallenges||[]), submission];
+  updateTeam(teamId,{pendingChallenges: pending});
+  syncToSheets({type:'challenge_submission', team_id:teamId, ...submission});
+  closeModal('modal-log-challenge');
+
+  // Refresh the current screen
+  const s = appState.activeScreen;
+  if(s==='team-home') renderTeamHome(teamId);
+  else if(s==='challenges') renderChallenges(teamId, type);
+}
+
+// ─── BADGES SCREEN ────────────────────────────
+function renderBadges(id){
+  const team = getTeam(id);
+  if(!id||!team){ return; }
+  const badges = team.badges||[];
+
+  document.getElementById('badges-content').innerHTML=`
+    <div style="background:${team.colour};color:#fff;padding:20px 18px 16px">
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.4rem">🏅 Badges</h1>
+      <p style="opacity:.8;font-size:.85rem;margin-top:4px">Tap a badge to see more</p>
+    </div>
+    <div style="padding:16px;padding-bottom:80px">
+      ${badges.length===0
+        ? `<div style="text-align:center;padding:48px 20px;color:var(--text-light)">
+            <div style="font-size:3rem;margin-bottom:12px">🏅</div>
+            <div style="font-weight:600">No badges yet</div>
+            <div style="font-size:.85rem;margin-top:6px">Complete challenges to start earning!</div>
+          </div>`
+        : `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            ${badges.map(b=>`
+              <div class="card" style="text-align:center;cursor:pointer;padding:16px 10px"
+                onclick="openBadgeDetail(${JSON.stringify(b).replace(/"/g,'&quot;')})">
+                <div style="font-size:2.2rem;margin-bottom:6px">${b.icon||'🏅'}</div>
+                <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;
+                  color:var(--green-dark);line-height:1.2">${esc(b.name)}</div>
+                <div style="font-size:.65rem;color:var(--text-light);margin-top:3px">${fmtDate(b.awardedAt)}</div>
+              </div>`).join('')}
+          </div>`}
+
+      <!-- Auto-badge progress -->
+      <div style="margin-top:24px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);
+          font-size:.9rem;margin-bottom:10px">Badges to unlock 🔒</div>
+        ${AUTO_BADGES.map(ab=>{
+          const earned = badges.some(b=>b.badgeDefId===ab.id);
+          if(earned) return '';
+          return `<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;opacity:.55">
+            <div style="font-size:1.6rem;filter:grayscale(1)">${ab.icon}</div>
+            <div>
+              <div style="font-weight:700;font-size:.88rem">${esc(ab.name)}</div>
+              <div style="font-size:.72rem;color:var(--text-light)">${badgeTriggerLabel(ab.trigger)}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    ${renderBottomNav(id,'badges')}`;
+}
+
+function badgeTriggerLabel(trigger){
+  const map = {
+    first_approved:'Get your first challenge approved',
+    five_approved:'Complete 5 challenges total',
+    ten_approved:'Complete 10 challenges total',
+    goal_complete:'Complete a weekly goal',
+    first_reflection:'Submit your first reflection',
+    charter_set:'Set your team charter',
+    level3:'Reach Growth (Level 3)',
+    level5:'Reach Thrive (Level 5)',
+  };
+  return map[trigger]||trigger;
+}
+
+function openBadgeDetail(badge){
+  if(typeof badge==='string') badge=JSON.parse(badge);
+  document.getElementById('modal-badge-content').innerHTML=`
+    <div style="text-align:center;padding:10px 0 20px">
+      <div style="font-size:3.5rem;animation:bounceIn .4s ease;margin-bottom:10px">${badge.icon||'🏅'}</div>
+      <h2 style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);
+        font-size:1.3rem;margin-bottom:6px">${esc(badge.name)}</h2>
+      ${badge.desc?`<p style="color:var(--text-light);font-size:.9rem;margin-bottom:10px">${esc(badge.desc)}</p>`:''}
+      ${badge.teacherNote?`<div style="background:var(--cream-dark);border-radius:10px;padding:12px;
+        font-size:.85rem;color:var(--text);margin-bottom:12px;font-style:italic">
+        💬 "${esc(badge.teacherNote)}"</div>`:''}
+      <div style="font-size:.75rem;color:var(--text-light);margin-bottom:20px">
+        Awarded ${fmtDate(badge.awardedAt)}</div>
+      <button class="btn btn-secondary btn-full" onclick="closeModal('modal-badge-detail')">Close</button>
+    </div>`;
+  openModal('modal-badge-detail');
+}
+
+// ═══════════════════════════════════════════
+//  PART 3 — GOALS, CHECK-IN, REFLECTION
+// ═══════════════════════════════════════════
+
+// ─── SHARED SCREEN HEADER ────────────────────
+function screenHeader(team, title, subtitle, backFn){
+  return `<div style="background:${team.colour};color:#fff;padding:20px 18px 16px">
+    <button class="back-btn" style="color:rgba(255,255,255,.8);margin-bottom:6px"
+      onclick="${backFn}">← Back</button>
+    <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.4rem">${title}</h1>
+    ${subtitle?`<p style="opacity:.8;font-size:.85rem;margin-top:4px">${subtitle}</p>`:''}
+  </div>`;
+}
+
+// ─── GOAL SETTING SCREEN ─────────────────────
+function renderGoals(id){
+  const team = getTeam(id);
+  if(!id||!team) return;
+
+  if(!appState.unit.goalWindowOpen){
+    document.getElementById('goals-content').innerHTML=
+      screenHeader(team,'🎯 Goals',`Week ${appState.unit.activeWeek} of ${appState.unit.weeks}`,
+        `goTeamTab('${id}','home')`) +
+      `<div style="padding:24px;text-align:center;color:var(--text-light)">
+        <div style="font-size:2.5rem;margin-bottom:12px">⏳</div>
+        <div style="font-weight:700;font-size:1rem;margin-bottom:6px">Goal setting isn't open yet</div>
+        <div style="font-size:.88rem">Your teacher will open goal setting soon.</div>
+        <button class="btn btn-secondary" style="margin-top:20px"
+          onclick="goTeamTab('${id}','home')">← Back to Home</button>
+      </div>`;
+    return;
+  }
+
+  const week = appState.unit.activeWeek;
+  const existing = (team.goals||[]).find(g=>g.week_number===week);
+  if(existing && existing.goals_set_at){
+    // Already set — show read-only
+    document.getElementById('goals-content').innerHTML=
+      screenHeader(team,'🎯 Goals',`Week ${week} of ${appState.unit.weeks}`,
+        `goTeamTab('${id}','home')`) +
+      `<div style="padding:16px;padding-bottom:80px">
+        <div class="card" style="border-left:4px solid var(--green-mid);margin-bottom:12px">
+          <div style="font-size:.72rem;font-weight:700;color:var(--text-light);
+            text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Physical Goal</div>
+          <div style="font-weight:600;font-size:1rem">${esc(existing.physical_goal)}</div>
+          <div style="font-size:.75rem;color:var(--text-light);margin-top:4px">${difficultyLabel(existing.physical_difficulty)}</div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--terracotta);margin-bottom:16px">
+          <div style="font-size:.72rem;font-weight:700;color:var(--text-light);
+            text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Teamwork Goal</div>
+          <div style="font-weight:600;font-size:1rem">${esc(existing.teamwork_goal)}</div>
+        </div>
+        <div style="background:var(--green-light)33;border-radius:var(--radius);padding:14px;
+          text-align:center;color:var(--green-dark);font-weight:600;font-size:.9rem">
+          ✅ Goals saved for Week ${week}
+        </div>
+        <button class="btn btn-secondary btn-full" style="margin-top:12px"
+          onclick="goTeamTab('${id}','home')">← Back to Home</button>
+      </div>`;
+    return;
+  }
+
+  const grade = getGrade();
+  const cfg   = GRADE_CONFIG[grade]||GRADE_CONFIG.G3;
+  const physPrompt = getText('goalPhysical');
+  const teamPrompt = getText('goalTeamwork');
+  const usePresets = cfg.useGoalPresets;
+  const physPresets = cfg.goalPresets?.physical||[];
+  const teamPresets = cfg.goalPresets?.teamwork||[];
+
+  // Physical goal input
+  const physInput = usePresets && physPresets.length
+    ? `<div style="display:flex;flex-direction:column;gap:8px" id="phys-presets">
+        ${physPresets.map(p=>`<button type="button" class="preset-btn"
+          data-target="phys-goal-val" data-value="${esc(p)}"
+          onclick="selectPreset(this,'phys-goal-val')"
+          style="background:var(--cream-dark);border:2px solid transparent;border-radius:var(--radius);
+          padding:12px 14px;font-size:.95rem;font-family:'Inter',sans-serif;cursor:pointer;
+          text-align:left;transition:all .15s">${esc(p)}</button>`).join('')}
+        <input type="hidden" id="phys-goal-val" value="">
+      </div>`
+    : `<input id="phys-goal-val" type="text" class="field-input"
+        placeholder="Write your physical goal here...">`;
+
+  // Teamwork goal input
+  const teamInput = (usePresets || ['G3','G4'].includes(grade)) && teamPresets.length
+    ? `<div style="display:flex;flex-direction:column;gap:8px" id="team-presets">
+        ${teamPresets.map(p=>`<button type="button" class="preset-btn"
+          data-target="team-goal-val" data-value="${esc(p)}"
+          onclick="selectPreset(this,'team-goal-val')"
+          style="background:var(--cream-dark);border:2px solid transparent;border-radius:var(--radius);
+          padding:12px 14px;font-size:.95rem;font-family:'Inter',sans-serif;cursor:pointer;
+          text-align:left;transition:all .15s">${esc(p)}</button>`).join('')}
+        <input type="hidden" id="team-goal-val" value="">
+      </div>`
+    : `<input id="team-goal-val" type="text" class="field-input"
+        placeholder="Write your teamwork goal here...">`;
+
+  // Difficulty selector
+  const diffBtns = (label, targetId) =>
+    `<div style="display:flex;gap:8px;margin-top:8px" id="${targetId}-wrap">
+      ${[['easy','😊 Easy'],['medium','💪 Medium'],['challenge','🔥 Challenge']].map(([val,lbl])=>
+        `<button type="button" onclick="selectDiff(this,'${targetId}')" data-val="${val}"
+          style="flex:1;background:var(--cream-dark);border:2px solid transparent;
+          border-radius:10px;padding:10px 6px;font-size:.82rem;font-family:'Inter',sans-serif;
+          font-weight:600;cursor:pointer;transition:all .15s;line-height:1.3">${lbl}</button>`
+      ).join('')}
+      <input type="hidden" id="${targetId}" value="medium">
+    </div>`;
+
+  document.getElementById('goals-content').innerHTML=
+    screenHeader(team,'🎯 Set Our Goals',`Week ${week} of ${appState.unit.weeks}`,
+      `goTeamTab('${id}','home')`) +
+    `<div style="padding:16px;padding-bottom:90px;overflow-y:auto;-webkit-overflow-scrolling:touch">
+
+      <!-- Physical Goal -->
+      <div class="card" style="margin-bottom:14px;border-top:4px solid var(--green-mid)">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-mid);
+          margin-bottom:8px;font-size:1rem">🏃 Physical Goal</div>
+        <div class="field-group">
+          <label class="field-label">${physPrompt}</label>
+          ${physInput}
+        </div>
+        <label class="field-label" style="margin-top:4px">Difficulty</label>
+        ${diffBtns('Physical difficulty','phys-diff')}
+      </div>
+
+      <!-- Teamwork Goal -->
+      <div class="card" style="margin-bottom:14px;border-top:4px solid var(--terracotta)">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--terracotta);
+          margin-bottom:8px;font-size:1rem">🤝 Teamwork Goal</div>
+        <div class="field-group">
+          <label class="field-label">${teamPrompt}</label>
+          ${teamInput}
+        </div>
+      </div>
+
+      <div id="goals-error" style="color:var(--error);font-size:.85rem;min-height:20px;margin-bottom:8px"></div>
+      <button class="btn btn-primary btn-full" onclick="saveGoals('${id}')">
+        💾 Save Our Goals</button>
+    </div>`;
+
+  // Pre-select medium difficulty
+  setTimeout(()=>{
+    const btn = document.querySelector('[data-val="medium"]');
+    if(btn) selectDiff(btn,'phys-diff');
+  },50);
+}
+
+function selectPreset(btn, targetId){
+  // Deselect siblings
+  btn.closest('[id$="-presets"]')?.querySelectorAll('.preset-btn').forEach(b=>{
+    b.style.background='var(--cream-dark)';
+    b.style.borderColor='transparent';
+  });
+  btn.style.background='var(--green-mid)22';
+  btn.style.borderColor='var(--green-mid)';
+  const hidden = document.getElementById(targetId);
+  if(hidden) hidden.value = btn.dataset.value;
+}
+
+function selectDiff(btn, targetId){
+  btn.closest('[id$="-wrap"]')?.querySelectorAll('button[type="button"]').forEach(b=>{
+    b.style.background='var(--cream-dark)';
+    b.style.borderColor='transparent';
+    b.style.color='var(--text)';
+  });
+  btn.style.background='var(--terracotta)';
+  btn.style.borderColor='var(--terracotta)';
+  btn.style.color='#fff';
+  const hidden = document.getElementById(targetId);
+  if(hidden) hidden.value = btn.dataset.val;
+}
+
+function saveGoals(teamId){
+  const physGoal = document.getElementById('phys-goal-val')?.value?.trim();
+  const teamGoal = document.getElementById('team-goal-val')?.value?.trim();
+  const physDiff = document.getElementById('phys-diff')?.value||'medium';
+  const errEl    = document.getElementById('goals-error');
+
+  if(!physGoal){ if(errEl) errEl.textContent='Please set a physical goal first.'; return; }
+  if(!teamGoal){ if(errEl) errEl.textContent='Please set a teamwork goal too.'; return; }
+  if(errEl) errEl.textContent='';
+
+  const team = getTeam(teamId);
+  const week = appState.unit.activeWeek;
+  const goalId = newUUID();
+
+  const goalEntry = {
+    goal_id: goalId,
+    week_number: week,
+    physical_goal: physGoal,
+    physical_difficulty: physDiff,
+    teamwork_goal: teamGoal,
+    goals_set_at: nowISO(),
+  };
+
+  const goals = [...(team.goals||[]).filter(g=>g.week_number!==week), goalEntry];
+  updateTeam(teamId,{goals});
+  syncToSheets({type:'goal_save', team_id:teamId, ...goalEntry});
+  checkAutoBadges(teamId);
+  showScreen('team-home',{teamId});
+}
+
+// ─── CHECK-IN SCREEN ─────────────────────────
+function renderCheckin(id){
+  const team = getTeam(id);
+  if(!id||!team) return;
+
+  if(!appState.unit.checkinWindowOpen){
+    document.getElementById('checkin-content').innerHTML=
+      screenHeader(team,'✅ Check In','',`goTeamTab('${id}','home')`) +
+      `<div style="padding:24px;text-align:center;color:var(--text-light)">
+        <div style="font-size:2.5rem;margin-bottom:12px">⏳</div>
+        <div style="font-weight:700;margin-bottom:6px">Check-in isn't open yet</div>
+        <div style="font-size:.88rem">Your teacher will open check-in mid-week.</div>
+        <button class="btn btn-secondary" style="margin-top:20px"
+          onclick="goTeamTab('${id}','home')">← Back</button>
+      </div>`;
+    return;
+  }
+
+  const week = appState.unit.activeWeek;
+  const goal = (team.goals||[]).find(g=>g.week_number===week);
+  if(!goal){
+    document.getElementById('checkin-content').innerHTML=
+      screenHeader(team,'✅ Check In','',`goTeamTab('${id}','home')`) +
+      `<div style="padding:24px;text-align:center;color:var(--text-light)">
+        <div style="font-size:2.5rem;margin-bottom:12px">📋</div>
+        <div style="font-weight:700;margin-bottom:6px">No goals set yet</div>
+        <div style="font-size:.88rem">Set your weekly goals before checking in.</div>
+        <button class="btn btn-secondary" style="margin-top:20px"
+          onclick="goTeamTab('${id}','home')">← Back</button>
+      </div>`;
+    return;
+  }
+
+  if(goal.checkin_at){
+    document.getElementById('checkin-content').innerHTML=
+      screenHeader(team,'✅ Check In',`Week ${week}`,`goTeamTab('${id}','home')`) +
+      `<div style="padding:16px">
+        <div class="card" style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">✅</div>
+          <div style="font-weight:700;color:var(--green-dark)">Check-in saved!</div>
+          <div style="font-size:.85rem;color:var(--text-light);margin-top:6px">
+            Physical: ${checkinLabel(goal.physical_checkin)}<br>
+            Teamwork: ${checkinLabel(goal.teamwork_checkin)}
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full" style="margin-top:12px"
+          onclick="goTeamTab('${id}','home')">← Back to Home</button>
+      </div>`;
+    return;
+  }
+
+  const grade = getGrade();
+  const showNote = ['G3','G4','G5'].includes(grade);
+  const useEmoji = ['G1','G2'].includes(grade);
+  const physQ  = getText('checkinTrack');
+  const teamQ  = getText('checkinTogether');
+
+  const trackOptions = useEmoji
+    ? [['on_track','👍 Yes!'],['sort_of','🤔 Sort of'],['need_help','🆘 Need help']]
+    : [['on_track','✅ On track'],['sort_of','🟡 Sort of'],['need_help','🆘 Need help']];
+
+  const trackBtns = (groupId) =>
+    `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      ${trackOptions.map(([val,lbl])=>
+        `<button type="button" onclick="selectTrack(this,'${groupId}')" data-val="${val}"
+          style="flex:1;min-width:80px;background:var(--cream-dark);border:2px solid transparent;
+          border-radius:10px;padding:12px 6px;font-size:.88rem;font-family:'Nunito',sans-serif;
+          font-weight:700;cursor:pointer;transition:all .15s;text-align:center">${lbl}</button>`
+      ).join('')}
+      <input type="hidden" id="${groupId}" value="">
+    </div>`;
+
+  document.getElementById('checkin-content').innerHTML=
+    screenHeader(team,'✅ How\'s it going?',`Week ${week}`,`goTeamTab('${id}','home')`) +
+    `<div style="padding:16px;padding-bottom:90px;overflow-y:auto;-webkit-overflow-scrolling:touch">
+
+      <!-- Physical -->
+      <div class="card" style="margin-bottom:14px;border-top:4px solid var(--green-mid)">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-mid);margin-bottom:6px">
+          🏃 Physical Goal</div>
+        <div style="font-size:.9rem;color:var(--text-light);margin-bottom:10px;
+          background:var(--cream);border-radius:8px;padding:10px">${esc(goal.physical_goal)}</div>
+        <label class="field-label">${physQ}</label>
+        ${trackBtns('checkin-phys')}
+      </div>
+
+      <!-- Teamwork -->
+      <div class="card" style="margin-bottom:14px;border-top:4px solid var(--terracotta)">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--terracotta);margin-bottom:6px">
+          🤝 Teamwork Goal</div>
+        <div style="font-size:.9rem;color:var(--text-light);margin-bottom:10px;
+          background:var(--cream);border-radius:8px;padding:10px">${esc(goal.teamwork_goal)}</div>
+        <label class="field-label">${teamQ}</label>
+        ${trackBtns('checkin-team')}
+      </div>
+
+      ${showNote?`
+      <div class="card" style="margin-bottom:14px">
+        <label class="field-label">Anything to tell your teacher? (optional)</label>
+        <textarea id="checkin-note" class="field-textarea"
+          placeholder="Any questions or messages for your teacher..."></textarea>
+      </div>`:''}
+
+      <div id="checkin-error" style="color:var(--error);font-size:.85rem;min-height:20px;margin-bottom:8px"></div>
+      <button class="btn btn-primary btn-full" onclick="saveCheckin('${id}')">
+        💾 Save Check-In</button>
+    </div>`;
+}
+
+function checkinLabel(val){
+  const map = {on_track:'On track ✅', sort_of:'Sort of 🟡', need_help:'Need help 🆘'};
+  return map[val]||val||'—';
+}
+
+function selectTrack(btn, groupId){
+  btn.closest('div').querySelectorAll('button[type="button"]').forEach(b=>{
+    b.style.background='var(--cream-dark)';
+    b.style.borderColor='transparent';
+    b.style.color='var(--text)';
+  });
+  const colours = {on_track:'var(--green-mid)',sort_of:'var(--gold)',need_help:'var(--error)'};
+  const col = colours[btn.dataset.val]||'var(--green-mid)';
+  btn.style.background=col;
+  btn.style.borderColor=col;
+  btn.style.color='#fff';
+  const hidden = document.getElementById(groupId);
+  if(hidden) hidden.value = btn.dataset.val;
+}
+
+function saveCheckin(teamId){
+  const physCheck = document.getElementById('checkin-phys')?.value;
+  const teamCheck = document.getElementById('checkin-team')?.value;
+  const note      = document.getElementById('checkin-note')?.value?.trim()||'';
+  const errEl     = document.getElementById('checkin-error');
+
+  if(!physCheck){ if(errEl) errEl.textContent='Please choose how you\'re going with your physical goal.'; return; }
+  if(!teamCheck){ if(errEl) errEl.textContent='Please choose how you\'re working as a team.'; return; }
+  if(errEl) errEl.textContent='';
+
+  const team = getTeam(teamId);
+  const week = appState.unit.activeWeek;
+  const goals = team.goals||[];
+  const gIdx  = goals.findIndex(g=>g.week_number===week);
+  if(gIdx<0) return;
+
+  const updated = {...goals[gIdx],
+    physical_checkin: physCheck,
+    teamwork_checkin: teamCheck,
+    checkin_note: note,
+    checkin_at: nowISO(),
+  };
+  const newGoals = [...goals];
+  newGoals[gIdx] = updated;
+  updateTeam(teamId,{goals:newGoals});
+  syncToSheets({type:'goal_save', team_id:teamId, ...updated});
+  showScreen('team-home',{teamId});
+}
+
+// ─── REFLECTION SCREEN ────────────────────────
+function renderReflect(id){
+  const team = getTeam(id);
+  if(!id||!team) return;
+
+  if(!appState.unit.reflectionWindowOpen){
+    document.getElementById('reflect-content').innerHTML=
+      screenHeader(team,'🪞 Reflect','',`goTeamTab('${id}','home')`) +
+      `<div style="padding:24px;text-align:center;color:var(--text-light)">
+        <div style="font-size:2.5rem;margin-bottom:12px">⏳</div>
+        <div style="font-weight:700;margin-bottom:6px">Reflection isn't open yet</div>
+        <div style="font-size:.88rem">Your teacher will open reflection at the end of the week.</div>
+        <button class="btn btn-secondary" style="margin-top:20px"
+          onclick="goTeamTab('${id}','home')">← Back</button>
+      </div>`;
+    return;
+  }
+
+  const week = appState.unit.activeWeek;
+  const goal = (team.goals||[]).find(g=>g.week_number===week);
+  if(!goal){
+    document.getElementById('reflect-content').innerHTML=
+      screenHeader(team,'🪞 Reflect','',`goTeamTab('${id}','home')`) +
+      `<div style="padding:24px;text-align:center;color:var(--text-light)">
+        <div style="font-size:2.5rem;margin-bottom:12px">📋</div>
+        <div style="font-weight:700;margin-bottom:6px">No goals set this week</div>
+        <button class="btn btn-secondary" style="margin-top:20px"
+          onclick="goTeamTab('${id}','home')">← Back</button>
+      </div>`;
+    return;
+  }
+
+  if(goal.reflection_at){
+    document.getElementById('reflect-content').innerHTML=
+      screenHeader(team,'🪞 Reflection',`Week ${week}`,`goTeamTab('${id}','home')`) +
+      `<div style="padding:16px">
+        <div class="card" style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">🪞</div>
+          <div style="font-weight:700;color:var(--green-dark)">Reflection saved!</div>
+          <div style="font-size:.85rem;color:var(--text-light);margin-top:4px">
+            Great work reflecting on your week.</div>
+        </div>
+        <button class="btn btn-secondary btn-full" style="margin-top:12px"
+          onclick="goTeamTab('${id}','home')">← Back to Home</button>
+      </div>`;
+    return;
+  }
+
+  const grade = getGrade();
+  const wellPrompt = getText('reflectWell');
+  const hardPrompt = getText('reflectHard');
+  const useStarters = ['G1','G2'].includes(grade);
+
+  const achOptions = [['yes','✅ Yes!'],['partial','🟡 Mostly'],['no','❌ Not quite']];
+  const achBtns = (groupId) =>
+    `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      ${achOptions.map(([val,lbl])=>
+        `<button type="button" onclick="selectAchieved(this,'${groupId}')" data-val="${val}"
+          style="flex:1;background:var(--cream-dark);border:2px solid transparent;
+          border-radius:10px;padding:11px 6px;font-size:.88rem;font-family:'Nunito',sans-serif;
+          font-weight:700;cursor:pointer;transition:all .15s;text-align:center">${lbl}</button>`
+      ).join('')}
+      <input type="hidden" id="${groupId}" value="">
+    </div>`;
+
+  // LP attributes — simplified for G1/G2
+  const lpOpts = ['G1','G2'].includes(grade)
+    ? ['Caring','Balanced','Principled','Communicator','Open-minded']
+    : LP_ATTRIBUTES;
+
+  // Sentence starters for G1/G2
+  const wellInput = useStarters
+    ? `<div style="display:flex;flex-direction:column;gap:6px" id="well-starters">
+        ${['We were great at...','We worked together when...','We are proud that...'].map(s=>
+          `<button type="button" class="starter-btn" data-target="reflect-well-val"
+            onclick="useStarter(this,'reflect-well-val')"
+            style="background:var(--cream-dark);border:2px solid transparent;border-radius:var(--radius);
+            padding:11px 14px;font-size:.9rem;font-family:'Inter',sans-serif;cursor:pointer;
+            text-align:left;transition:all .15s">${s}</button>`
+        ).join('')}
+        <input id="reflect-well-val" type="text" class="field-input"
+          placeholder="Write your answer here..." style="margin-top:4px">
+      </div>`
+    : `<textarea id="reflect-well-val" class="field-textarea"
+        placeholder="${wellPrompt}"></textarea>`;
+
+  const hardInput = useStarters
+    ? `<div style="display:flex;flex-direction:column;gap:6px" id="hard-starters">
+        ${['It was tricky when...','We found it hard to...','Next time we will...'].map(s=>
+          `<button type="button" class="starter-btn" data-target="reflect-hard-val"
+            onclick="useStarter(this,'reflect-hard-val')"
+            style="background:var(--cream-dark);border:2px solid transparent;border-radius:var(--radius);
+            padding:11px 14px;font-size:.9rem;font-family:'Inter',sans-serif;cursor:pointer;
+            text-align:left;transition:all .15s">${s}</button>`
+        ).join('')}
+        <input id="reflect-hard-val" type="text" class="field-input"
+          placeholder="Write your answer here..." style="margin-top:4px">
+      </div>`
+    : `<textarea id="reflect-hard-val" class="field-textarea"
+        placeholder="${hardPrompt}"></textarea>`;
+
+  document.getElementById('reflect-content').innerHTML=
+    screenHeader(team,'🪞 End-of-Week Reflection',`Week ${week}`,`goTeamTab('${id}','home')`) +
+    `<div style="padding:16px;padding-bottom:90px;overflow-y:auto;-webkit-overflow-scrolling:touch">
+
+      <!-- Physical Goal Achievement -->
+      <div class="card" style="margin-bottom:14px;border-top:4px solid var(--green-mid)">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-mid);margin-bottom:6px">
+          🏃 Physical Goal</div>
+        <div style="font-size:.9rem;background:var(--cream);border-radius:8px;padding:10px;
+          margin-bottom:10px;color:var(--text-light)">${esc(goal.physical_goal)}</div>
+        <label class="field-label">Did you achieve it?</label>
+        ${achBtns('reflect-phys-ach')}
+      </div>
+
+      <!-- What went well -->
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);margin-bottom:8px">
+          🌟 ${wellPrompt}</div>
+        ${wellInput}
+      </div>
+
+      <!-- What was hard -->
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);margin-bottom:8px">
+          💪 ${hardPrompt}</div>
+        ${hardInput}
+      </div>
+
+      <!-- Teamwork Goal Achievement -->
+      <div class="card" style="margin-bottom:14px;border-top:4px solid var(--terracotta)">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--terracotta);margin-bottom:6px">
+          🤝 Teamwork Goal</div>
+        <div style="font-size:.9rem;background:var(--cream);border-radius:8px;padding:10px;
+          margin-bottom:10px;color:var(--text-light)">${esc(goal.teamwork_goal)}</div>
+        <label class="field-label">How did your team do?</label>
+        ${achBtns('reflect-team-ach')}
+      </div>
+
+      <!-- IB Learner Profile -->
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);margin-bottom:8px">
+          🌍 Which IB Learner Profile did your team show?</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px" id="lp-options">
+          ${lpOpts.map(lp=>
+            `<button type="button" onclick="selectLP(this)" data-val="${esc(lp)}"
+              style="background:var(--cream-dark);border:2px solid transparent;border-radius:99px;
+              padding:8px 14px;font-size:.82rem;font-family:'Inter',sans-serif;font-weight:600;
+              cursor:pointer;transition:all .15s">${esc(lp)}</button>`
+          ).join('')}
+          <input type="hidden" id="reflect-lp" value="">
+        </div>
+      </div>
+
+      <div id="reflect-error" style="color:var(--error);font-size:.85rem;min-height:20px;margin-bottom:8px"></div>
+      <button class="btn btn-primary btn-full" onclick="saveReflection('${id}')">
+        💾 Save Reflection</button>
+    </div>`;
+}
+
+function useStarter(btn, targetId){
+  // Highlight selected starter
+  btn.closest('[id$="-starters"]')?.querySelectorAll('.starter-btn').forEach(b=>{
+    b.style.background='var(--cream-dark)';
+    b.style.borderColor='transparent';
+  });
+  btn.style.background='var(--green-mid)22';
+  btn.style.borderColor='var(--green-mid)';
+  // Put starter text into the input
+  const input = document.getElementById(targetId);
+  if(input && input.tagName==='INPUT'){
+    input.value = btn.dataset.target ? btn.textContent : '';
+    input.placeholder = btn.textContent;
+    input.focus();
+  }
+}
+
+function selectAchieved(btn, groupId){
+  btn.closest('div').querySelectorAll('button[type="button"]').forEach(b=>{
+    b.style.background='var(--cream-dark)';
+    b.style.borderColor='transparent';
+    b.style.color='var(--text)';
+  });
+  const colours = {yes:'var(--green-mid)',partial:'var(--gold)',no:'var(--error)'};
+  const col = colours[btn.dataset.val]||'var(--green-mid)';
+  btn.style.background=col;
+  btn.style.borderColor=col;
+  btn.style.color='#fff';
+  const hidden = document.getElementById(groupId);
+  if(hidden) hidden.value = btn.dataset.val;
+}
+
+function selectLP(btn){
+  document.querySelectorAll('#lp-options button[type="button"]').forEach(b=>{
+    b.style.background='var(--cream-dark)';
+    b.style.borderColor='transparent';
+    b.style.color='var(--text)';
+  });
+  btn.style.background='var(--green-mid)';
+  btn.style.borderColor='var(--green-mid)';
+  btn.style.color='#fff';
+  const hidden = document.getElementById('reflect-lp');
+  if(hidden) hidden.value = btn.dataset.val;
+}
+
+function saveReflection(teamId){
+  const physAch = document.getElementById('reflect-phys-ach')?.value;
+  const teamAch = document.getElementById('reflect-team-ach')?.value;
+  const wellVal = document.getElementById('reflect-well-val')?.value?.trim();
+  const hardVal = document.getElementById('reflect-hard-val')?.value?.trim();
+  const lpVal   = document.getElementById('reflect-lp')?.value;
+  const errEl   = document.getElementById('reflect-error');
+
+  if(!physAch){ if(errEl) errEl.textContent='Did you achieve your physical goal?'; return; }
+  if(!wellVal){ if(errEl) errEl.textContent='Please write what went well.'; return; }
+  if(!hardVal){ if(errEl) errEl.textContent='Please write what was hard.'; return; }
+  if(!teamAch){ if(errEl) errEl.textContent='How did your team do on the teamwork goal?'; return; }
+  if(!lpVal)  { if(errEl) errEl.textContent='Please pick a Learner Profile attribute.'; return; }
+  if(errEl) errEl.textContent='';
+
+  const team = getTeam(teamId);
+  const week = appState.unit.activeWeek;
+  const goals = team.goals||[];
+  const gIdx  = goals.findIndex(g=>g.week_number===week);
+  if(gIdx<0) return;
+
+  const updated = {...goals[gIdx],
+    physical_achieved: physAch,
+    teamwork_achieved: teamAch,
+    reflection_wellbeing: wellVal,
+    reflection_challenge: hardVal,
+    lp_attribute_shown: lpVal,
+    reflection_at: nowISO(),
+  };
+  const newGoals = [...goals];
+  newGoals[gIdx] = updated;
+  updateTeam(teamId,{goals:newGoals});
+  syncToSheets({type:'goal_save', team_id:teamId, ...updated});
+
+  // Check auto badges
+  checkAutoBadges(teamId);
+  // Check level-up (reflections count toward unlock conditions)
+  checkLevelUp(teamId);
+
+  showScreen('team-home',{teamId});
+}
+
+// ═══════════════════════════════════════════
+//  PART 4 — TEACHER DASHBOARD, SETUP, TEAM DETAIL
+// ═══════════════════════════════════════════
+
+// ─── AUTH GUARD ──────────────────────────────
+function requireTeacher(){
+  if(!appState.teacherAuth){ showScreen('teacher-login'); return false; }
+  return true;
+}
+function teacherLogout(){
+  sessionStorage.removeItem('tqTeacherAuth');
+  appState.teacherAuth=false;
+  showScreen('landing');
+}
+
+// ─── TEACHER DASHBOARD OVERVIEW ──────────────
+function renderTeacherDashboard(){
+  if(!requireTeacher()) return;
+  const unit = appState.unit;
+  const teams = appState.teams||[];
+
+  // Collect all pending challenges across all teams
+  const allPending = [];
+  teams.forEach(t=>{
+    (t.pendingChallenges||[]).forEach(c=>{
+      allPending.push({...c, teamId:t.id, teamName:t.name, teamColour:t.colour});
+    });
+  });
+
+  // ATL skills summary
+  const atlSkills = ATL_SKILLS;
+  const atlTable = atlSkills.map(skill=>{
+    const row = teams.map(t=>{
+      const count = (t.approvedChallenges||[]).filter(c=>c.atl_skill===skill).length;
+      return `<td style="text-align:center;padding:6px 10px;font-size:.82rem;
+        background:${count>0?'var(--green-light)33':'transparent'};
+        font-weight:${count>0?'700':'400'};color:${count>0?'var(--green-dark)':'var(--text-light)'}">
+        ${count>0?count:'—'}</td>`;
+    }).join('');
+    return `<tr><td style="padding:6px 10px;font-size:.8rem;font-weight:600;white-space:nowrap;
+      border-right:1px solid var(--cream-dark)">${skill}</td>${row}</tr>`;
+  }).join('');
+
+  const atlHeaders = teams.map(t=>
+    `<th style="padding:6px 10px;font-size:.72rem;font-weight:700;text-align:center;
+      color:${t.colour};white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis">
+      ${esc(t.name)}</th>`).join('');
+
+  document.getElementById('dashboard-content').innerHTML=`
+    <!-- Top Bar -->
+    <div style="background:var(--green-dark);color:#fff;padding:16px 18px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.2rem">
+            🏫 Teacher Dashboard</div>
+          <div style="font-size:.78rem;opacity:.7;margin-top:2px">
+            ${esc(unit.name||'No unit set')} · ${unit.grade} · Week ${unit.activeWeek}/${unit.weeks}</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)"
+            onclick="doSync()">🔄 Sync</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3)"
+            onclick="showScreen('unit-setup')">⚙️ Settings</button>
+          <button class="btn btn-sm" style="background:var(--terracotta);color:#fff"
+            onclick="teacherLogout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:40px">
+
+      <!-- Pending Approvals -->
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);
+        font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+        ⏳ Pending Approvals
+        ${allPending.length?`<span style="background:var(--terracotta);color:#fff;border-radius:99px;
+          padding:2px 10px;font-size:.75rem">${allPending.length}</span>`:''}
+      </div>
+
+      ${allPending.length===0
+        ? `<div class="card" style="text-align:center;color:var(--text-light);padding:20px;margin-bottom:16px">
+            ✅ No pending approvals
+          </div>`
+        : allPending.map(c=>`
+          <div class="card" style="margin-bottom:10px;border-left:4px solid ${c.teamColour}">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:.72rem;font-weight:700;color:var(--text-light);margin-bottom:2px">
+                  <span style="color:${c.teamColour}">● ${esc(c.teamName)}</span> · ${fmtDate(c.submitted_at)}</div>
+                <div style="font-weight:700;font-size:.95rem;margin-bottom:4px">${esc(c.challenge_name)}</div>
+                <div style="font-size:.82rem;color:var(--text-light);margin-bottom:4px">
+                  ${c.challenge_type==='collaboration'?`${esc(c.atl_skill||'')} · `:''}${starsHTML(c.difficulty||1)}</div>
+                <div style="font-size:.85rem;background:var(--cream);border-radius:8px;padding:8px;
+                  line-height:1.4;margin-bottom:6px">"${esc(c.reflection_text)}"</div>
+                ${c.submitted_by?`<div style="font-size:.72rem;color:var(--text-light)">Submitted by: ${esc(c.submitted_by)}</div>`:''}
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px" id="approval-btns-${c.submission_id}">
+              <button class="btn btn-primary btn-sm" style="flex:1"
+                onclick="approveChallenge('${c.teamId}','${c.submission_id}')">✓ Approve</button>
+              <button class="btn btn-sm" style="flex:1;background:var(--cream-dark);color:var(--text)"
+                onclick="showRejectInput('${c.submission_id}')">✗ Reject</button>
+            </div>
+            <div id="reject-input-${c.submission_id}" style="display:none;margin-top:8px">
+              <input type="text" class="field-input"
+                id="reject-note-${c.submission_id}"
+                placeholder="Optional: reason for rejection..."
+                style="margin-bottom:6px">
+              <button class="btn btn-sm" style="background:var(--error);color:#fff;width:100%"
+                onclick="rejectChallenge('${c.teamId}','${c.submission_id}')">Confirm Reject</button>
+            </div>
+          </div>`).join('')}
+
+      <!-- Quick Actions -->
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);
+        font-size:1rem;margin:16px 0 10px">⚡ Quick Actions</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        ${quickActionBtn('goalWindowOpen','📋 Goal Setting','open goals for students')}
+        ${quickActionBtn('checkinWindowOpen','✅ Check-In','open check-in')}
+        ${quickActionBtn('reflectionWindowOpen','🪞 Reflection','open reflection')}
+        ${quickActionBtn('unitComplete','🏁 Unit Complete','mark unit complete & unlock stories')}
+      </div>
+      <div style="margin-bottom:16px">
+        <button class="btn btn-terra btn-full" onclick="openAwardBadgeModal()">🏅 Award Special Badge</button>
+      </div>
+      <div style="margin-bottom:4px">
+        <label class="field-label">Active Week</label>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="btn btn-sm btn-secondary" onclick="changeWeek(-1)">−</button>
+          <span style="font-weight:700;font-size:1rem;min-width:60px;text-align:center">
+            Week ${unit.activeWeek} of ${unit.weeks}</span>
+          <button class="btn btn-sm btn-secondary" onclick="changeWeek(1)">+</button>
+        </div>
+      </div>
+
+      <!-- Team Overview -->
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);
+        font-size:1rem;margin:16px 0 10px">👥 Team Overview</div>
+      ${teams.length===0
+        ? `<div class="card" style="text-align:center;color:var(--text-light)">No teams yet — go to Settings to set up your unit.</div>`
+        : teams.map(t=>{
+          const prog = teamProgress(t);
+          const lv = LEVELS[t.level-1]||LEVELS[0];
+          const lastAct = t.last_updated ? fmtDate(t.last_updated) : 'No activity';
+          return `<div class="card" style="margin-bottom:10px;cursor:pointer;border-left:5px solid ${t.colour}"
+            onclick="showScreen('team-detail',{teamId:'${t.id}'})">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+              <div style="flex:1">
+                <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;
+                  color:var(--green-dark)">${esc(t.name)}</div>
+                <div style="display:flex;gap:8px;align-items:center;margin:4px 0">
+                  ${makeLevelBadge(t.level,t.colour)}
+                  <span style="font-size:.72rem;color:var(--text-light)">Last active: ${lastAct}</span>
+                </div>
+                <div class="prog-wrap" style="margin-top:6px">
+                  <div class="prog-bar" style="width:${prog.pct}%;background:${t.colour}"></div>
+                </div>
+                <div style="font-size:.7rem;color:var(--text-light);margin-top:3px">
+                  ${t.approvedPhysical||0} physical · ${t.approvedCollaboration||0} collab · ${(t.badges||[]).length} badges</div>
+              </div>
+              <div style="font-size:1.2rem;color:var(--text-light)">›</div>
+            </div>
+          </div>`;
+        }).join('')}
+
+      <!-- ATL Skills Summary -->
+      ${teams.length>0?`
+      <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);
+        font-size:1rem;margin:16px 0 10px">📊 ATL Skills Summary</div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table style="border-collapse:collapse;width:100%;background:var(--white);
+          border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden">
+          <thead style="background:var(--cream-dark)">
+            <tr>
+              <th style="padding:8px 10px;text-align:left;font-size:.78rem;border-right:1px solid var(--cream-dark)">
+                ATL Skill</th>
+              ${atlHeaders}
+            </tr>
+          </thead>
+          <tbody>${atlTable}</tbody>
+        </table>
+      </div>`:''}
+
+    </div>`;
+}
+
+function quickActionBtn(key, label, hint){
+  const isOn = appState.unit[key];
+  return `<button class="btn btn-sm" onclick="toggleUnitFlag('${key}')"
+    style="background:${isOn?'var(--green-mid)':'var(--cream-dark)'};
+    color:${isOn?'#fff':'var(--text)'};border:2px solid ${isOn?'var(--green-mid)':'var(--cream-dark)'};
+    flex-direction:column;align-items:flex-start;padding:12px;height:auto;min-height:56px;text-align:left">
+    <span style="font-size:.88rem;font-weight:800">${label}</span>
+    <span style="font-size:.68rem;opacity:.7;font-weight:400;font-family:'Inter',sans-serif;margin-top:2px">
+      ${isOn?'● Open':'○ Closed'}</span>
+  </button>`;
+}
+
+function toggleUnitFlag(key){
+  const unit = {...appState.unit, [key]: !appState.unit[key]};
+  setState({unit});
+  syncToSheets({type:'config_update', ...unit});
+  renderTeacherDashboard();
+}
+
+function changeWeek(delta){
+  const w = Math.max(1, Math.min(appState.unit.weeks, appState.unit.activeWeek + delta));
+  const unit = {...appState.unit, activeWeek:w};
+  setState({unit});
+  syncToSheets({type:'config_update',...unit});
+  renderTeacherDashboard();
+}
+
+// ─── APPROVE / REJECT CHALLENGES ─────────────
+function approveChallenge(teamId, submissionId){
+  const team = getTeam(teamId);
+  if(!team) return;
+  const pending  = team.pendingChallenges||[];
+  const sub = pending.find(c=>c.submission_id===submissionId);
+  if(!sub) return;
+
+  const approved = [...(team.approvedChallenges||[]), {...sub, status:'approved', approved_at:nowISO()}];
+  const newPending = pending.filter(c=>c.submission_id!==submissionId);
+
+  const isPhys = sub.challenge_type==='physical';
+  const patch = {
+    pendingChallenges: newPending,
+    approvedChallenges: approved,
+    approvedPhysical:      (team.approvedPhysical||0)      + (isPhys?1:0),
+    approvedCollaboration: (team.approvedCollaboration||0) + (isPhys?0:1),
+  };
+  updateTeam(teamId, patch);
+  syncToSheets({type:'challenge_approval', team_id:teamId, submission_id:submissionId,
+    status:'approved', approved_at:nowISO()});
+  checkAutoBadges(teamId);
+  checkLevelUp(teamId);
+  renderTeacherDashboard();
+}
+
+function showRejectInput(submissionId){
+  const el = document.getElementById('reject-input-'+submissionId);
+  if(el) el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+
+function rejectChallenge(teamId, submissionId){
+  const team = getTeam(teamId);
+  if(!team) return;
+  const note = document.getElementById('reject-note-'+submissionId)?.value?.trim()||'';
+  const newPending = (team.pendingChallenges||[]).filter(c=>c.submission_id!==submissionId);
+  updateTeam(teamId,{pendingChallenges:newPending});
+  syncToSheets({type:'challenge_approval', team_id:teamId, submission_id:submissionId,
+    status:'rejected', teacher_note:note, approved_at:nowISO()});
+  renderTeacherDashboard();
+}
+
+// ─── AWARD BADGE MODAL ────────────────────────
+function openAwardBadgeModal(){
+  const teams = appState.teams||[];
+  document.getElementById('modal-award-badge-content').innerHTML=`
+    <h2 style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);
+      margin-bottom:16px">🏅 Award Special Badge</h2>
+    <div class="field-group">
+      <label class="field-label">Team</label>
+      <select id="award-team" class="field-select">
+        <option value="">— select a team —</option>
+        ${teams.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}
+      </select>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Badge</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="badge-picker">
+        ${SPECIAL_BADGES.map(b=>`
+          <button type="button" class="badge-pick-btn" data-id="${b.id}"
+            onclick="selectBadgePick(this)"
+            style="background:var(--cream-dark);border:2px solid transparent;border-radius:var(--radius);
+            padding:10px 8px;cursor:pointer;text-align:left;transition:all .15s">
+            <span style="font-size:1.2rem">${b.icon}</span>
+            <span style="font-size:.8rem;font-weight:700;display:block;margin-top:2px">${esc(b.name)}</span>
+            <span style="font-size:.68rem;color:var(--text-light)">${esc(b.desc)}</span>
+          </button>`).join('')}
+      </div>
+      <input type="hidden" id="award-badge-id" value="">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Personal note for team (optional)</label>
+      <textarea id="award-note" class="field-textarea" style="min-height:60px"
+        placeholder="e.g. You showed incredible resilience this week..."></textarea>
+    </div>
+    <div id="award-error" style="color:var(--error);font-size:.82rem;min-height:18px;margin-bottom:8px"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-secondary" style="flex:1"
+        onclick="closeModal('modal-award-badge')">Cancel</button>
+      <button class="btn btn-terra" style="flex:1" onclick="awardBadge()">Award Badge 🏅</button>
+    </div>`;
+  openModal('modal-award-badge');
+}
+
+function selectBadgePick(btn){
+  document.querySelectorAll('.badge-pick-btn').forEach(b=>{
+    b.style.background='var(--cream-dark)';
+    b.style.borderColor='transparent';
+  });
+  btn.style.background='var(--terracotta)22';
+  btn.style.borderColor='var(--terracotta)';
+  document.getElementById('award-badge-id').value = btn.dataset.id;
+}
+
+function awardBadge(){
+  const teamId  = document.getElementById('award-team')?.value;
+  const badgeId = document.getElementById('award-badge-id')?.value;
+  const note    = document.getElementById('award-note')?.value?.trim()||'';
+  const errEl   = document.getElementById('award-error');
+
+  if(!teamId)  { if(errEl) errEl.textContent='Please select a team.'; return; }
+  if(!badgeId) { if(errEl) errEl.textContent='Please pick a badge.'; return; }
+  if(errEl) errEl.textContent='';
+
+  const def  = SPECIAL_BADGES.find(b=>b.id===badgeId);
+  const team = getTeam(teamId);
+  if(!def||!team) return;
+
+  const badge = {
+    id: newUUID(), badgeDefId:badgeId,
+    name:def.name, icon:def.icon, desc:def.desc,
+    teacherNote:note, type:'teacher',
+    awardedAt:nowISO(),
+  };
+  const badges = [...(team.badges||[]), badge];
+  updateTeam(teamId,{badges});
+  syncToSheets({type:'badge_award', team_id:teamId, ...badge});
+
+  // Flag for badge celebration overlay when team next opens their view
+  updateTeam(teamId,{badgePending:badge});
+
+  closeModal('modal-award-badge');
+  renderTeacherDashboard();
+}
+
+// ─── SYNC ────────────────────────────────────
+async function doSync(){
+  await replayPendingSync();
+  const data = await fetchFromSheets();
+  if(data){
+    // Merge remote config if present
+    if(data.config){ setState({unit:{...appState.unit,...data.config}}); }
+    renderTeacherDashboard();
+  }
+}
+
+// ─── TEAM DETAIL ─────────────────────────────
+function renderTeamDetail(id){
+  if(!requireTeacher()) return;
+  const team = getTeam(id);
+  if(!team){ document.getElementById('team-detail-content').innerHTML='<p style="padding:20px">Team not found.</p>'; return; }
+
+  const lv = LEVELS[team.level-1]||LEVELS[0];
+  const goals = team.goals||[];
+  const badges = team.badges||[];
+  const approved = team.approvedChallenges||[];
+  const charter = team.charterValues||[];
+  const icons = Object.fromEntries(CHARTER_OPTIONS.map(c=>[c.value,c.icon]));
+
+  document.getElementById('team-detail-content').innerHTML=`
+    <!-- Header -->
+    <div style="background:${team.colour};color:#fff;padding:20px 18px 16px">
+      <button class="back-btn" style="color:rgba(255,255,255,.8);margin-bottom:6px"
+        onclick="showScreen('teacher-dashboard')">← Dashboard</button>
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.5rem;margin-bottom:6px">
+        ${esc(team.name)}</h1>
+      ${makeLevelBadge(team.level,'rgba(255,255,255,.25)')}
+      <div style="margin-top:8px;font-size:.82rem;opacity:.8">
+        ${team.approvedPhysical||0} physical · ${team.approvedCollaboration||0} collab · ${badges.length} badges</div>
+    </div>
+
+    <div style="padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:40px">
+
+      <!-- Charter -->
+      ${charter.length?`
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-weight:800;color:var(--green-dark);margin-bottom:8px">📜 Team Charter</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${charter.map(v=>`<span style="background:${team.colour}22;border:1px solid ${team.colour};
+            border-radius:99px;padding:4px 12px;font-size:.82rem;font-weight:600">
+            ${icons[v]||''} ${esc(v)}</span>`).join('')}
+        </div>
+      </div>`:''}
+
+      <!-- Actions -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+        <button class="btn btn-terra btn-sm" onclick="openAwardBadgeModalForTeam('${id}')">🏅 Award Badge</button>
+        <button class="btn btn-sm btn-secondary" onclick="openEditTeam('${id}')">✏️ Edit Team</button>
+        <button class="btn btn-sm btn-secondary" onclick="resetCharter('${id}')">↺ Reset Charter</button>
+      </div>
+
+      <!-- Goals & Reflections -->
+      <div style="font-weight:800;color:var(--green-dark);margin-bottom:8px;font-size:.95rem">
+        🎯 Goals & Reflections</div>
+      ${goals.length===0
+        ? `<div class="card" style="color:var(--text-light);font-size:.88rem;margin-bottom:12px">No goals set yet.</div>`
+        : goals.map(g=>`
+          <div class="card" style="margin-bottom:10px">
+            <div style="font-size:.72rem;font-weight:700;color:var(--text-light);margin-bottom:6px">
+              WEEK ${g.week_number}</div>
+            <div style="margin-bottom:6px">
+              <span style="font-size:.75rem;font-weight:700;color:var(--green-mid)">Physical:</span>
+              <span style="font-size:.85rem;margin-left:4px">${esc(g.physical_goal||'—')}</span>
+              ${g.physical_achieved?`<span style="font-size:.7rem;color:var(--text-light);margin-left:4px">(${g.physical_achieved})</span>`:''}
+            </div>
+            <div style="margin-bottom:6px">
+              <span style="font-size:.75rem;font-weight:700;color:var(--terracotta)">Teamwork:</span>
+              <span style="font-size:.85rem;margin-left:4px">${esc(g.teamwork_goal||'—')}</span>
+              ${g.teamwork_achieved?`<span style="font-size:.7rem;color:var(--text-light);margin-left:4px">(${g.teamwork_achieved})</span>`:''}
+            </div>
+            ${g.reflection_wellbeing?`
+              <div style="background:var(--cream);border-radius:8px;padding:8px;margin-top:6px;font-size:.82rem">
+                <div style="font-weight:700;color:var(--green-dark);margin-bottom:3px">What went well:</div>
+                <div>"${esc(g.reflection_wellbeing)}"</div>
+              </div>
+              <div style="background:var(--cream);border-radius:8px;padding:8px;margin-top:6px;font-size:.82rem">
+                <div style="font-weight:700;color:var(--green-dark);margin-bottom:3px">What was hard:</div>
+                <div>"${esc(g.reflection_challenge)}"</div>
+              </div>
+              ${g.lp_attribute_shown?`<div style="margin-top:6px;font-size:.75rem">
+                IB LP shown: <strong>${esc(g.lp_attribute_shown)}</strong></div>`:''}
+              <div style="margin-top:8px">
+                <button class="btn btn-sm btn-secondary"
+                  onclick="selectStoryQuote('${id}',${JSON.stringify(g.reflection_wellbeing).replace(/"/g,'&quot;')})">
+                  📌 Use as Story Quote</button>
+              </div>`:''}
+          </div>`).join('')}
+
+      <!-- Approved Challenges -->
+      <div style="font-weight:800;color:var(--green-dark);margin:14px 0 8px;font-size:.95rem">
+        ✅ Completed Challenges (${approved.length})</div>
+      ${approved.length===0
+        ? `<div class="card" style="color:var(--text-light);font-size:.88rem;margin-bottom:12px">None yet.</div>`
+        : approved.map(c=>`
+          <div class="card" style="margin-bottom:8px;padding:12px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div>
+                <div style="font-weight:700;font-size:.88rem">${esc(c.challenge_name)}</div>
+                <div style="font-size:.72rem;color:var(--text-light);margin-top:2px">
+                  ${c.challenge_type} · ${starsHTML(c.difficulty||1)} · ${fmtDate(c.approved_at)}</div>
+                ${c.reflection_text?`<div style="font-size:.8rem;margin-top:6px;font-style:italic;
+                  color:var(--text-light)">"${esc(c.reflection_text)}"</div>`:''}
+              </div>
+            </div>
+          </div>`).join('')}
+
+      <!-- Badges -->
+      <div style="font-weight:800;color:var(--green-dark);margin:14px 0 8px;font-size:.95rem">
+        🏅 Badges (${badges.length})</div>
+      ${badges.length===0
+        ? `<div class="card" style="color:var(--text-light);font-size:.88rem">No badges yet.</div>`
+        : `<div style="display:flex;flex-wrap:wrap;gap:10px">
+            ${badges.map(b=>`<div style="text-align:center;background:var(--white);
+              border-radius:12px;padding:10px 14px;box-shadow:var(--shadow)">
+              <div style="font-size:1.8rem">${b.icon}</div>
+              <div style="font-size:.72rem;font-weight:700;color:var(--green-dark);margin-top:3px">${esc(b.name)}</div>
+              <div style="font-size:.65rem;color:var(--text-light)">${fmtDate(b.awardedAt)}</div>
+            </div>`).join('')}
+          </div>`}
+
+      <!-- Edit Team Panel -->
+      <div id="edit-team-panel" style="display:none;margin-top:20px">
+        <div class="card" style="border:2px solid var(--green-mid)">
+          <div style="font-weight:800;color:var(--green-dark);margin-bottom:12px">✏️ Edit Team</div>
+          <div class="field-group">
+            <label class="field-label">Team Name</label>
+            <input id="edit-team-name" type="text" class="field-input" value="${esc(team.name)}">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Team Colour</label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              ${TEAM_COLOURS.map(c=>`
+                <button type="button" onclick="selectEditColour('${c.hex}')"
+                  data-hex="${c.hex}"
+                  style="width:36px;height:36px;border-radius:50%;background:${c.hex};
+                  border:3px solid ${team.colour===c.hex?'var(--green-dark)':'transparent'};
+                  cursor:pointer;transition:border .15s" title="${c.name}"></button>`).join('')}
+              <input type="hidden" id="edit-team-colour" value="${team.colour}">
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="btn btn-secondary btn-sm" onclick="document.getElementById('edit-team-panel').style.display='none'">Cancel</button>
+            <button class="btn btn-primary btn-sm" onclick="saveTeamEdit('${id}')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+    </div>`;
+}
+
+function openAwardBadgeModalForTeam(teamId){
+  openAwardBadgeModal();
+  setTimeout(()=>{
+    const sel = document.getElementById('award-team');
+    if(sel) sel.value = teamId;
+  },50);
+}
+
+function openEditTeam(teamId){
+  const panel = document.getElementById('edit-team-panel');
+  if(panel) panel.style.display = panel.style.display==='none' ? 'block' : 'none';
+}
+
+function selectEditColour(hex){
+  document.querySelectorAll('[data-hex]').forEach(b=>{
+    b.style.borderColor = b.dataset.hex===hex ? 'var(--green-dark)' : 'transparent';
+  });
+  const hidden = document.getElementById('edit-team-colour');
+  if(hidden) hidden.value = hex;
+}
+
+function saveTeamEdit(teamId){
+  const name   = document.getElementById('edit-team-name')?.value?.trim();
+  const colour = document.getElementById('edit-team-colour')?.value;
+  if(!name) return;
+  updateTeam(teamId,{name,colour});
+  syncToSheets({type:'team_setup', team_id:teamId, team_name:name, team_colour:colour});
+  renderTeamDetail(teamId);
+}
+
+function selectStoryQuote(teamId, quote){
+  updateTeam(teamId,{storyQuote:quote});
+  alert('Story quote saved! ✅');
+}
+
+function resetCharter(teamId){
+  if(!confirm('Reset this team\'s charter? They\'ll need to choose again.')) return;
+  updateTeam(teamId,{charterValues:[], charterSet:false});
+  renderTeamDetail(teamId);
+}
+
+// ─── UNIT SETUP ───────────────────────────────
+function renderUnitSetup(){
+  if(!requireTeacher()) return;
+  const unit = appState.unit;
+  const numTeams = appState.teams.length || 2;
+
+  document.getElementById('setup-content').innerHTML=`
+    <div style="background:var(--green-dark);color:#fff;padding:20px 18px 16px">
+      <button class="back-btn" style="color:rgba(255,255,255,.8);margin-bottom:6px"
+        onclick="showScreen('teacher-dashboard')">← Dashboard</button>
+      <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.4rem">⚙️ Unit Setup</h1>
+      <p style="opacity:.75;font-size:.82rem;margin-top:4px">Configure your unit and teams</p>
+    </div>
+
+    <div style="padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:60px">
+
+      <!-- Unit Info -->
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-weight:800;color:var(--green-dark);margin-bottom:12px">📋 Unit Info</div>
+        <div class="field-group">
+          <label class="field-label">Unit Name</label>
+          <input id="setup-unit-name" type="text" class="field-input"
+            value="${esc(unit.name)}" placeholder="e.g. Basketball Unit 2">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Active Grade</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            ${['G1','G2','G3','G4','G5'].map(g=>`
+              <button type="button" onclick="selectSetupGrade('${g}')" data-grade="${g}"
+                style="flex:1;min-width:48px;background:${unit.grade===g?'var(--green-mid)':'var(--cream-dark)'};
+                color:${unit.grade===g?'#fff':'var(--text)'};border:2px solid ${unit.grade===g?'var(--green-mid)':'var(--cream-dark)'};
+                border-radius:10px;padding:11px 6px;font-weight:700;font-size:.9rem;
+                font-family:'Nunito',sans-serif;cursor:pointer;transition:all .15s">${g}</button>`).join('')}
+            <input type="hidden" id="setup-grade" value="${unit.grade}">
+          </div>
+        </div>
+        <div class="field-group" style="display:flex;gap:12px">
+          <div style="flex:1">
+            <label class="field-label">Duration (weeks)</label>
+            <input id="setup-weeks" type="number" class="field-input" min="2" max="8"
+              value="${unit.weeks}">
+          </div>
+          <div style="flex:1">
+            <label class="field-label">Number of Teams</label>
+            <input id="setup-num-teams" type="number" class="field-input" min="2" max="8"
+              value="${numTeams}" onchange="renderTeamInputs()">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Teacher Password</label>
+          <input id="setup-password" type="text" class="field-input"
+            value="${esc(localStorage.getItem('tqTeacherPassword')||TEACHER_PASSWORD)}"
+            placeholder="seed2025">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Google Apps Script URL</label>
+          <input id="setup-script-url" type="url" class="field-input"
+            value="${esc(unit.appsScriptUrl)}"
+            placeholder="https://script.google.com/macros/s/...">
+        </div>
+      </div>
+
+      <!-- Charter Values -->
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-weight:800;color:var(--green-dark);margin-bottom:8px">📜 Charter Values</div>
+        <p style="font-size:.82rem;color:var(--text-light);margin-bottom:10px">
+          Uncheck values you don't want students to see</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          ${CHARTER_OPTIONS.map(c=>{
+            const active = (unit.availableCharterValues||[]).includes(c.value);
+            return `<label style="display:flex;align-items:center;gap:5px;cursor:pointer;
+              background:${active?'var(--green-mid)22':'var(--cream-dark)'};
+              border:2px solid ${active?'var(--green-mid)':'var(--cream-dark)'};
+              border-radius:99px;padding:6px 12px;font-size:.82rem;font-weight:600;
+              transition:all .15s">
+              <input type="checkbox" data-charter="${c.value}" ${active?'checked':''}
+                style="display:none" onchange="updateCharterAvail()">
+              ${c.icon} ${esc(c.value)}
+            </label>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Challenge Categories -->
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-weight:800;color:var(--green-dark);margin-bottom:8px">🏋️ Physical Categories</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${['Fitness','Skill','Movement','Team Performance'].map(cat=>{
+            const on = (unit.availablePhysicalCategories||[]).includes(cat);
+            return `<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem">
+              <input type="checkbox" data-physcat="${cat}" ${on?'checked':''}
+                onchange="updatePhysCats()">
+              ${cat}</label>`;
+          }).join('')}
+        </div>
+        <div style="font-weight:800;color:var(--green-dark);margin:12px 0 8px">🤝 ATL Skill Categories</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${ATL_SKILLS.map(skill=>{
+            const on = (unit.availableATLSkills||[]).includes(skill);
+            return `<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem">
+              <input type="checkbox" data-atlcat="${skill}" ${on?'checked':''}
+                onchange="updateATLCats()">
+              ${skill}</label>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Team Setup -->
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-weight:800;color:var(--green-dark);margin-bottom:12px">👥 Team Setup</div>
+        <div id="team-inputs-container"></div>
+      </div>
+
+      <div id="setup-error" style="color:var(--error);font-size:.85rem;min-height:20px;margin-bottom:10px"></div>
+      <button class="btn btn-primary btn-full" onclick="saveUnitSetup()" style="font-size:1.05rem">
+        💾 Save &amp; Start Unit</button>
+      <p style="font-size:.72rem;color:var(--text-light);text-align:center;margin-top:10px">
+        ⚠️ Saving will update all settings. Team data is preserved.</p>
+    </div>`;
+
+  renderTeamInputs();
+}
+
+function selectSetupGrade(g){
+  document.querySelectorAll('[data-grade]').forEach(b=>{
+    const match = b.dataset.grade===g;
+    b.style.background = match?'var(--green-mid)':'var(--cream-dark)';
+    b.style.color = match?'#fff':'var(--text)';
+    b.style.borderColor = match?'var(--green-mid)':'var(--cream-dark)';
+  });
+  const hidden = document.getElementById('setup-grade');
+  if(hidden) hidden.value=g;
+}
+
+function renderTeamInputs(){
+  const n = parseInt(document.getElementById('setup-num-teams')?.value)||2;
+  const existing = appState.teams;
+  let html='';
+  for(let i=0;i<n;i++){
+    const t = existing[i]||{name:`Team ${i+1}`, colour:TEAM_COLOURS[i%TEAM_COLOURS.length].hex, roster:[]};
+    html+=`<div style="border:1px solid var(--cream-dark);border-radius:var(--radius);
+      padding:14px;margin-bottom:10px">
+      <div style="font-weight:700;color:var(--text-light);font-size:.78rem;
+        text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Team ${i+1}</div>
+      <div class="field-group">
+        <label class="field-label">Team Name</label>
+        <input id="team-name-${i}" type="text" class="field-input" value="${esc(t.name)}"
+          placeholder="Team name">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Colour</label>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${TEAM_COLOURS.map(c=>`
+            <button type="button" onclick="selectTeamColour(${i},'${c.hex}')"
+              data-team="${i}" data-hex="${c.hex}"
+              style="width:32px;height:32px;border-radius:50%;background:${c.hex};
+              border:3px solid ${t.colour===c.hex?'#333':'transparent'};
+              cursor:pointer;transition:border .15s" title="${c.name}"></button>`).join('')}
+          <input type="hidden" id="team-colour-${i}" value="${t.colour}">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Roster (names separated by commas or new lines)</label>
+        <textarea id="team-roster-${i}" class="field-textarea" style="min-height:60px"
+          placeholder="Amara, Sam, Jess, Leo">${esc((t.roster||[]).join(', '))}</textarea>
+      </div>
+    </div>`;
+  }
+  const cont = document.getElementById('team-inputs-container');
+  if(cont) cont.innerHTML=html;
+}
+
+function selectTeamColour(teamIdx, hex){
+  document.querySelectorAll(`[data-team="${teamIdx}"][data-hex]`).forEach(b=>{
+    b.style.borderColor = b.dataset.hex===hex?'#333':'transparent';
+  });
+  const hidden = document.getElementById('team-colour-'+teamIdx);
+  if(hidden) hidden.value=hex;
+}
+
+function updateCharterAvail(){
+  const checked = [...document.querySelectorAll('[data-charter]:checked')].map(el=>el.dataset.charter);
+  const unit = {...appState.unit, availableCharterValues:checked};
+  setState({unit});
+}
+function updatePhysCats(){
+  const checked = [...document.querySelectorAll('[data-physcat]:checked')].map(el=>el.dataset.physcat);
+  const unit = {...appState.unit, availablePhysicalCategories:checked};
+  setState({unit});
+}
+function updateATLCats(){
+  const checked = [...document.querySelectorAll('[data-atlcat]:checked')].map(el=>el.dataset.atlcat);
+  const unit = {...appState.unit, availableATLSkills:checked};
+  setState({unit});
+}
+
+function saveUnitSetup(){
+  const name     = document.getElementById('setup-unit-name')?.value?.trim();
+  const grade    = document.getElementById('setup-grade')?.value||'G3';
+  const weeks    = parseInt(document.getElementById('setup-weeks')?.value)||4;
+  const numTeams = parseInt(document.getElementById('setup-num-teams')?.value)||2;
+  const pw       = document.getElementById('setup-password')?.value?.trim();
+  const scriptUrl= document.getElementById('setup-script-url')?.value?.trim()||'';
+  const errEl    = document.getElementById('setup-error');
+
+  if(!name){ if(errEl) errEl.textContent='Please enter a unit name.'; return; }
+  if(errEl) errEl.textContent='';
+
+  if(pw) localStorage.setItem('tqTeacherPassword',pw);
+
+  // Build teams
+  const teams = [];
+  for(let i=0;i<numTeams;i++){
+    const tName   = document.getElementById('team-name-'+i)?.value?.trim()||`Team ${i+1}`;
+    const tColour = document.getElementById('team-colour-'+i)?.value||TEAM_COLOURS[i%8].hex;
+    const rosterRaw = document.getElementById('team-roster-'+i)?.value||'';
+    const roster = rosterRaw.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+    const existing = appState.teams[i];
+    teams.push({
+      id: existing?.id||newUUID(),
+      name: tName,
+      colour: tColour,
+      roster,
+      charterValues: existing?.charterValues||[],
+      charterSet: existing?.charterSet||false,
+      level: existing?.level||1,
+      approvedPhysical: existing?.approvedPhysical||0,
+      approvedCollaboration: existing?.approvedCollaboration||0,
+      pendingChallenges: existing?.pendingChallenges||[],
+      approvedChallenges: existing?.approvedChallenges||[],
+      goals: existing?.goals||[],
+      badges: existing?.badges||[],
+      storyQuote: existing?.storyQuote||null,
+      created_at: existing?.created_at||nowISO(),
+      last_updated: nowISO(),
+    });
+  }
+
+  const unit = {
+    ...appState.unit,
+    name, grade, weeks, appsScriptUrl:scriptUrl,
+    activeWeek: appState.unit.activeWeek||1,
+  };
+
+  setState({unit, teams});
+  syncToSheets({type:'config_update',...unit});
+  teams.forEach(t=>syncToSheets({type:'team_setup',team_id:t.id,
+    team_name:t.name,team_colour:t.colour,roster:t.roster.join('|'),
+    grade, unit_name:name, current_level:t.level,
+    created_at:t.created_at, last_updated:t.last_updated}));
+
+  showScreen('teacher-dashboard');
+}
+
+// ═══════════════════════════════════════════
+//  PART 5 — TEAM STORY, BADGE OVERLAY, FINAL WIRING
+// ═══════════════════════════════════════════
+
+// ─── TEAM STORY ───────────────────────────────
+function renderTeamStory(id){
+  const team = getTeam(id);
+  if(!id||!team) return;
+  const lv     = LEVELS[team.level-1]||LEVELS[0];
+  const goals  = team.goals||[];
+  const badges = team.badges||[];
+  const charter= team.charterValues||[];
+  const icons  = Object.fromEntries(CHARTER_OPTIONS.map(c=>[c.value,c.icon]));
+
+  // Gather LP attributes shown
+  const lpShown = [...new Set(goals.filter(g=>g.lp_attribute_shown).map(g=>g.lp_attribute_shown))];
+
+  // Goals summary
+  const goalsSet      = goals.filter(g=>g.goals_set_at).length;
+  const physAchieved  = goals.filter(g=>g.physical_achieved==='yes').length;
+  const teamAchieved  = goals.filter(g=>g.teamwork_achieved==='yes').length;
+  const reflections   = goals.filter(g=>g.reflection_at).length;
+
+  const storyQuote = team.storyQuote;
+
+  document.getElementById('story-content').innerHTML=`
+    <div id="story-print-area">
+      <!-- Header -->
+      <div style="background:${team.colour};color:#fff;padding:28px 20px 20px;text-align:center"
+        class="no-print-back">
+        <button class="back-btn no-print-back" style="color:rgba(255,255,255,.8);margin-bottom:10px"
+          onclick="showScreen('team-home',{teamId:'${id}'})">← Back</button>
+        <div style="font-size:3rem;margin-bottom:6px">📖</div>
+        <h1 style="font-family:'Nunito',sans-serif;font-weight:900;font-size:2rem;margin-bottom:4px">
+          ${esc(team.name)}</h1>
+        <div style="opacity:.85;font-size:.95rem;margin-bottom:10px">
+          ${esc(appState.unit.name||'Team Quest')} · ${appState.unit.grade}</div>
+        ${makeLevelBadge(team.level,'rgba(255,255,255,.25)')}
+      </div>
+
+      <div style="padding:20px;max-width:600px;margin:0 auto;padding-bottom:60px">
+
+        <!-- Charter -->
+        ${charter.length?`
+        <div class="card" style="margin-bottom:16px;border-top:4px solid ${team.colour}">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);
+            font-size:1.05rem;margin-bottom:10px">📜 Our Team Values</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${charter.map(v=>`
+              <div style="background:${team.colour}22;border:2px solid ${team.colour};
+                border-radius:12px;padding:10px 16px;font-weight:700;font-size:.95rem">
+                ${icons[v]||'⭐'} ${esc(v)}</div>`).join('')}
+          </div>
+        </div>`:''}
+
+        <!-- Level Achieved -->
+        <div class="card" style="margin-bottom:16px;text-align:center;background:${team.colour}11;
+          border:2px solid ${team.colour}44">
+          <div style="font-size:2.5rem;margin-bottom:6px">${lv.icon}</div>
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.3rem;
+            color:var(--green-dark)">Level ${lv.level}: ${lv.name}</div>
+          <div style="font-size:.85rem;color:var(--text-light);margin-top:4px">
+            Final level achieved this unit</div>
+        </div>
+
+        <!-- Stats -->
+        <div class="card" style="margin-bottom:16px">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);
+            margin-bottom:12px">📊 Our Unit Stats</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            ${statBox('🏃','Physical Challenges',team.approvedPhysical||0,team.colour)}
+            ${statBox('🤝','Collaboration Challenges',team.approvedCollaboration||0,team.colour)}
+            ${statBox('🎯','Weeks with Goals',goalsSet,team.colour)}
+            ${statBox('🪞','Reflections Done',reflections,team.colour)}
+            ${statBox('✅','Physical Goals Achieved',physAchieved,team.colour)}
+            ${statBox('💚','Teamwork Goals Achieved',teamAchieved,team.colour)}
+          </div>
+        </div>
+
+        <!-- Best Quote -->
+        ${storyQuote?`
+        <div class="card" style="margin-bottom:16px;border-left:5px solid ${team.colour}">
+          <div style="font-family:'Nunito',sans-serif;font-weight:800;color:var(--green-dark);
+            margin-bottom:8px">💬 Our Best Reflection</div>
+          <div style="font-size:1rem;font-style:italic;line-height:1.6;color:var(--text)">
+            "${esc(storyQuote)}"</div>
+        </div>`:''}
+
+        <!-- Badges -->
+        ${badges.length?`
+        <div class="card" style="margin-bottom:16px">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);
+            margin-bottom:12px">🏅 Badges Earned</div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px">
+            ${badges.map(b=>`
+              <div style="text-align:center;min-width:60px">
+                <div style="font-size:2rem">${b.icon||'🏅'}</div>
+                <div style="font-size:.7rem;font-weight:700;color:var(--green-dark);
+                  margin-top:3px;line-height:1.2">${esc(b.name)}</div>
+              </div>`).join('')}
+          </div>
+        </div>`:''}
+
+        <!-- IB LP Attributes -->
+        ${lpShown.length?`
+        <div class="card" style="margin-bottom:16px">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);
+            margin-bottom:10px">🌍 IB Learner Profile — We Demonstrated</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${lpShown.map(lp=>`
+              <span style="background:var(--green-mid)22;border:1px solid var(--green-mid);
+                border-radius:99px;padding:6px 14px;font-size:.85rem;font-weight:600;
+                color:var(--green-dark)">${esc(lp)}</span>`).join('')}
+          </div>
+        </div>`:''}
+
+        <!-- Reflection Highlights -->
+        ${goals.filter(g=>g.reflection_wellbeing).length?`
+        <div class="card" style="margin-bottom:16px">
+          <div style="font-family:'Nunito',sans-serif;font-weight:900;color:var(--green-dark);
+            margin-bottom:10px">📝 Our Weekly Reflections</div>
+          ${goals.filter(g=>g.reflection_wellbeing).map(g=>`
+            <div style="border-left:3px solid ${team.colour};padding:8px 12px;margin-bottom:10px">
+              <div style="font-size:.72rem;font-weight:700;color:var(--text-light);margin-bottom:4px">
+                WEEK ${g.week_number}</div>
+              <div style="font-size:.88rem;font-style:italic;color:var(--text);line-height:1.5">
+                "${esc(g.reflection_wellbeing)}"</div>
+            </div>`).join('')}
+        </div>`:''}
+
+        <!-- Print / Share -->
+        <div style="display:flex;gap:10px;margin-top:8px" class="no-print-back">
+          <button class="btn btn-primary" style="flex:1" onclick="window.print()">
+            🖨️ Print / Save as PDF</button>
+          <button class="btn btn-secondary" style="flex:1"
+            onclick="showScreen('team-home',{teamId:'${id}'})">← Back</button>
+        </div>
+
+      </div>
+    </div>`;
+}
+
+function statBox(icon, label, value, colour){
+  return `<div style="background:${colour}11;border-radius:10px;padding:14px 10px;text-align:center">
+    <div style="font-size:1.4rem;margin-bottom:4px">${icon}</div>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:1.5rem;color:var(--green-dark)">${value}</div>
+    <div style="font-size:.7rem;color:var(--text-light);margin-top:2px;line-height:1.3">${label}</div>
+  </div>`;
+}
+
+// ─── BADGE AWARD OVERLAY ─────────────────────
+function triggerBadgeOverlay(badge, teamColour){
+  const overlay = document.getElementById('overlay-badge');
+  overlay.style.display='flex';
+  document.getElementById('overlay-badge-content').innerHTML=`
+    <div style="animation:bounceIn .5s ease;font-size:5rem;margin-bottom:12px">${badge.icon||'🏅'}</div>
+    <h1 style="font-family:'Nunito',sans-serif;font-weight:900;color:#fff;font-size:1.8rem;margin-bottom:8px">
+      New Badge!</h1>
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;color:#fff;font-size:1.5rem;margin-bottom:8px">
+      ${esc(badge.name)}</div>
+    <p style="color:rgba(255,255,255,.85);font-size:.95rem;margin-bottom:${badge.teacherNote?'8px':'24px'};max-width:280px;line-height:1.5">
+      ${esc(badge.desc||'')}</p>
+    ${badge.teacherNote?`
+    <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:12px 16px;
+      margin-bottom:20px;max-width:300px;font-style:italic;color:rgba(255,255,255,.9);font-size:.9rem">
+      💬 "${esc(badge.teacherNote)}"</div>`:''}
+    <button class="btn" style="background:#fff;color:var(--green-dark);font-size:1.05rem;padding:16px 32px"
+      onclick="document.getElementById('overlay-badge').style.display='none'">
+      Amazing! 🎉</button>`;
+}
+
+// selectTeam is fully defined above — badge + level-up handling included.
+
+// ─── INIT ─────────────────────────────────────
+function init(){
+  loadState();
+  appState.teacherAuth = sessionStorage.getItem('tqTeacherAuth')==='true';
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(mo=>{
+    mo.addEventListener('click',e=>{
+      if(e.target===mo) mo.classList.remove('open');
+    });
+  });
+  showScreen('landing');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+<style>
+/* ── ANIMATIONS ── */
+@keyframes confettiFall{
+  to{transform:translateY(110dvh) rotate(720deg);opacity:0}
+}
+@keyframes bounceIn{
+  0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}
+}
+@keyframes starPop{
+  0%{transform:scale(0) rotate(-30deg);opacity:0}
+  60%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-8px)}
+  75%{transform:translateX(8px)}
+}
+.shake{animation:shake .4s ease}
+/* Grade font sizes applied to body */
+body.grade-g1,body.grade-g2{font-size:18px}
+body.grade-g3,body.grade-g4{font-size:16px}
+body.grade-g5{font-size:15px}
+
+/* ── PRINT ── */
+@media print{
+  body{background:#fff!important;font-size:13px}
+  .bottom-nav,.no-print-back,#overlay-levelup,#overlay-badge,
+  .modal-overlay,.back-btn,.btn{display:none!important}
+  .screen:not(#screen-team-story){display:none!important}
+  #screen-team-story{display:block!important;min-height:unset}
+  #story-print-area{padding:0}
+  .card{box-shadow:none!important;border:1px solid #ddd!important;break-inside:avoid}
+}
+</style>
+</body>
+</html>
