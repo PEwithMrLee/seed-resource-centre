@@ -254,7 +254,101 @@ import { withBase } from "../utils/withBase";
     </div>
   </section>
 
+  <!-- Team Quest -->
   <section class="section section-soft">
+    <div class="shell">
+      <div class="tech-top">
+        <div class="tech-text stack">
+          <div class="circle-badges">
+            <span class="badge-tool">Student & Teacher</span>
+            <span class="badge-tool">IB / ATL Aligned</span>
+            <span class="badge-tool">AI-Assisted Teacher Tool</span>
+          </div>
+          <span class="eyebrow">Team Quest</span>
+          <h2>Building team culture — one challenge at a time.</h2>
+          <p>
+            Team Quest is a team-based progression app where groups of 3–5 students level up
+            together across a PE unit — completing physical and collaboration challenges, setting
+            weekly goals, and reflecting on their growth as a team.
+          </p>
+          <ul class="tech-feature-list">
+            <li>5 levels: 🌱 Seed → 🌿 Sprout → 🌳 Growth → 🌸 Bloom → 🌻 Thrive</li>
+            <li>Physical challenges + ATL collaboration challenges</li>
+            <li>Grade-differentiated language — G1 through G5</li>
+            <li>Weekly goals, check-ins, and structured reflections</li>
+            <li>Teacher dashboard — approve challenges, award badges, track ATL skills</li>
+            <li>Syncs to Google Sheets — full unit data saved automatically</li>
+          </ul>
+          <div class="tech-intro-actions">
+            <a class="button" href="/team-quest.html" target="_blank">Open Team Quest →</a>
+            <a class="button-secondary" href={withBase("/say-hello")}>Request a demo</a>
+          </div>
+        </div>
+        <div class="tech-ipad">
+          <div class="ipad-landscape">
+            <div class="ipad-left-bar"><div class="ipad-camera-side"></div></div>
+            <div class="ipad-screen-landscape">
+              <div class="tq-mockup">
+                <div class="tq-header">
+                  <span class="tq-icon">🏆</span>
+                  <span class="tq-title">Team Quest</span>
+                  <span class="tq-unit">Basketball Unit 2 · G4</span>
+                </div>
+                <div class="tq-body">
+                  <div class="tq-team falcons">
+                    <div class="tq-team-info">
+                      <span class="tq-team-name">🦅 The Falcons</span>
+                      <span class="tq-level">🌳 Growth</span>
+                    </div>
+                    <div class="tq-bar"><div class="tq-fill" style="width:72%"></div></div>
+                  </div>
+                  <div class="tq-team storm">
+                    <div class="tq-team-info">
+                      <span class="tq-team-name">⚡ Storm Squad</span>
+                      <span class="tq-level">🌿 Sprout</span>
+                    </div>
+                    <div class="tq-bar"><div class="tq-fill" style="width:45%"></div></div>
+                  </div>
+                  <div class="tq-team rise">
+                    <div class="tq-team-info">
+                      <span class="tq-team-name">🌊 The Rise</span>
+                      <span class="tq-level">🌸 Bloom</span>
+                    </div>
+                    <div class="tq-bar"><div class="tq-fill" style="width:88%"></div></div>
+                  </div>
+                  <div class="tq-pending">
+                    <span class="tq-pending-label">⏳ 3 challenges awaiting approval</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ipad-right-bar"><div class="ipad-home-side"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 feature cards -->
+      <div class="tech-features">
+        <div class="tech-feat-card green-top">
+          <span class="tech-feat-icon">🌱</span>
+          <h4>Level Progression</h4>
+          <p>Teams advance through 5 SEED-branded levels by completing a mix of physical and collaboration challenges — unlocked only after teacher approval.</p>
+        </div>
+        <div class="tech-feat-card orange-top">
+          <span class="tech-feat-icon">🤝</span>
+          <h4>ATL & Learner Profile</h4>
+          <p>Every collaboration challenge is mapped to IB ATL skills and Learner Profile attributes. Language and complexity automatically adjust for G1–G5.</p>
+        </div>
+        <div class="tech-feat-card purple-top">
+          <span class="tech-feat-icon">📊</span>
+          <h4>Teacher Dashboard</h4>
+          <p>Approve challenges, award special badges, open weekly goal windows, and track which ATL skills each team has demonstrated — all from your own device.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <div class="shell two-column">
       <div class="quote-card stack">
         <span class="eyebrow">More coming soon</span>
@@ -679,6 +773,100 @@ import { withBase } from "../utils/withBase";
     color: #555;
     border-radius: 0 6px 6px 0;
     font-style: italic;
+  }
+
+  /* ── Team Quest mockup ── */
+  .tq-mockup {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #f5f0e8;
+  }
+
+  .tq-header {
+    background: #2d5016;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tq-icon { font-size: 1rem; }
+
+  .tq-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .tq-unit {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.68rem;
+  }
+
+  .tq-body {
+    padding: 0.6rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .tq-team {
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    border-left: 3px solid #ccc;
+  }
+
+  .tq-team.falcons { border-color: #2D6A4F; }
+  .tq-team.storm   { border-color: #2196A8; }
+  .tq-team.rise    { border-color: #7B3F96; }
+
+  .tq-team-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+  }
+
+  .tq-team-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #2c2c2c;
+  }
+
+  .tq-level {
+    font-size: 0.65rem;
+    color: #666;
+  }
+
+  .tq-bar {
+    height: 5px;
+    background: #e8e8e8;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .tq-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a7c2f, #8db87a);
+    border-radius: 999px;
+  }
+
+  .tq-pending {
+    background: rgba(196,123,74,0.12);
+    border: 1px solid rgba(196,123,74,0.3);
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    margin-top: auto;
+  }
+
+  .tq-pending-label {
+    font-size: 0.68rem;
+    color: #c47b4a;
+    font-weight: 600;
   }
 
   @media (max-width: 900px) {
