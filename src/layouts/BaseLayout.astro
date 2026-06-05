@@ -365,19 +365,13 @@ const {
         gap: 0.75rem;
       }
 
-      .bio-image-placeholder {
-        width: 160px;
-        height: 160px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent-soft), var(--bg-soft));
+      .bio-photo {
+        width: 200px;
+        height: 200px;
+        border-radius: var(--radius);
+        object-fit: cover;
         border: 3px solid var(--line-strong);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: "Cormorant Garamond", serif;
-        font-size: 4rem;
-        color: var(--accent-deep);
-        font-weight: 600;
+        box-shadow: var(--shadow-soft);
       }
 
       .bio-location {
@@ -783,10 +777,9 @@ const {
           justify-content: flex-start;
         }
 
-        .bio-image-placeholder {
+        .bio-photo {
           width: 80px;
           height: 80px;
-          font-size: 2rem;
         }
 
         .resources-grid {
