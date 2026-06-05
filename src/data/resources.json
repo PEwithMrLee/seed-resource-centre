@@ -63,5 +63,44 @@
     "href": "#",
     "image": "/teacher-communication-assistant1.png",
     "featured": false
+  },
+  {
+    "slug": "pe-challenges",
+    "title": "PE Challenges",
+    "type": "Interactive App",
+    "audience": "Students & Teachers",
+    "description": "A student-facing web app for PE lessons — four challenge categories, progressive difficulty levels, video demos, score logging, and built-in reflection. Runs on any device, no login required.",
+    "tagline": "Built for the gym, designed for engagement.",
+    "category": "Tech Integration",
+    "ctaLabel": "Open the App",
+    "href": "/pe-challenges.html",
+    "image": "/teacher-prompt-card1.png",
+    "featured": false
+  },
+  {
+    "slug": "pe-circle",
+    "title": "PE Circle",
+    "type": "Teacher App",
+    "audience": "Teachers",
+    "description": "A teacher-facing app for opening and closing PE lessons with intention. Tracks student readiness, wellbeing, and ATL skills in real time. Password protected, syncs to Google Sheets.",
+    "tagline": "Be more present with your students.",
+    "category": "Tech Integration",
+    "ctaLabel": "Open the App",
+    "href": "/circle-app.html",
+    "image": "/teacher-infographic2.png",
+    "featured": false
+  },
+  {
+    "slug": "team-quest",
+    "title": "Team Quest",
+    "type": "Interactive App",
+    "audience": "Students & Teachers",
+    "description": "A team-based progression app where groups of 3–5 students level up together through physical and ATL collaboration challenges. IB/ATL aligned, grade-differentiated G1–G5, syncs to Google Sheets.",
+    "tagline": "Building team culture, one challenge at a time.",
+    "category": "Tech Integration",
+    "ctaLabel": "Open the App",
+    "href": "/team-quest.html",
+    "image": "/teacher-infographic1.png",
+    "featured": false
   }
 ]

@@ -21,14 +21,14 @@ const pathWithoutBase =
       </div>
     </a>
 
-    <nav aria-label="Primary navigation">
+    <!-- Desktop nav -->
+    <nav class="nav-desktop" aria-label="Primary navigation">
       <ul class="nav-list">
         {navigation.filter(item => item.href !== "/say-hello").map((item) => {
           const isActive =
             item.href === "/"
               ? pathWithoutBase === "/"
               : pathWithoutBase.startsWith(item.href);
-
           return (
             <li>
               <a class:list={["nav-link", { active: isActive }]} href={withBase(item.href)}>
@@ -42,8 +42,57 @@ const pathWithoutBase =
         </li>
       </ul>
     </nav>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <nav aria-label="Mobile navigation">
+      <ul class="mobile-nav-list">
+        {navigation.map((item) => {
+          const isActive =
+            item.href === "/"
+              ? pathWithoutBase === "/"
+              : pathWithoutBase.startsWith(item.href);
+          return (
+            <li>
+              <a class:list={["mobile-nav-link", { active: isActive }]} href={withBase(item.href)}>
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   </div>
 </header>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburger?.addEventListener('click', () => {
+    const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.setAttribute('aria-expanded', String(!isOpen));
+    mobileMenu?.classList.toggle('open');
+    hamburger.classList.toggle('open');
+  });
+
+  // Close on link click
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger?.classList.remove('open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
 
 <style>
   .brand-logo {
@@ -65,5 +114,99 @@ const pathWithoutBase =
     color: var(--muted);
     letter-spacing: 0.03em;
     line-height: 1;
+  }
+
+  /* Desktop nav — visible by default */
+  .nav-desktop {
+    display: flex;
+  }
+
+  /* Hamburger — hidden on desktop */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 160ms ease;
+  }
+
+  .hamburger:hover {
+    background: var(--accent-soft);
+  }
+
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 999px;
+    transition: transform 200ms ease, opacity 200ms ease;
+    transform-origin: center;
+  }
+
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(250, 248, 243, 0.98);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--line);
+    padding: 1rem 0 1.5rem;
+    z-index: 19;
+    box-shadow: 0 8px 32px rgba(40,65,40,0.12);
+  }
+
+  .mobile-menu.open {
+    display: block;
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .mobile-nav-link {
+    display: block;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-weight: 500;
+    font-size: 1.05rem;
+    transition: background 160ms ease;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    background: var(--accent-soft);
+    color: var(--accent-deep);
+  }
+
+  @media (max-width: 820px) {
+    .nav-desktop {
+      display: none;
+    }
+
+    .hamburger {
+      display: flex;
+    }
+
+    .site-header {
+      position: relative;
+    }
   }
 </style>

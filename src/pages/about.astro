@@ -1,30 +1,58 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../utils/withBase";
 ---
 
 <BaseLayout
   title="About"
-  description="Learn more about the purpose and design principles behind SEED."
+  description="Lee Mayes is a primary PE, movement and wellbeing educator in Nanjing, China — and the person behind The SEED Lab."
 >
+
   <section class="page-hero">
     <div class="shell two-column">
       <div class="stack">
-        <span class="eyebrow">About SEED</span>
-        <h1>A resource centre designed to feel calm, useful, and credible.</h1>
+        <span class="eyebrow">About The SEED Lab</span>
+        <h1>A small educational greenhouse.</h1>
         <p>
-          SEED starts with teachers. The aim is to share practical resources in a way that feels
-          professional and uncluttered, while keeping the technical setup easy to maintain.
+          Some ideas are fully grown, some are still sprouting, and some are here simply
+          because they might help someone else start something useful.
         </p>
       </div>
       <div class="panel stack">
-        <span class="eyebrow">Principles</span>
-        <h3>What guides this first version</h3>
-        <ul class="list-clean">
-          <li>Use static pages for speed, stability, and simple hosting</li>
-          <li>Keep content in structured files instead of hardcoding it into layouts</li>
-          <li>Design with warmth and whitespace rather than visual noise</li>
-          <li>Make future expansion possible without a rebuild from scratch</li>
-        </ul>
+        <span class="eyebrow">At the heart of this</span>
+        <h3>One simple question</h3>
+        <p class="accent-note" style="font-size: 1.1rem;">
+          How do we help young people feel safe, connected, capable, and ready to grow?
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="shell about-bio">
+      <div class="about-photo-col">
+        <img src="/lee-and-gatis.jpg" alt="Lee and Gatis" class="about-photo" />
+        <p class="about-photo-caption">Lee (right) with Gatis, the teacher whose clinical practice journey sparked The SEED Lab.</p>
+      </div>
+      <div class="stack">
+        <span class="eyebrow">The person behind SEED</span>
+        <h2>Hi, I'm Lee.</h2>
+        <p>
+          I'm a primary PE, movement, and wellbeing educator living and teaching in Nanjing, China.
+          I created The SEED Lab as a home for the ideas, resources, reflections, and classroom
+          experiments that grow out of my work with children, teachers, and school communities.
+        </p>
+        <p>
+          For me, PE is about much more than sport. It is a space where children learn how to move,
+          cooperate, solve problems, manage challenge, understand their bodies, and discover what kind
+          of teammate, learner, and person they are becoming.
+        </p>
+        <p>
+          My work sits somewhere between movement, wellbeing, relationships, and identity. I'm
+          interested in how children build confidence, how groups learn to work together, how routines
+          create safety, and how physical activity can help young people better understand themselves
+          and others.
+        </p>
       </div>
     </div>
   </section>
@@ -32,21 +60,114 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <section class="section">
     <div class="shell two-column">
       <div class="quote-card stack">
-        <span class="eyebrow">Audience</span>
-        <h2>Teachers first, with a path for wider support later.</h2>
+        <span class="eyebrow">How it started</span>
+        <h2>A seed planted through mentoring.</h2>
         <p>
-          The initial content and language are teacher-focused, but the structure leaves room for
-          future sections for parents, carers, and students when needed.
+          The seed for this project was planted through my work mentoring another teacher, Gatis,
+          during his clinical practice journey. What began as lesson feedback, reflective conversations,
+          rubric-aligned observations, and practical teaching support slowly grew into something bigger:
+          a collection of tools and ideas that could help make good teaching more visible, thoughtful,
+          and shareable.
         </p>
       </div>
       <div class="panel stack">
-        <span class="eyebrow">Maintenance</span>
-        <h3>Built for beginner-friendly upkeep</h3>
-        <p>
-          To add a new resource, edit one JSON file. To publish a new post, add one more object to
-          the blog data file. That is enough for a small site to stay manageable.
-        </p>
+        <span class="eyebrow">What you'll find here</span>
+        <h3>A growing collection</h3>
+        <ul class="list-clean">
+          <li>Practical teaching tools and prompt cards</li>
+          <li>Curriculum thinking and planning examples</li>
+          <li>Wellbeing resources and visual supports</li>
+          <li>Teacher-built apps for PE and movement</li>
+          <li>Honest reflections from inside the classroom</li>
+          <li>Mentoring notes and professional growth tools</li>
+        </ul>
       </div>
     </div>
   </section>
+
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="about-audience">
+        <div class="panel stack">
+          <span class="eyebrow">Who this is for</span>
+          <h3>Teachers first</h3>
+          <p>Primary teachers, PE educators, IB practitioners, new teachers finding their feet, and experienced teachers looking for fresh practical ideas.</p>
+        </div>
+        <div class="panel stack">
+          <span class="eyebrow">The approach</span>
+          <h3>Practical, not theoretical</h3>
+          <p>Every resource here has been tested in a real classroom. Nothing is added because it looks good on paper — only because it actually works with real children.</p>
+        </div>
+        <div class="panel stack">
+          <span class="eyebrow">The future</span>
+          <h3>Always growing</h3>
+          <p>The SEED Lab is designed to expand thoughtfully — for parents, students, and wider school communities when the time is right.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell two-column">
+      <div class="quote-card stack">
+        <span class="eyebrow">Get in touch</span>
+        <h2>Have an idea, a request, or just want to say hello?</h2>
+        <p>
+          The SEED Lab grows through genuine teacher needs. Every message is read personally.
+        </p>
+        <a class="button" href={withBase("/say-hello")} style="width: fit-content; margin-top: 0.5rem;">Say hello →</a>
+      </div>
+      <div class="panel stack">
+        <span class="eyebrow">Start exploring</span>
+        <h3>The resources are the best starting point</h3>
+        <p>Downloadable tools, prompt cards, infographics, and interactive apps — all free, no sign-up required.</p>
+        <a class="button-secondary" href={withBase("/resources")} style="width: fit-content; margin-top: 0.5rem;">Browse resources →</a>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
+
+<style>
+  .about-bio {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-photo-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .about-photo {
+    width: 100%;
+    border-radius: var(--radius);
+    object-fit: cover;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+
+  .about-photo-caption {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+    max-width: none;
+  }
+
+  .about-audience {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .about-bio,
+    .about-audience {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

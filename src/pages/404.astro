@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../utils/withBase";
+---
+
+<BaseLayout title="Page Not Found" description="This page couldn't be found — but there's plenty more growing at The SEED Lab.">
+  <section class="not-found">
+    <div class="shell not-found-inner">
+      <div class="not-found-icon">🌱</div>
+      <span class="eyebrow">404 — Page not found</span>
+      <h1>This seed hasn't sprouted yet.</h1>
+      <p>
+        The page you're looking for doesn't exist — it may have moved, been renamed,
+        or perhaps it's still growing. Either way, there's plenty more to explore.
+      </p>
+      <div class="not-found-actions">
+        <a class="button" href={withBase("/")}>Go home</a>
+        <a class="button-secondary" href={withBase("/resources")}>Browse resources</a>
+        <a class="button-secondary" href={withBase("/say-hello")}>Say hello</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: 8rem 0;
+    text-align: center;
+  }
+
+  .not-found-inner {
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .not-found-icon {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .not-found-inner h1 {
+    max-width: none;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .not-found-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+</style>
