@@ -110,10 +110,12 @@ const pathWithoutBase =
   }
 
   .brand-sub {
-    font-size: 0.72rem;
-    color: var(--muted);
-    letter-spacing: 0.03em;
+    font-size: 0.68rem;
+    color: var(--muted-on-dark);
+    letter-spacing: 0.05em;
     line-height: 1;
+    font-family: "Space Grotesk", sans-serif;
+    text-transform: uppercase;
   }
 
   /* Desktop nav — visible by default */
@@ -135,14 +137,14 @@ const pathWithoutBase =
   }
 
   .hamburger:hover {
-    background: var(--accent-soft);
+    background: rgba(127, 176, 105, 0.15);
   }
 
   .hamburger span {
     display: block;
     width: 24px;
     height: 2px;
-    background: var(--text);
+    background: var(--text-on-dark);
     border-radius: 999px;
     transition: transform 200ms ease, opacity 200ms ease;
     transform-origin: center;
@@ -159,12 +161,12 @@ const pathWithoutBase =
     top: 100%;
     left: 0;
     right: 0;
-    background: rgba(250, 248, 243, 0.98);
+    background: rgba(14, 22, 40, 0.97);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--line-cosmic);
     padding: 1rem 0 1.5rem;
     z-index: 19;
-    box-shadow: 0 8px 32px rgba(40,65,40,0.12);
+    box-shadow: 0 8px 32px rgba(7, 10, 18, 0.4);
   }
 
   .mobile-menu.open {
@@ -184,16 +186,17 @@ const pathWithoutBase =
     display: block;
     padding: 0.8rem 1rem;
     border-radius: var(--radius-sm);
-    color: var(--text);
+    color: rgba(243, 232, 208, 0.8);
     font-weight: 500;
     font-size: 1.05rem;
-    transition: background 160ms ease;
+    font-family: "Space Grotesk", sans-serif;
+    transition: background 160ms ease, color 160ms ease;
   }
 
   .mobile-nav-link:hover,
   .mobile-nav-link.active {
-    background: var(--accent-soft);
-    color: var(--accent-deep);
+    background: rgba(127, 176, 105, 0.15);
+    color: var(--growth-green);
   }
 
   @media (max-width: 820px) {

@@ -1,0 +1,358 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import posts from "../../data/blog-posts.json";
+import resources from "../../data/resources.json";
+import { withBase } from "../../utils/withBase";
+
+export function getStaticPaths() {
+  return posts.map(p => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = posts.find(p => p.slug === slug)!;
+
+// Related resources
+const related = resources.filter(r => post.relatedResources?.includes(r.slug));
+
+// Next / prev posts
+const idx  = posts.findIndex(p => p.slug === slug);
+const prev = idx > 0 ? posts[idx - 1] : null;
+const next = idx < posts.length - 1 ? posts[idx + 1] : null;
+
+const categoryColour: Record<string, string> = {
+  "Reflection":            "fcat-gold",
+  "Classroom Systems":     "fcat-blue",
+  "Movement":              "fcat-green",
+  "Wellbeing":             "fcat-green",
+  "Behaviour & Belonging": "fcat-violet",
+  "Teaching Experiments":  "fcat-blue",
+};
+const catClass = categoryColour[post.category] ?? "fcat-gold";
+
+const pillColours: Record<string, string> = {
+  "Teaching Practice":       "pill-blue",
+  "Curriculum Design":       "pill-green",
+  "Assessment & Reflection": "pill-gold",
+  "Communication":           "pill-violet",
+  "Wellbeing & SEL":         "pill-green",
+  "Tech Integration":        "pill-blue",
+};
+---
+
+<BaseLayout
+  title={post.title}
+  description={post.summary}
+>
+
+  <!-- ── Breadcrumb ── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="shell">
+      <ol class="breadcrumb-list">
+        <li><a href={withBase("/")}>Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li><a href={withBase("/blog")}>Field Notes</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">{post.title}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Article hero ── -->
+  <section class="post-hero">
+    <div class="shell post-hero-inner">
+      <div class="post-meta">
+        <span class={`fn-cat ${catClass}`}>{post.category}</span>
+        <time class="post-date" datetime={post.dateISO}>{post.date}</time>
+        <span class="post-read">{post.readingTime} min read</span>
+      </div>
+      <h1 class="post-title">{post.title}</h1>
+      <p class="post-summary">{post.summary}</p>
+    </div>
+  </section>
+
+  <!-- ── Article body ── -->
+  <article class="section post-body" aria-label={post.title}>
+    <div class="shell">
+      <div class="post-content">
+        {post.content.map((paragraph, i) => (
+          <p class={i === 0 ? "post-para post-para--lead" : "post-para"}>{paragraph}</p>
+        ))}
+      </div>
+
+      <!-- Divider -->
+      <div class="post-divider" aria-hidden="true">✦</div>
+
+      <!-- Post nav -->
+      <nav class="post-nav" aria-label="More field notes">
+        {prev && (
+          <a class="post-nav-link post-nav-link--prev" href={withBase(`/blog/${prev.slug}`)}>
+            <span class="nav-dir">← Previous</span>
+            <span class="nav-title">{prev.title}</span>
+          </a>
+        )}
+        <a class="post-nav-all" href={withBase("/blog")}>All Field Notes</a>
+        {next && (
+          <a class="post-nav-link post-nav-link--next" href={withBase(`/blog/${next.slug}`)}>
+            <span class="nav-dir">Next →</span>
+            <span class="nav-title">{next.title}</span>
+          </a>
+        )}
+      </nav>
+    </div>
+  </article>
+
+  <!-- ── Related resources ── -->
+  {related.length > 0 && (
+    <section class="section post-related">
+      <div class="shell">
+        <div class="section-head">
+          <div class="stack">
+            <span class="eyebrow">From the Resource Shelf</span>
+            <h2>Resources connected to this field note.</h2>
+          </div>
+          <a class="button-secondary" href={withBase("/resources")}>Browse all resources</a>
+        </div>
+        <div class="resources-grid">
+          {related.map(r => {
+            const rHref = r.hasDetailPage
+              ? withBase(`/resources/${r.slug}`)
+              : (r.href.startsWith("http") || r.href.startsWith("#") ? r.href : withBase(r.href));
+            const rPill = pillColours[r.category] ?? "pill-blue";
+            return (
+              <article class="resource-card rcard">
+                {r.image && (
+                  <div class="rcard-img-wrap">
+                    <img src={r.image} alt={r.title} class="rcard-img" loading="lazy" />
+                  </div>
+                )}
+                <div class="rcard-body">
+                  <div class="rcard-meta">
+                    <span class={`pill ${rPill}`}>{r.category}</span>
+                    <span class="pill pill-outline">{r.type}</span>
+                  </div>
+                  <h3 class="rcard-title">{r.title}</h3>
+                  <p class="rcard-tagline">{r.tagline}</p>
+                  <div class="rcard-footer">
+                    <a href={rHref} class="resource-cta">{r.hasDetailPage ? "View Resource" : r.ctaLabel} →</a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+</BaseLayout>
+
+<style>
+  /* ── Shared pills ── */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pill-blue   { background: rgba(125,211,252,0.12); color: #3a9dbf; }
+  .pill-green  { background: rgba(127,176,105,0.12); color: var(--accent-deep); }
+  .pill-gold   { background: rgba(242,199,102,0.15); color: var(--lantern-gold-deep); }
+  .pill-violet { background: rgba(139,124,246,0.12); color: #6b5fd4; }
+  .pill-outline { background: transparent; border: 1px solid var(--line-strong); color: var(--muted); }
+
+  .fn-cat {
+    display: inline-flex;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .fcat-gold   { background: rgba(242,199,102,0.15); color: var(--lantern-gold-deep); }
+  .fcat-blue   { background: rgba(125,211,252,0.12); color: #3a9dbf; }
+  .fcat-green  { background: rgba(127,176,105,0.12); color: var(--accent-deep); }
+  .fcat-violet { background: rgba(139,124,246,0.12); color: #6b5fd4; }
+
+  /* ── Breadcrumb ── */
+  .breadcrumb { background: var(--bg); border-bottom: 1px solid var(--line); padding: 0.75rem 0; }
+  .breadcrumb-list {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; gap: 0.5rem; flex-wrap: wrap;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem; color: var(--muted);
+  }
+  .breadcrumb-list a { color: var(--accent-deep); text-decoration: none; transition: color 160ms ease; }
+  .breadcrumb-list a:hover { color: var(--lantern-gold-deep); }
+  .breadcrumb-list [aria-current="page"] { color: var(--text); font-weight: 600; }
+
+  /* ── Post hero ── */
+  .post-hero {
+    background: var(--bg-soft);
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .post-hero-inner { max-width: 760px; }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .post-date, .post-read {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .post-date::before, .post-read::before {
+    content: "·";
+    margin-right: 0.75rem;
+    color: var(--line-strong);
+  }
+
+  .post-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    color: var(--text);
+    line-height: 1.1;
+    margin: 0 0 1rem;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  .post-summary {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 56ch;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Body ── */
+  .post-body { background: var(--bg); }
+
+  .post-content {
+    max-width: 680px;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .post-para {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.85;
+    max-width: 66ch;
+    margin: 0;
+  }
+
+  .post-para--lead {
+    font-size: 1.15rem;
+    color: var(--text);
+    font-family: "Fraunces", serif;
+    line-height: 1.7;
+  }
+
+  /* ── Divider ── */
+  .post-divider {
+    text-align: left;
+    font-size: 1.5rem;
+    color: var(--lantern-gold);
+    filter: drop-shadow(0 0 8px rgba(242,199,102,0.35));
+    margin: 3rem 0 2rem;
+    max-width: 680px;
+  }
+
+  /* ── Post nav ── */
+  .post-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    max-width: 680px;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    max-width: 220px;
+    transition: color 160ms ease;
+  }
+  .post-nav-link--next { text-align: right; }
+
+  .nav-dir {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .nav-title {
+    font-family: "Fraunces", serif;
+    font-size: 0.95rem;
+    color: var(--accent-deep);
+    line-height: 1.35;
+  }
+
+  .post-nav-link:hover .nav-title { color: var(--lantern-gold-deep); }
+
+  .post-nav-all {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 999px;
+    transition: border-color 160ms ease, color 160ms ease;
+    white-space: nowrap;
+  }
+  .post-nav-all:hover { border-color: var(--seed-green); color: var(--accent-deep); }
+
+  /* ── Related resources ── */
+  .post-related { background: var(--bg-soft); }
+
+  .rcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  }
+  .rcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--warm-sand); }
+  .rcard-img-wrap { overflow: hidden; aspect-ratio: 4 / 3; background: var(--bg-soft); }
+  .rcard-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rcard-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; gap: 0.6rem; }
+  .rcard-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .rcard-title { font-family: "Fraunces", serif; font-size: 1.15rem; font-weight: 600; color: var(--text); margin: 0; line-height: 1.25; }
+  .rcard-tagline { font-family: "Fraunces", serif; font-style: italic; font-size: 0.9rem; color: var(--accent-deep); margin: 0; max-width: none; }
+  .rcard-footer { padding-top: 1rem; border-top: 1px solid var(--line); margin-top: auto; }
+  .resource-cta { font-family: "Space Grotesk", sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--accent-deep); text-decoration: none; transition: color 160ms ease; }
+  .resource-cta:hover { color: var(--lantern-gold-deep); }
+
+  @media (max-width: 600px) {
+    .post-nav { flex-direction: column; align-items: flex-start; }
+    .post-nav-link--next { text-align: left; }
+    .post-nav-all { align-self: center; }
+  }
+</style>

@@ -7,26 +7,95 @@ import { withBase } from "../utils/withBase";
   title="Inside My Classroom"
   description="A window into real teaching practice — curriculum design, learning routines, assessment, and day-to-day life in the classroom."
 >
-  <section class="page-hero">
-    <div class="shell two-column">
-      <div class="stack">
-        <span class="eyebrow">Inside My Classroom</span>
-        <h1>How this actually works in a real classroom.</h1>
-        <p>
-          This section answers the question teachers ask most: <em>but what does it actually look like?</em>
-          Real examples, real routines, and real reflections from day-to-day practice.
+  <!-- ── Cosmic hero ── -->
+  <section class="classroom-hero">
+    <div class="shell">
+      <div class="ch-inner">
+        <span class="eyebrow cosmic">Inside My Classroom</span>
+        <h1 class="ch-title">Systems, routines, and learning in motion.</h1>
+        <p class="ch-lead">
+          Step inside the classroom structures, routines, visuals, and learning systems that
+          shape my PE and wellbeing practice. This is the real practice behind the resources.
+        </p>
+        <p class="ch-sub">
+          Real teaching. Real examples. For lessons that wobble before they bloom.
         </p>
       </div>
-      <div class="panel stack">
-        <span class="eyebrow">What you'll find here</span>
-        <h3>Practical, not theoretical</h3>
-        <ul class="list-clean">
-          <li>Curriculum planning and alignment examples</li>
-          <li>Assessment and reflection systems in action</li>
-          <li>Daily routines and classroom structures</li>
-          <li>Unit and lesson design, start to finish</li>
-          <li>Events, experiences, and large-scale planning</li>
-        </ul>
+    </div>
+  </section>
+
+  <!-- ── Teaching philosophy ── -->
+  <section class="section ch-philosophy">
+    <div class="shell">
+      <div class="phil-grid">
+        <div class="phil-copy stack">
+          <span class="eyebrow">Teaching philosophy</span>
+          <h2>PE as a place to become, not just to perform.</h2>
+          <p>
+            This section answers the question teachers ask most:
+            <em>but what does it actually look like?</em>
+          </p>
+          <p>
+            My teaching is built around the belief that physical education is one of the most
+            powerful spaces in a school. It's where children learn how to cooperate under pressure,
+            manage their emotions in public, take risks in front of peers, and discover something real
+            about who they are becoming.
+          </p>
+          <p>
+            Everything on this page — the routines, the tech tools, the planning structures — comes
+            back to the same question: how do we help every child feel safe enough to try?
+          </p>
+        </div>
+
+        <!-- Constellation map of principles -->
+        <div class="constellation-map" aria-label="Core teaching principles">
+          <div class="const-title">Core principles</div>
+          <svg class="const-lines" viewBox="0 0 300 280" aria-hidden="true">
+            <g stroke="rgba(125,211,252,0.15)" stroke-width="1" fill="none">
+              <line x1="150" y1="140" x2="80"  y2="60"/>
+              <line x1="150" y1="140" x2="220" y2="60"/>
+              <line x1="150" y1="140" x2="60"  y2="180"/>
+              <line x1="150" y1="140" x2="240" y2="180"/>
+              <line x1="150" y1="140" x2="150" y2="240"/>
+              <line x1="80"  y1="60"  x2="220" y2="60"/>
+              <line x1="60"  y1="180" x2="240" y2="180"/>
+            </g>
+            <g fill="rgba(127,176,105,0.5)">
+              <circle cx="150" cy="140" r="3"/>
+              <circle cx="80"  cy="60"  r="2"/>
+              <circle cx="220" cy="60"  r="2"/>
+              <circle cx="60"  cy="180" r="2"/>
+              <circle cx="240" cy="180" r="2"/>
+              <circle cx="150" cy="240" r="2"/>
+            </g>
+          </svg>
+          <div class="const-nodes">
+            <div class="const-node const-node--centre">
+              <span class="node-label">Movement<br/>& Learning</span>
+            </div>
+            <div class="const-node const-node--tl">
+              <span class="node-icon">🛡️</span>
+              <span class="node-label">Psychological<br/>Safety</span>
+            </div>
+            <div class="const-node const-node--tr">
+              <span class="node-icon">🤝</span>
+              <span class="node-label">Belonging<br/>& Connection</span>
+            </div>
+            <div class="const-node const-node--ml">
+              <span class="node-icon">💪</span>
+              <span class="node-label">Challenge<br/>& Capability</span>
+            </div>
+            <div class="const-node const-node--mr">
+              <span class="node-icon">🔍</span>
+              <span class="node-label">Reflection<br/>& Growth</span>
+            </div>
+            <div class="const-node const-node--b">
+              <span class="node-icon">🌱</span>
+              <span class="node-label">Identity<br/>& Becoming</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -451,6 +520,121 @@ import { withBase } from "../utils/withBase";
 </BaseLayout>
 
 <style>
+  /* ── Cosmic hero ── */
+  .classroom-hero {
+    background:
+      radial-gradient(ellipse 55% 50% at 85% 20%, rgba(90,40,130,0.25) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 15% 75%, rgba(20,100,130,0.20) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 0%, #1a2f55 0%, var(--deep-navy) 55%, var(--space-black) 100%);
+    padding: 5rem 0 4rem;
+    border-bottom: 1px solid var(--line-cosmic);
+  }
+  .ch-inner { max-width: 640px; }
+  .ch-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    color: var(--starlight);
+    line-height: 1.08;
+    margin: 0.5rem 0 0;
+    letter-spacing: -0.02em;
+  }
+  .ch-lead {
+    font-size: 1.1rem;
+    color: rgba(243,232,208,0.8);
+    max-width: 54ch;
+    margin-top: 1.25rem;
+    line-height: 1.75;
+  }
+  .ch-sub {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 0.98rem;
+    color: var(--growth-green);
+    margin-top: 0.75rem;
+    max-width: none;
+  }
+
+  /* ── Philosophy ── */
+  .ch-philosophy {
+    background:
+      radial-gradient(ellipse 55% 35% at 90% 10%, rgba(200,158,60,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 35% 25% at 10% 90%, rgba(160,120,50,0.05) 0%, transparent 60%),
+      var(--bg);
+  }
+  .phil-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .phil-copy em { color: var(--accent-deep); font-style: italic; }
+
+  /* ── Constellation map ── */
+  .constellation-map {
+    position: relative;
+    background: var(--midnight-blue);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line-cosmic);
+    padding: 2rem;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .const-title {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--lantern-gold);
+    margin-bottom: 0.75rem;
+  }
+  .const-lines {
+    width: 100%;
+    flex: 1;
+    position: absolute;
+    inset: 2rem;
+    pointer-events: none;
+  }
+  .const-nodes {
+    position: relative;
+    flex: 1;
+    min-height: 280px;
+  }
+  .const-node {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    text-align: center;
+  }
+  .const-node--centre { top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .const-node--tl     { top: 5%;  left: 15%; }
+  .const-node--tr     { top: 5%;  right: 10%; }
+  .const-node--ml     { top: 50%; left: 2%; transform: translateY(-50%); }
+  .const-node--mr     { top: 50%; right: 2%; transform: translateY(-50%); }
+  .const-node--b      { bottom: 0%; left: 50%; transform: translateX(-50%); }
+
+  .node-icon { font-size: 1.2rem; line-height: 1; }
+  .node-label {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: rgba(243,232,208,0.75);
+    line-height: 1.3;
+    max-width: 7rem;
+  }
+  .const-node--centre .node-label {
+    font-family: "Fraunces", serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: var(--growth-green);
+    font-weight: 600;
+  }
+
+  /* ── Existing classroom grid ── */
   .classroom-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -458,14 +642,16 @@ import { withBase } from "../utils/withBase";
   }
 
   .card-cta {
-    color: var(--accent);
-    font-weight: 600;
-    font-size: 0.95rem;
+    color: var(--accent-deep);
+    font-weight: 700;
+    font-size: 0.9rem;
+    font-family: "Space Grotesk", sans-serif;
     margin-top: 0.5rem;
+    transition: color 160ms ease;
   }
 
   .card-cta:hover {
-    color: var(--accent-deep);
+    color: var(--lantern-gold-deep);
   }
 
   em {
@@ -548,8 +734,8 @@ import { withBase } from "../utils/withBase";
   .tech-feat-icon { font-size: 1.75rem; }
 
   .tech-feat-card h4 {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 1.25rem;
+    font-family: "Fraunces", serif;
+    font-size: 1.2rem;
     font-weight: 600;
     color: var(--text);
   }
@@ -726,18 +912,20 @@ import { withBase } from "../utils/withBase";
   .badge-tool {
     display: inline-flex;
     background: var(--terra-soft);
-    color: var(--terra-deep);
+    color: var(--lantern-gold-deep);
     font-size: 0.75rem;
     font-weight: 700;
     padding: 0.3rem 0.8rem;
     border-radius: 999px;
     letter-spacing: 0.03em;
+    font-family: "Space Grotesk", sans-serif;
   }
 
   .circle-quote {
     font-style: italic;
+    font-family: "Fraunces", serif;
     color: var(--text);
-    border-left: 3px solid var(--terra);
+    border-left: 3px solid var(--lantern-gold);
     padding-left: 1rem;
     font-size: 0.95rem;
     max-width: 52ch;
@@ -1046,8 +1234,10 @@ import { withBase } from "../utils/withBase";
     .classroom-grid,
     .tech-top,
     .tech-features,
-    .circle-section {
+    .circle-section,
+    .phil-grid {
       grid-template-columns: 1fr;
     }
+    .constellation-map { min-height: 300px; }
   }
 </style>

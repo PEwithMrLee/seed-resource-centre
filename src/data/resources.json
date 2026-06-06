@@ -10,7 +10,17 @@
     "ctaLabel": "Download PDF",
     "href": "/teacher-prompt-card1.pdf",
     "image": "/teacher-prompt-card1.png",
-    "featured": true
+    "featured": true,
+    "hasDetailPage": true,
+    "origin": "Grown from real PE lesson starts.",
+    "bestUsedWhen": [
+      "A lesson needs a calmer, more intentional start",
+      "Students arrive distracted or dysregulated",
+      "You want routines to feel safe and predictable",
+      "You're reflecting on your own lesson opening habits"
+    ],
+    "howItWorks": "The G.R.E.E.T framework gives you five clear prompts for designing lesson openings that work — Greet, Routine, Engage, Explain, Transition. Use it as a planning checklist before the lesson or as a reflection tool after. It's designed to fit on one page so it stays useful, not theoretical.",
+    "reflectionPrompt": "What small shift could make the beginning of this lesson feel safer, clearer, or more connected for your students?"
   },
   {
     "slug": "say-less-get-more",
@@ -23,7 +33,17 @@
     "ctaLabel": "Download PDF",
     "href": "/teacher-prompt-card2.pdf",
     "image": "/teacher-prompt-card2.png",
-    "featured": true
+    "featured": true,
+    "hasDetailPage": true,
+    "origin": "Born from one too many lessons where I heard my own voice more than theirs.",
+    "bestUsedWhen": [
+      "You notice students zoning out during instructions",
+      "You want to increase student agency and ownership",
+      "You're working on reducing unnecessary teacher talk",
+      "You want to create more space for student thinking"
+    ],
+    "howItWorks": "The L.E.S.S framework is a practical reminder card for in-lesson use. Limit your words. Engage before explaining. Signal, don't narrate. Step back and let them think. Each prompt is short enough to remember mid-lesson — the goal is to make silence feel purposeful rather than awkward.",
+    "reflectionPrompt": "In your next lesson, count how many times you speak when a student could have instead. What did you notice?"
   },
   {
     "slug": "vertical-horizontal-alignment",
@@ -36,7 +56,17 @@
     "ctaLabel": "Download PDF",
     "href": "/teacher-infographic1.pdf",
     "image": "/teacher-infographic1.png",
-    "featured": true
+    "featured": true,
+    "hasDetailPage": true,
+    "origin": "Created to explain curriculum coherence without the jargon.",
+    "bestUsedWhen": [
+      "Planning across year groups or grade bands",
+      "Having curriculum conversations with your team",
+      "Reviewing whether your units connect meaningfully",
+      "Explaining curriculum design to newer teachers"
+    ],
+    "howItWorks": "The infographic maps vertical alignment (how skills and concepts deepen year on year) against horizontal alignment (how subjects and units connect within the same year). The garden metaphor — roots, trunk, branches — makes abstract curriculum theory visible and easy to discuss in a team meeting.",
+    "reflectionPrompt": "Where does your curriculum have strong roots? Where are the branches growing in different directions?"
   },
   {
     "slug": "making-learning-visible",
@@ -49,7 +79,17 @@
     "ctaLabel": "Download PDF",
     "href": "/teacher-infographic2.pdf",
     "image": "/teacher-infographic2.png",
-    "featured": true
+    "featured": true,
+    "hasDetailPage": true,
+    "origin": "Grew from watching students genuinely surprise themselves.",
+    "bestUsedWhen": [
+      "You want students to take more ownership of their learning",
+      "You're reviewing your approach to assessment and feedback",
+      "You want practical strategies, not just theory",
+      "You're exploring visible learning or assessment for learning"
+    ],
+    "howItWorks": "This infographic pulls together key strategies for making learning visible — through student reflection, documentation, peer feedback, and teacher observation. Each strategy is framed around what it looks like in practice, not just in theory. Print it, share it, stick it on your planning wall.",
+    "reflectionPrompt": "What would your students say about their learning if you asked them right now? Would they be able to tell you what they're getting better at?"
   },
   {
     "slug": "teacher-communication-assistant",
@@ -62,7 +102,17 @@
     "ctaLabel": "Make a Copy",
     "href": "#",
     "image": "/teacher-communication-assistant1.png",
-    "featured": false
+    "featured": false,
+    "hasDetailPage": true,
+    "origin": "Built after one too many late-night emails that needed a second pair of eyes.",
+    "bestUsedWhen": [
+      "Writing a sensitive message to a parent or caregiver",
+      "Preparing for a difficult professional conversation",
+      "You want to sound confident, clear, and kind — at once",
+      "You're a newer teacher building communication confidence"
+    ],
+    "howItWorks": "Open the Google Sheet and make a copy to your own Drive. Choose from pre-written communication frameworks for common scenarios — parent updates, concern emails, positive feedback, meeting follow-ups — and adapt the language to your context. No login required beyond your Google account.",
+    "reflectionPrompt": "What's one type of communication you find yourself putting off? Could a template take away enough friction to make it easier?"
   },
   {
     "slug": "class-compass",
@@ -75,7 +125,12 @@
     "ctaLabel": "Open the App",
     "href": "/class-compass/",
     "image": "/teacher-infographic2.png",
-    "featured": false
+    "featured": false,
+    "hasDetailPage": false,
+    "origin": "Built because behaviour support shouldn't require a conference and a consultant.",
+    "bestUsedWhen": [],
+    "howItWorks": "",
+    "reflectionPrompt": ""
   },
   {
     "slug": "pe-challenges",
@@ -88,7 +143,12 @@
     "ctaLabel": "Open the App",
     "href": "/pe-challenges.html",
     "image": "/teacher-prompt-card1.png",
-    "featured": false
+    "featured": false,
+    "hasDetailPage": false,
+    "origin": "",
+    "bestUsedWhen": [],
+    "howItWorks": "",
+    "reflectionPrompt": ""
   },
   {
     "slug": "pe-circle",
@@ -101,7 +161,12 @@
     "ctaLabel": "Open the App",
     "href": "/circle-app.html",
     "image": "/teacher-infographic2.png",
-    "featured": false
+    "featured": false,
+    "hasDetailPage": false,
+    "origin": "",
+    "bestUsedWhen": [],
+    "howItWorks": "",
+    "reflectionPrompt": ""
   },
   {
     "slug": "team-quest",
@@ -114,6 +179,11 @@
     "ctaLabel": "Open the App",
     "href": "/team-quest.html",
     "image": "/teacher-infographic1.png",
-    "featured": false
+    "featured": false,
+    "hasDetailPage": false,
+    "origin": "",
+    "bestUsedWhen": [],
+    "howItWorks": "",
+    "reflectionPrompt": ""
   }
 ]

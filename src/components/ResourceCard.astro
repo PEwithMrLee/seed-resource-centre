@@ -11,6 +11,8 @@ interface Props {
   href: string;
   ctaLabel: string;
   image?: string;
+  slug?: string;
+  hasDetailPage?: boolean;
 }
 
 const {
@@ -22,26 +24,190 @@ const {
   category,
   href,
   ctaLabel,
-  image
+  image,
+  slug,
+  hasDetailPage = false,
 } = Astro.props;
 
-const isExternal = href.startsWith("http");
-const finalHref = isExternal ? href : withBase(href);
+// If the resource has a detail page, link to it; otherwise link directly
+const isExternal = href.startsWith("http") || href.startsWith("#");
+const finalHref  = hasDetailPage && slug
+  ? withBase(`/resources/${slug}`)
+  : isExternal ? href : withBase(href);
+const finalLabel = hasDetailPage ? "View Resource" : ctaLabel;
+const finalTarget = hasDetailPage ? undefined : (isExternal ? "_blank" : undefined);
+const finalRel    = hasDetailPage ? undefined : (isExternal ? "noreferrer" : undefined);
+
+// Category to colour mapping
+const categoryColour: Record<string, string> = {
+  "Teaching Practice":       "pill-blue",
+  "Curriculum Design":       "pill-green",
+  "Assessment & Reflection": "pill-gold",
+  "Communication":           "pill-violet",
+  "Wellbeing & SEL":         "pill-green",
+  "Tech Integration":        "pill-blue",
+};
+const pillClass = categoryColour[category] ?? "pill-blue";
 ---
 
-<article class="resource-card">
-  {image && <img src={image} alt={title} class="resource-image" />}
-  <div class="resource-meta">
-    <span>{type}</span>
-    <span>{audience}</span>
-  </div>
-  <h3>{title}</h3>
-  <p class="resource-tagline">{tagline}</p>
-  <p>{description}</p>
-  <div class="resource-footer">
-    <span class="resource-category">{category}</span>
-    <a href={finalHref} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noreferrer" : undefined}>
-      {ctaLabel}
-    </a>
+<article class="resource-card" data-category={category} data-type={type}>
+  {image && (
+    <div class="resource-img-wrap">
+      <img src={image} alt={title} class="resource-image" loading="lazy" />
+    </div>
+  )}
+  <div class="resource-body">
+    <div class="resource-meta">
+      <span class={`pill ${pillClass}`}>{category}</span>
+      <span class="pill pill-outline">{type}</span>
+    </div>
+    <h3 class="resource-title">{title}</h3>
+    <p class="resource-tagline">{tagline}</p>
+    <p class="resource-desc">{description}</p>
+    <div class="resource-footer">
+      <span class="resource-audience">For: {audience}</span>
+      <a
+        href={finalHref}
+        class="resource-cta"
+        target={finalTarget}
+        rel={finalRel}
+        aria-label={`${finalLabel} — ${title}`}
+      >
+        {finalLabel} →
+      </a>
+    </div>
   </div>
 </article>
+
+<style>
+  .resource-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  }
+
+  .resource-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--warm-sand);
+  }
+
+  .resource-img-wrap {
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--bg-soft);
+  }
+
+  .resource-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms ease;
+    display: block;
+  }
+
+  .resource-card:hover .resource-image {
+    transform: scale(1.03);
+  }
+
+  .resource-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.6rem;
+  }
+
+  .resource-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .pill-blue   { background: rgba(125,211,252,0.12); color: #3a9dbf; }
+  .pill-green  { background: rgba(127,176,105,0.12); color: var(--accent-deep); }
+  .pill-gold   { background: rgba(242,199,102,0.15); color: var(--lantern-gold-deep); }
+  .pill-violet { background: rgba(139,124,246,0.12); color: #6b5fd4; }
+
+  .pill-outline {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+  }
+
+  .resource-title {
+    font-family: "Fraunces", serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .resource-tagline {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--accent-deep);
+    margin: 0;
+    max-width: none;
+    line-height: 1.4;
+  }
+
+  .resource-desc {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin: 0;
+    max-width: none;
+    flex: 1;
+  }
+
+  .resource-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    margin-top: 0.5rem;
+  }
+
+  .resource-audience {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: "Space Grotesk", sans-serif;
+  }
+
+  .resource-cta {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-deep);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 160ms ease;
+  }
+
+  .resource-cta:hover {
+    color: var(--lantern-gold-deep);
+  }
+</style>

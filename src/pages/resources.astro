@@ -2,30 +2,435 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ResourceCard from "../components/ResourceCard.astro";
 import resources from "../data/resources.json";
+
+const categories = [...new Set(resources.map(r => r.category))];
+const types      = [...new Set(resources.map(r => r.type))];
 ---
 
 <BaseLayout
   title="Resources"
-  description="Free downloadable teaching resources — prompt cards, planning tools, infographics and more. Created by a classroom teacher for primary and IB educators."
+  description="Free practical teaching resources — prompt cards, infographics, planning tools, and classroom apps. Created by a primary PE and wellbeing educator."
 >
-  <section class="page-hero">
-    <div class="shell stack">
-      <span class="eyebrow">Resources</span>
-      <h1>A small, thoughtful library to begin with.</h1>
-      <p>
-        Every example resource is stored as structured content, making this page easy to update as
-        SEED grows.
-      </p>
+
+  <!-- ── Page hero ── -->
+  <section class="resources-hero">
+    <div class="shell">
+      <div class="rh-inner">
+        <span class="eyebrow cosmic">The Resource Shelf</span>
+        <h1 class="rh-title">Practical tools from the archive.</h1>
+        <p class="rh-lead">
+          A growing collection of free resources for teachers who care about helping children
+          feel safe, connected, capable, and ready to grow.
+        </p>
+        <p class="rh-trust">
+          <span class="trust-pip"></span> Free to use
+          <span class="trust-pip"></span> No sign-up required
+          <span class="trust-pip"></span> Classroom-tested
+          <span class="trust-pip"></span> Still growing
+        </p>
+      </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="shell resources-grid">
-      {resources.map((resource) => (
-        <div id={resource.slug}>
-          <ResourceCard {...resource} />
+  <!-- ── Search + Filter ── -->
+  <section class="resources-controls">
+    <div class="shell">
+
+      <div class="search-wrap">
+        <label for="resource-search" class="sr-only">Search resources</label>
+        <svg class="search-icon" aria-hidden="true" viewBox="0 0 20 20" fill="none">
+          <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M13 13l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input
+          id="resource-search"
+          type="search"
+          placeholder="Search resources, reflections, or classroom curiosities…"
+          autocomplete="off"
+          aria-label="Search resources"
+        />
+      </div>
+
+      <div class="filter-row" aria-label="Filter by category">
+        <span class="filter-label">Topic:</span>
+        <div class="filter-chips" id="category-filters">
+          <button class="chip chip-active" data-filter="category" data-value="all">All</button>
+          {categories.map(cat => (
+            <button class="chip" data-filter="category" data-value={cat}>{cat}</button>
+          ))}
         </div>
-      ))}
+      </div>
+
+      <div class="filter-row" aria-label="Filter by resource type">
+        <span class="filter-label">Type:</span>
+        <div class="filter-chips" id="type-filters">
+          <button class="chip chip-active" data-filter="type" data-value="all">All</button>
+          {types.map(t => (
+            <button class="chip" data-filter="type" data-value={t}>{t}</button>
+          ))}
+        </div>
+      </div>
+
     </div>
   </section>
+
+  <!-- ── Resource grid ── -->
+  <section class="section resources-shelf">
+    <div class="shell">
+
+      <div class="resources-count" id="resources-count" aria-live="polite">
+        Showing all {resources.length} resources
+      </div>
+
+      <div class="resources-grid" id="resources-grid">
+        {resources.map((resource) => (
+          <div
+            class="resource-item"
+            id={resource.slug}
+            data-category={resource.category}
+            data-type={resource.type}
+            data-search={`${resource.title} ${resource.tagline} ${resource.description} ${resource.category} ${resource.type}`.toLowerCase()}
+          >
+            <ResourceCard {...resource} />
+          </div>
+        ))}
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" id="empty-state" hidden>
+        <span class="empty-icon" aria-hidden="true">🌱</span>
+        <p class="empty-heading">Nothing sprouted for that search yet.</p>
+        <p class="empty-sub">Try a different word, or clear the filters to browse everything.</p>
+        <button class="button-secondary" id="reset-all">Clear filters</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Bottom CTA ── -->
+  <section class="section-cosmic resources-cta">
+    <div class="shell">
+      <div class="rcta-inner">
+        <span class="eyebrow cosmic">Can't find what you need?</span>
+        <h2 class="cosmic-heading">The SEED Lab grows through genuine teacher needs.</h2>
+        <p>If there's a resource, template, or tool you'd find useful — get in touch. I'd love to hear what would help.</p>
+        <div class="rcta-actions">
+          <a class="button-terra" href="/say-hello">Request a Resource</a>
+          <a class="button-ghost" href="/blog">Read the Field Notes</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
+
+<script>
+  const searchInput   = document.getElementById('resource-search') as HTMLInputElement;
+  const grid          = document.getElementById('resources-grid')!;
+  const emptyState    = document.getElementById('empty-state')!;
+  const countEl       = document.getElementById('resources-count')!;
+  const resetBtn      = document.getElementById('reset-all')!;
+  const items         = Array.from(grid.querySelectorAll('.resource-item')) as HTMLElement[];
+
+  let activeCategory  = 'all';
+  let activeType      = 'all';
+  let searchQuery     = '';
+
+  function applyFilters() {
+    let visible = 0;
+
+    items.forEach(item => {
+      const cat    = item.dataset.category ?? '';
+      const type   = item.dataset.type ?? '';
+      const search = item.dataset.search ?? '';
+
+      const matchCat    = activeCategory === 'all' || cat === activeCategory;
+      const matchType   = activeType === 'all'     || type === activeType;
+      const matchSearch = !searchQuery || search.includes(searchQuery);
+
+      const show = matchCat && matchType && matchSearch;
+      item.hidden = !show;
+      if (show) visible++;
+    });
+
+    const total = items.length;
+    countEl.textContent = visible === total
+      ? `Showing all ${total} resources`
+      : `Showing ${visible} of ${total} resources`;
+
+    emptyState.hidden = visible > 0;
+  }
+
+  // Search
+  searchInput.addEventListener('input', () => {
+    searchQuery = searchInput.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  // Chips
+  document.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = (btn as HTMLElement).dataset.filter!;
+      const value  = (btn as HTMLElement).dataset.value!;
+
+      // Update active chip in group
+      const group = filter === 'category' ? '#category-filters' : '#type-filters';
+      document.querySelectorAll(`${group} .chip`).forEach(c => c.classList.remove('chip-active'));
+      btn.classList.add('chip-active');
+
+      if (filter === 'category') activeCategory = value;
+      if (filter === 'type')     activeType = value;
+
+      applyFilters();
+    });
+  });
+
+  // Reset
+  resetBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    searchQuery = '';
+    activeCategory = 'all';
+    activeType = 'all';
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-active'));
+    document.querySelector('[data-filter="category"][data-value="all"]')?.classList.add('chip-active');
+    document.querySelector('[data-filter="type"][data-value="all"]')?.classList.add('chip-active');
+    applyFilters();
+  });
+</script>
+
+<style>
+  /* ── Screen-reader only ── */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border: 0;
+  }
+
+  /* ── Hero ── */
+  .resources-hero {
+    background:
+      radial-gradient(ellipse 55% 50% at 85% 20%, rgba(90,40,130,0.25) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 15% 75%, rgba(20,100,130,0.20) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 0%, #1a2f55 0%, var(--deep-navy) 55%, var(--space-black) 100%);
+    padding: 5rem 0 4rem;
+    border-bottom: 1px solid var(--line-cosmic);
+  }
+
+  .rh-inner { max-width: 640px; }
+
+  .rh-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    color: var(--starlight);
+    line-height: 1.08;
+    margin: 0.5rem 0 0;
+    letter-spacing: -0.02em;
+  }
+
+  .rh-lead {
+    font-size: 1.1rem;
+    color: rgba(243,232,208,0.8);
+    max-width: 54ch;
+    margin-top: 1.25rem;
+    line-height: 1.75;
+  }
+
+  .rh-trust {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(243,232,208,0.45);
+    max-width: none;
+  }
+
+  .trust-pip {
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--seed-green);
+    box-shadow: 0 0 5px var(--seed-green);
+    flex-shrink: 0;
+  }
+
+  /* ── Controls ── */
+  .resources-controls {
+    background: var(--bg);
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 80px;
+    z-index: 10;
+    backdrop-filter: blur(12px);
+    background: rgba(248,244,232,0.95);
+  }
+
+  .search-wrap {
+    position: relative;
+    margin-bottom: 1.25rem;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  #resource-search {
+    width: 100%;
+    font-family: "Atkinson Hyperlegible", sans-serif;
+    font-size: 0.98rem;
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--line-strong);
+    background: var(--surface-strong);
+    color: var(--text);
+    outline: none;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+  }
+
+  #resource-search:focus {
+    border-color: var(--seed-green);
+    box-shadow: 0 0 0 3px rgba(127,176,105,0.15);
+  }
+
+  #resource-search::placeholder { color: var(--muted); opacity: 0.7; }
+
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .filter-label {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    flex-shrink: 0;
+    min-width: 3.5rem;
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .chip {
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    background: transparent;
+    color: var(--muted);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+    white-space: nowrap;
+  }
+
+  .chip:hover {
+    border-color: var(--seed-green);
+    color: var(--accent-deep);
+  }
+
+  .chip-active {
+    border-color: var(--seed-green);
+    background: var(--accent-soft);
+    color: var(--accent-deep);
+  }
+
+  /* ── Shelf ── */
+  .resources-shelf {
+    background:
+      radial-gradient(ellipse 50% 40% at 5% 95%, rgba(80,140,80,0.08) 0%, transparent 65%),
+      radial-gradient(ellipse 35% 30% at 95% 5%, rgba(100,160,100,0.05) 0%, transparent 60%),
+      var(--bg-soft);
+    padding-top: 2.5rem;
+  }
+
+  .resources-count {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .empty-icon { font-size: 3rem; line-height: 1; }
+
+  .empty-heading {
+    font-family: "Fraunces", serif;
+    font-size: 1.4rem;
+    color: var(--text);
+    margin: 0;
+    max-width: none;
+  }
+
+  .empty-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 42ch;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ── Bottom CTA ── */
+  .resources-cta { padding: 5rem 0 6rem; }
+
+  .rcta-inner {
+    max-width: 580px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .rcta-inner p {
+    color: var(--muted-on-dark);
+    font-size: 1.05rem;
+    max-width: 52ch;
+  }
+
+  .rcta-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .resources-controls { top: 0; position: static; }
+    .filter-row { flex-direction: column; align-items: flex-start; }
+  }
+</style>
