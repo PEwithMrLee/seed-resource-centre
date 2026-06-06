@@ -65,6 +65,19 @@
     "featured": false
   },
   {
+    "slug": "class-compass",
+    "title": "Class Compass",
+    "type": "Interactive App",
+    "audience": "Students & Teachers",
+    "description": "A student wellbeing and SEL app that helps children navigate emotions, build coping strategies, and develop self-awareness — through missions, reflections, a personal toolkit, and badge progression.",
+    "tagline": "Finding your direction through big feelings.",
+    "category": "Wellbeing & SEL",
+    "ctaLabel": "Open the App",
+    "href": "/class-compass/",
+    "image": "/teacher-infographic2.png",
+    "featured": false
+  },
+  {
     "slug": "pe-challenges",
     "title": "PE Challenges",
     "type": "Interactive App",

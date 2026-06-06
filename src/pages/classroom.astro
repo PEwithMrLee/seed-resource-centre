@@ -254,6 +254,87 @@ import { withBase } from "../utils/withBase";
     </div>
   </section>
 
+  <!-- Class Compass -->
+  <section class="section section-soft">
+    <div class="shell">
+      <div class="tech-top">
+        <div class="tech-text stack">
+          <div class="circle-badges">
+            <span class="badge-tool">Student-Facing</span>
+            <span class="badge-tool">Wellbeing & SEL</span>
+            <span class="badge-tool">AI-Assisted Teacher Tool</span>
+          </div>
+          <span class="eyebrow">Class Compass</span>
+          <h2>Finding your direction through big feelings, tricky moments, and growing humans.</h2>
+          <p>
+            Class Compass is a student wellbeing and SEL app that helps children navigate emotions,
+            build coping strategies, and develop self-awareness — through missions, reflections,
+            a personal toolkit, and a badge progression system.
+          </p>
+          <ul class="tech-feature-list">
+            <li>Help Now — in-the-moment support for big feelings</li>
+            <li>Learn — a strategy library students build over time</li>
+            <li>Try a Mission — weekly quests that build wellbeing habits</li>
+            <li>Reflect — log what happened and how you responded</li>
+            <li>My Toolkit — saved strategies personalised to each student</li>
+            <li>Progress — badges and XP to celebrate growth</li>
+          </ul>
+          <div class="tech-intro-actions">
+            <a class="button" href="/class-compass/" target="_blank">Open Class Compass →</a>
+            <a class="button-secondary" href={withBase("/say-hello")}>Request a demo</a>
+          </div>
+        </div>
+        <div class="tech-ipad">
+          <div class="ipad-landscape">
+            <div class="ipad-left-bar"><div class="ipad-camera-side"></div></div>
+            <div class="ipad-screen-landscape">
+              <div class="compass-mockup">
+                <div class="compass-header">
+                  <span class="compass-icon">🧭</span>
+                  <span class="compass-title">Class Compass</span>
+                </div>
+                <div class="compass-body">
+                  <p class="compass-tagline">What do you need right now?</p>
+                  <div class="compass-grid">
+                    <div class="compass-card red-card"><span>🆘</span><strong>Help Now</strong><small>In-moment support</small></div>
+                    <div class="compass-card green-card"><span>🌱</span><strong>Learn</strong><small>Strategy library</small></div>
+                    <div class="compass-card blue-card"><span>🎯</span><strong>Try a Mission</strong><small>This week's quest</small></div>
+                    <div class="compass-card purple-card"><span>🔍</span><strong>Reflect</strong><small>Log what happened</small></div>
+                    <div class="compass-card yellow-card"><span>🧰</span><strong>My Toolkit</strong><small>Saved strategies</small></div>
+                    <div class="compass-card orange-card"><span>⭐</span><strong>Progress</strong><small>Badges & XP</small></div>
+                  </div>
+                  <div class="compass-xp">
+                    <span class="compass-level">Level 2: Noticer → Calm Builder</span>
+                    <span class="compass-pts">140 XP ⭐</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ipad-right-bar"><div class="ipad-home-side"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-features">
+        <div class="tech-feat-card green-top">
+          <span class="tech-feat-icon">🆘</span>
+          <h4>In-the-Moment Support</h4>
+          <p>When students are overwhelmed, Help Now gives them immediate, calm strategies matched to how they're feeling — no adult required.</p>
+        </div>
+        <div class="tech-feat-card orange-top">
+          <span class="tech-feat-icon">🎯</span>
+          <h4>Missions & Reflection</h4>
+          <p>Weekly missions build wellbeing habits over time. Students log what happened, what they tried, and what helped — building a personal reflection history.</p>
+        </div>
+        <div class="tech-feat-card purple-top">
+          <span class="tech-feat-icon">⭐</span>
+          <h4>Progress & Badges</h4>
+          <p>XP and badge progression celebrate emotional growth — not just academic performance. Students level up from Noticer to Calm Builder and beyond.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Team Quest -->
   <section class="section section-soft">
     <div class="shell">
@@ -773,6 +854,97 @@ import { withBase } from "../utils/withBase";
     color: #555;
     border-radius: 0 6px 6px 0;
     font-style: italic;
+  }
+
+  /* ── Class Compass mockup ── */
+  .compass-mockup {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #f0faf8;
+  }
+
+  .compass-header {
+    background: #0d9488;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .compass-icon { font-size: 1rem; }
+
+  .compass-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .compass-body {
+    padding: 0.5rem 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+  }
+
+  .compass-tagline {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #555;
+    margin: 0;
+    max-width: none;
+    text-align: center;
+  }
+
+  .compass-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+  }
+
+  .compass-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: 0.4rem 0.2rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .compass-card span { font-size: 1rem; }
+  .compass-card strong { font-size: 0.65rem; font-weight: 700; color: #2c2c2c; line-height: 1.2; }
+  .compass-card small { font-size: 0.55rem; color: #888; line-height: 1.2; }
+
+  .red-card    { background: #fff0f0; }
+  .green-card  { background: #f0fff4; }
+  .blue-card   { background: #eff6ff; }
+  .purple-card { background: #faf5ff; }
+  .yellow-card { background: #fefce8; }
+  .orange-card { background: #fff7ed; }
+
+  .compass-xp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    margin-top: auto;
+  }
+
+  .compass-level {
+    font-size: 0.6rem;
+    color: #555;
+    font-weight: 600;
+  }
+
+  .compass-pts {
+    font-size: 0.65rem;
+    color: #d97706;
+    font-weight: 700;
   }
 
   /* ── Team Quest mockup ── */
