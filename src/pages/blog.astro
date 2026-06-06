@@ -1,37 +1,355 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import posts from "../data/blog-posts.json";
+import { withBase } from "../utils/withBase";
+
+const categories = [...new Set(posts.map(p => p.category))];
+
+const categoryColour: Record<string, string> = {
+  "Reflection":        "fcat-gold",
+  "Classroom Systems": "fcat-blue",
+  "Movement":          "fcat-green",
+  "Wellbeing":         "fcat-green",
+  "Behaviour & Belonging": "fcat-violet",
+  "Teaching Experiments":  "fcat-blue",
+};
 ---
 
-<BaseLayout title="Blog" description="Practical teaching reflections and classroom insights from The SEED Lab — short, honest posts for busy primary and IB educators.">
-  <section class="page-hero">
-    <div class="shell stack">
-      <span class="eyebrow">Blog</span>
-      <h1>Short posts for calm, practical teaching.</h1>
-      <p>
-        The blog is intentionally light in this first version: just enough room for thoughtful
-        writing without overcomplicating the project.
-      </p>
+<BaseLayout
+  title="Field Notes"
+  description="Reflections from the gym floor — honest writing about PE, wellbeing, movement, behaviour, and the beautiful chaos between them."
+>
+
+  <!-- ── Hero ── -->
+  <section class="fn-hero">
+    <div class="shell">
+      <div class="fn-hero-inner">
+        <span class="eyebrow cosmic">Field Notes</span>
+        <h1 class="fn-title">Reflections from the gym floor.</h1>
+        <p class="fn-lead">
+          Honest writing about PE, wellbeing, movement, behaviour, and the beautiful
+          chaos between them. For lessons that wobble before they bloom.
+        </p>
+        <p class="fn-trust">
+          <span class="trust-pip"></span> Real teaching
+          <span class="trust-pip"></span> No corporate polish
+          <span class="trust-pip"></span> Still figuring it out
+        </p>
+      </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="shell blog-grid">
-      {posts.map((post) => (
-        <article class="blog-card stack" id={post.slug}>
-          <div class="blog-meta">
-            <span class="pill">Short Blog Post</span>
-            <span>{post.date}</span>
-          </div>
-          <h2>{post.title}</h2>
-          <p>{post.summary}</p>
-          <div class="stack">
-            {post.content.map((paragraph) => (
-              <p>{paragraph}</p>
+  <!-- ── Filter chips ── -->
+  {categories.length > 1 && (
+    <div class="fn-filters">
+      <div class="shell">
+        <div class="fn-filter-row">
+          <span class="filter-label">Category:</span>
+          <div class="filter-chips" id="post-filters">
+            <button class="chip chip-active" data-value="all">All</button>
+            {categories.map(cat => (
+              <button class="chip" data-value={cat}>{cat}</button>
             ))}
           </div>
-        </article>
-      ))}
+        </div>
+      </div>
+    </div>
+  )}
+
+  <!-- ── Posts ── -->
+  <section class="section fn-posts">
+    <div class="shell fn-grid">
+      {posts.map((post) => {
+        const catClass = categoryColour[post.category] ?? "fcat-gold";
+        return (
+          <article class="fn-card" id={post.slug} data-category={post.category}>
+            <div class="fn-card-meta">
+              <span class={`fn-cat ${catClass}`}>{post.category}</span>
+              <span class="fn-date">
+                <time datetime={post.dateISO}>{post.date}</time>
+              </span>
+              <span class="fn-read">{post.readingTime} min read</span>
+            </div>
+            <h2 class="fn-card-title">
+              <a href={withBase(`/blog/${post.slug}`)}>{post.title}</a>
+            </h2>
+            <p class="fn-card-summary">{post.summary}</p>
+            <a class="fn-read-link" href={withBase(`/blog/${post.slug}`)}>
+              Read Field Note →
+            </a>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Empty state (if future filtering empties list) -->
+    <div class="fn-empty" id="fn-empty" hidden>
+      <p class="fn-empty-text">Nothing in that category yet. More field notes are growing.</p>
     </div>
   </section>
+
+  <!-- ── Bottom CTA ── -->
+  <section class="section-cosmic fn-cta">
+    <div class="shell">
+      <div class="fn-cta-inner">
+        <span class="eyebrow cosmic">From the Resource Shelf</span>
+        <h2 class="cosmic-heading">Looking for something practical to use tomorrow?</h2>
+        <p>The resources grow alongside the field notes — same thinking, ready to use.</p>
+        <a class="button-terra" href={withBase("/resources")}>Explore the Resources</a>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
+
+<script>
+  const chips = document.querySelectorAll('#post-filters .chip');
+  const cards = document.querySelectorAll('.fn-card') as NodeListOf<HTMLElement>;
+  const empty = document.getElementById('fn-empty');
+
+  chips.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const value = (btn as HTMLElement).dataset.value!;
+      chips.forEach(c => c.classList.remove('chip-active'));
+      btn.classList.add('chip-active');
+
+      let visible = 0;
+      cards.forEach(card => {
+        const show = value === 'all' || card.dataset.category === value;
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
+    });
+  });
+</script>
+
+<style>
+  /* ── Hero ── */
+  .fn-hero {
+    background:
+      radial-gradient(ellipse 55% 50% at 85% 20%, rgba(90,40,130,0.25) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 15% 75%, rgba(20,100,130,0.20) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 0%, #1a2f55 0%, var(--deep-navy) 55%, var(--space-black) 100%);
+    padding: 5rem 0 4rem;
+    border-bottom: 1px solid var(--line-cosmic);
+  }
+
+  .fn-hero-inner { max-width: 600px; }
+
+  .fn-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    color: var(--starlight);
+    line-height: 1.08;
+    margin: 0.5rem 0 0;
+    letter-spacing: -0.02em;
+  }
+
+  .fn-lead {
+    font-size: 1.1rem;
+    color: rgba(243,232,208,0.8);
+    max-width: 52ch;
+    margin-top: 1.25rem;
+    line-height: 1.75;
+  }
+
+  .fn-trust {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(243,232,208,0.45);
+    max-width: none;
+  }
+
+  .trust-pip {
+    display: inline-block;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--seed-green);
+    box-shadow: 0 0 5px var(--seed-green);
+    flex-shrink: 0;
+  }
+
+  /* ── Filters ── */
+  .fn-filters {
+    background: rgba(248,244,232,0.95);
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 80px;
+    z-index: 10;
+  }
+
+  .fn-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .filter-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  .chip {
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    background: transparent;
+    color: var(--muted);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--lantern-gold-deep); color: var(--text); }
+  .chip-active {
+    border-color: var(--lantern-gold-deep);
+    background: rgba(242,199,102,0.12);
+    color: var(--lantern-gold-deep);
+  }
+
+  /* ── Post grid ── */
+  .fn-posts {
+    background:
+      radial-gradient(ellipse 50% 40% at 5% 95%, rgba(80,140,80,0.08) 0%, transparent 65%),
+      radial-gradient(ellipse 35% 30% at 95% 5%, rgba(100,160,100,0.05) 0%, transparent 60%),
+      var(--bg-soft);
+  }
+
+  .fn-grid {
+    display: grid;
+    gap: 2rem;
+    max-width: 780px;
+  }
+
+  /* ── Post card ── */
+  .fn-card {
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 2rem 2.25rem;
+    box-shadow: var(--shadow-card);
+    transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+  }
+
+  .fn-card:hover {
+    border-color: var(--warm-sand);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  .fn-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .fn-cat {
+    display: inline-flex;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .fcat-gold   { background: rgba(242,199,102,0.15); color: var(--lantern-gold-deep); }
+  .fcat-blue   { background: rgba(125,211,252,0.12); color: #3a9dbf; }
+  .fcat-green  { background: rgba(127,176,105,0.12); color: var(--accent-deep); }
+  .fcat-violet { background: rgba(139,124,246,0.12); color: #6b5fd4; }
+
+  .fn-date, .fn-read {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .fn-date::before { content: "·"; margin-right: 0.75rem; color: var(--line-strong); }
+
+  .fn-card-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+    margin: 0 0 0.75rem;
+  }
+
+  .fn-card-title a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 160ms ease;
+  }
+
+  .fn-card-title a:hover { color: var(--accent-deep); }
+
+  .fn-card-summary {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 62ch;
+    margin: 0 0 1.25rem;
+  }
+
+  .fn-read-link {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--lantern-gold-deep);
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+
+  .fn-read-link:hover { color: var(--accent-deep); }
+
+  /* ── Empty ── */
+  .fn-empty {
+    padding: 3rem 0;
+    text-align: center;
+  }
+  .fn-empty-text {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: none;
+  }
+
+  /* ── Bottom CTA ── */
+  .fn-cta { padding: 5rem 0 6rem; }
+  .fn-cta-inner {
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .fn-cta-inner p { color: var(--muted-on-dark); max-width: 48ch; }
+
+  @media (max-width: 600px) {
+    .fn-filters { position: static; }
+    .fn-card { padding: 1.5rem; }
+  }
+</style>

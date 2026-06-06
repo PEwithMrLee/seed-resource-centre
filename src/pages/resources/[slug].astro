@@ -1,0 +1,527 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import resources from "../../data/resources.json";
+import { withBase } from "../../utils/withBase";
+
+export function getStaticPaths() {
+  return resources
+    .filter(r => r.hasDetailPage)
+    .map(r => ({ params: { slug: r.slug } }));
+}
+
+const { slug } = Astro.params;
+const resource = resources.find(r => r.slug === slug)!;
+
+// Related resources — same category, excluding self, max 3
+const related = resources
+  .filter(r => r.slug !== slug && r.category === resource.category)
+  .slice(0, 3);
+
+const isExternal = resource.href.startsWith("http") || resource.href.startsWith("#");
+const downloadHref = isExternal ? resource.href : withBase(resource.href);
+
+// Category colour
+const pillColours: Record<string, string> = {
+  "Teaching Practice":       "pill-blue",
+  "Curriculum Design":       "pill-green",
+  "Assessment & Reflection": "pill-gold",
+  "Communication":           "pill-violet",
+  "Wellbeing & SEL":         "pill-green",
+  "Tech Integration":        "pill-blue",
+};
+const pillClass = pillColours[resource.category] ?? "pill-blue";
+---
+
+<BaseLayout
+  title={resource.title}
+  description={resource.tagline + " " + resource.description}
+>
+
+  <!-- ── Breadcrumb ── -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="shell">
+      <ol class="breadcrumb-list">
+        <li><a href={withBase("/")}>Home</a></li>
+        <li aria-hidden="true">›</li>
+        <li><a href={withBase("/resources")}>Resources</a></li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">{resource.title}</li>
+      </ol>
+    </div>
+  </nav>
+
+  <!-- ── Resource hero ── -->
+  <section class="res-hero">
+    <div class="shell res-hero-grid">
+
+      <div class="res-hero-copy">
+        <div class="res-meta">
+          <span class={`pill ${pillClass}`}>{resource.category}</span>
+          <span class="pill pill-outline">{resource.type}</span>
+          <span class="pill pill-outline">For: {resource.audience}</span>
+        </div>
+
+        <h1 class="res-title">{resource.title}</h1>
+        <p class="res-promise">{resource.tagline}</p>
+        <p class="res-desc">{resource.description}</p>
+
+        {resource.origin && (
+          <p class="res-origin">
+            <span aria-hidden="true">🌱</span> {resource.origin}
+          </p>
+        )}
+
+        <!-- Top download button -->
+        <div class="res-cta-wrap">
+          <a
+            href={downloadHref}
+            class="button-terra res-cta-btn"
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noreferrer" : undefined}
+          >
+            {resource.ctaLabel}
+          </a>
+          <a href={withBase("/resources")} class="button-secondary">← Back to Resources</a>
+        </div>
+      </div>
+
+      {resource.image && (
+        <div class="res-hero-image">
+          <img src={resource.image} alt={resource.title} class="res-preview-img" loading="lazy" />
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- ── Detail sections ── -->
+  <section class="section res-detail">
+    <div class="shell res-detail-grid">
+
+      <!-- Main content -->
+      <div class="res-main">
+
+        {resource.bestUsedWhen.length > 0 && (
+          <div class="detail-block">
+            <h2 class="detail-heading">Best used when…</h2>
+            <ul class="when-list">
+              {resource.bestUsedWhen.map(item => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {resource.howItWorks && (
+          <div class="detail-block">
+            <h2 class="detail-heading">How it works</h2>
+            <p class="detail-body">{resource.howItWorks}</p>
+          </div>
+        )}
+
+        <!-- Mid download button -->
+        <div class="detail-download">
+          <a
+            href={downloadHref}
+            class="button-terra"
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noreferrer" : undefined}
+          >
+            {resource.ctaLabel}
+          </a>
+          <p class="download-note">Free to use. No sign-up required.</p>
+        </div>
+
+        {resource.reflectionPrompt && (
+          <div class="detail-block reflection-block">
+            <span class="reflection-label" aria-hidden="true">✦</span>
+            <h2 class="detail-heading">Reflection prompt</h2>
+            <p class="reflection-text">{resource.reflectionPrompt}</p>
+          </div>
+        )}
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="res-sidebar">
+        <div class="sidebar-card">
+          <h3 class="sidebar-heading">About this resource</h3>
+          <dl class="sidebar-dl">
+            <dt>Type</dt>
+            <dd>{resource.type}</dd>
+            <dt>For</dt>
+            <dd>{resource.audience}</dd>
+            <dt>Topic</dt>
+            <dd>{resource.category}</dd>
+          </dl>
+          <a
+            href={downloadHref}
+            class="button-terra sidebar-btn"
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noreferrer" : undefined}
+          >
+            {resource.ctaLabel}
+          </a>
+          <p class="sidebar-note">Classroom-tested. Teacher-friendly.</p>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ── Related resources ── -->
+  {related.length > 0 && (
+    <section class="section res-related">
+      <div class="shell">
+        <div class="section-head">
+          <div class="stack">
+            <span class="eyebrow">From the same shelf</span>
+            <h2>You might also find these useful.</h2>
+          </div>
+          <a class="button-secondary" href={withBase("/resources")}>Browse all resources</a>
+        </div>
+        <div class="resources-grid">
+          {related.map(r => {
+            const rHref = r.hasDetailPage
+              ? withBase(`/resources/${r.slug}`)
+              : (r.href.startsWith("http") || r.href.startsWith("#") ? r.href : withBase(r.href));
+            const rPill = pillColours[r.category] ?? "pill-blue";
+            return (
+              <article class="resource-card related-card">
+                {r.image && (
+                  <div class="resource-img-wrap">
+                    <img src={r.image} alt={r.title} class="resource-image" loading="lazy" />
+                  </div>
+                )}
+                <div class="resource-body">
+                  <div class="resource-meta">
+                    <span class={`pill ${rPill}`}>{r.category}</span>
+                    <span class="pill pill-outline">{r.type}</span>
+                  </div>
+                  <h3 class="resource-title">{r.title}</h3>
+                  <p class="resource-tagline">{r.tagline}</p>
+                  <div class="resource-footer">
+                    <span class="resource-audience">For: {r.audience}</span>
+                    <a href={rHref} class="resource-cta">{r.ctaLabel} →</a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+</BaseLayout>
+
+<style>
+  /* ── Shared pill styles (mirrors ResourceCard) ── */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pill-blue   { background: rgba(125,211,252,0.12); color: #3a9dbf; }
+  .pill-green  { background: rgba(127,176,105,0.12); color: var(--accent-deep); }
+  .pill-gold   { background: rgba(242,199,102,0.15); color: var(--lantern-gold-deep); }
+  .pill-violet { background: rgba(139,124,246,0.12); color: #6b5fd4; }
+  .pill-outline {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+  }
+
+  /* ── Breadcrumb ── */
+  .breadcrumb {
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 0.75rem 0;
+  }
+  .breadcrumb-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .breadcrumb-list a {
+    color: var(--accent-deep);
+    text-decoration: none;
+    transition: color 160ms ease;
+  }
+  .breadcrumb-list a:hover { color: var(--lantern-gold-deep); }
+  .breadcrumb-list [aria-current="page"] { color: var(--text); font-weight: 600; }
+
+  /* ── Hero ── */
+  .res-hero {
+    background: var(--bg-soft);
+    padding: 4rem 0 3.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .res-hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .res-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+  }
+  .res-title {
+    font-family: "Fraunces", serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text);
+    line-height: 1.1;
+    margin: 0 0 0.75rem;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  .res-promise {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent-deep);
+    margin: 0 0 1rem;
+    max-width: 44ch;
+    line-height: 1.45;
+  }
+  .res-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 54ch;
+    line-height: 1.75;
+    margin: 0 0 1rem;
+  }
+  .res-origin {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0 0 1.5rem;
+    max-width: none;
+  }
+  .res-cta-wrap {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .res-cta-btn { min-width: 160px; }
+
+  .res-hero-image {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+  .res-preview-img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* ── Detail ── */
+  .res-detail { background: var(--bg); }
+  .res-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .detail-block {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .detail-block:last-child { border-bottom: none; }
+
+  .detail-heading {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--lantern-gold-deep);
+    margin: 0 0 1rem;
+  }
+
+  .when-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: grid;
+    gap: 0.65rem;
+  }
+  .when-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .when-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--seed-green);
+    font-size: 0.85rem;
+  }
+
+  .detail-body {
+    font-size: 1.02rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .detail-download {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    padding: 2rem;
+    background: var(--bg-soft);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    margin-bottom: 2.5rem;
+  }
+  .download-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+    max-width: none;
+  }
+
+  .reflection-block {
+    background: linear-gradient(135deg, rgba(127,176,105,0.06), rgba(248,244,232,0.8));
+    padding: 2rem;
+    border-radius: var(--radius);
+    border: 1px solid rgba(127,176,105,0.2);
+    border-bottom: none;
+    position: relative;
+  }
+  .reflection-label {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: var(--lantern-gold);
+    font-size: 1.25rem;
+    filter: drop-shadow(0 0 8px rgba(242,199,102,0.4));
+  }
+  .reflection-text {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--text);
+    line-height: 1.65;
+    max-width: 56ch;
+    margin: 0;
+  }
+
+  /* ── Sidebar ── */
+  .res-sidebar { position: sticky; top: 100px; }
+
+  .sidebar-card {
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .sidebar-heading {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 0;
+  }
+  .sidebar-dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+    margin: 0;
+  }
+  .sidebar-dl dt {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .sidebar-dl dd {
+    font-size: 0.9rem;
+    color: var(--text);
+    margin: 0;
+  }
+  .sidebar-btn { width: 100%; text-align: center; justify-content: center; }
+  .sidebar-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    max-width: none;
+  }
+
+  /* ── Related ── */
+  .res-related { background: var(--bg-soft); }
+
+  /* Mirror ResourceCard styles for related cards */
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  }
+  .related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--warm-sand);
+  }
+  .resource-img-wrap { overflow: hidden; aspect-ratio: 4 / 3; background: var(--bg-soft); }
+  .resource-image { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 400ms ease; }
+  .related-card:hover .resource-image { transform: scale(1.03); }
+  .resource-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; gap: 0.6rem; }
+  .resource-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .resource-title { font-family: "Fraunces", serif; font-size: 1.2rem; font-weight: 600; color: var(--text); line-height: 1.25; margin: 0; }
+  .resource-tagline { font-family: "Fraunces", serif; font-style: italic; font-size: 0.92rem; color: var(--accent-deep); margin: 0; max-width: none; }
+  .resource-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); margin-top: auto; }
+  .resource-audience { font-size: 0.8rem; color: var(--muted); font-family: "Space Grotesk", sans-serif; }
+  .resource-cta { font-family: "Space Grotesk", sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--accent-deep); text-decoration: none; white-space: nowrap; transition: color 160ms ease; }
+  .resource-cta:hover { color: var(--lantern-gold-deep); }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .res-hero-grid,
+    .res-detail-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .res-sidebar { position: static; }
+    .res-hero-image { max-width: 480px; }
+  }
+</style>

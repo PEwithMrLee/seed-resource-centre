@@ -44,7 +44,7 @@ const {
 
     <!-- Authorship & theme -->
     <meta name="author" content="The SEED Lab" />
-    <meta name="theme-color" content="#3a5e3a" />
+    <meta name="theme-color" content="#14213D" />
 
     <!-- Google Analytics — replace G-XXXXXXXXXX with your Measurement ID -->
     <!-- To get your ID: analytics.google.com → Admin → Data Streams → your stream -->
@@ -59,46 +59,86 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300;1,9..144,600&display=swap"
       rel="stylesheet"
     />
     <style is:global>
       :root {
-        /* Core palette */
-        --bg: #faf8f3;
-        --bg-soft: #e8efe4;
-        --surface: rgba(255, 253, 248, 0.92);
-        --surface-strong: rgba(255, 253, 249, 0.98);
-        --surface-moss: rgba(236, 244, 232, 0.88);
+        /* ── Galaxy Greenhouse colour tokens ── */
+
+        /* Deep space backgrounds */
+        --space-black: #070A12;
+        --deep-navy: #0E1628;
+        --midnight-blue: #14213D;
+        --soft-charcoal: #1E2636;
+
+        /* Warm reading backgrounds */
+        --bg: #F8F4E8;
+        --bg-soft: #F3E8D0;
+        --warm-sand: #D8B87A;
+        --bronze: #A9783A;
+
+        /* Surfaces (light sections) */
+        --surface: rgba(248, 244, 232, 0.96);
+        --surface-strong: rgba(255, 252, 245, 0.99);
+        --surface-dark: rgba(14, 22, 40, 0.92);
 
         /* Borders */
-        --line: rgba(80, 105, 75, 0.15);
-        --line-strong: rgba(80, 105, 75, 0.26);
+        --line: rgba(169, 120, 58, 0.18);
+        --line-strong: rgba(169, 120, 58, 0.32);
+        --line-cosmic: rgba(125, 211, 252, 0.15);
 
         /* Text */
-        --text: #2c2c2c;
-        --muted: #666;
+        --text: #1A1A2E;
+        --muted: #5A5A72;
+        --text-on-dark: #F3E8D0;
+        --muted-on-dark: rgba(243, 232, 208, 0.65);
 
-        /* Brand greens */
-        --accent: #4a7c59;
-        --accent-deep: #3a5e3a;
-        --accent-soft: #d8e8d4;
+        /* Seed green */
+        --seed-green: #7FB069;
+        --growth-green: #A7C788;
+        --accent: #7FB069;
+        --accent-deep: #5A8A45;
+        --accent-soft: rgba(127, 176, 105, 0.15);
 
-        /* Terracotta accent for CTAs */
-        --terra: #c47b4a;
-        --terra-deep: #a85f30;
-        --terra-soft: #f5e8dc;
+        /* Warm gold — primary CTA */
+        --lantern-gold: #F2C766;
+        --lantern-gold-deep: #C9962A;
+        --terra: #F2C766;
+        --terra-deep: #C9962A;
+        --terra-soft: rgba(242, 199, 102, 0.12);
+
+        /* Cosmic accents — used sparingly */
+        --jedi-blue: #7DD3FC;
+        --nebula-violet: #8B7CF6;
+        --starlight: #F8F4E8;
+
+        /* Glow utilities */
+        --glow-gold: 0 0 32px rgba(242, 199, 102, 0.25);
+        --glow-blue: 0 0 32px rgba(125, 211, 252, 0.20);
+        --glow-green: 0 0 32px rgba(127, 176, 105, 0.25);
 
         /* Shadows */
-        --shadow: 0 24px 60px rgba(40, 65, 40, 0.10);
-        --shadow-soft: 0 8px 32px rgba(40, 65, 40, 0.07);
-        --shadow-hover: 0 16px 48px rgba(40, 65, 40, 0.14);
+        --shadow: 0 24px 60px rgba(7, 10, 18, 0.18);
+        --shadow-soft: 0 8px 32px rgba(7, 10, 18, 0.10);
+        --shadow-hover: 0 16px 48px rgba(7, 10, 18, 0.22);
+        --shadow-card: 0 4px 24px rgba(169, 120, 58, 0.10);
 
         /* Shape */
         --radius: 16px;
         --radius-sm: 10px;
         --radius-lg: 24px;
         --shell: min(1120px, calc(100vw - 3rem));
+      }
+
+      /* ── Reduced motion ── */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+        html { scroll-behavior: auto; }
       }
 
       * {
@@ -111,11 +151,11 @@ const {
 
       body {
         margin: 0;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Atkinson Hyperlegible", "Space Grotesk", sans-serif;
         font-size: 1.05rem;
         color: var(--text);
         background: var(--bg);
-        line-height: 1.7;
+        line-height: 1.75;
       }
 
       a {
@@ -144,13 +184,13 @@ const {
         top: 0;
         z-index: 20;
         backdrop-filter: blur(20px);
-        background: rgba(250, 248, 243, 0.88);
-        border-bottom: 1px solid var(--line);
+        background: rgba(20, 33, 61, 0.92);
+        border-bottom: 1px solid var(--line-cosmic);
         transition: box-shadow 200ms ease;
       }
 
       .site-header.scrolled {
-        box-shadow: 0 2px 20px rgba(40, 65, 40, 0.08);
+        box-shadow: 0 2px 20px rgba(7, 10, 18, 0.4);
       }
 
       .nav-wrap {
@@ -170,17 +210,17 @@ const {
       }
 
       .brand-mark {
-        font-family: "Cormorant Garamond", serif;
-        font-size: 1.7rem;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        color: var(--accent-deep);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: var(--starlight);
         line-height: 1.1;
       }
 
       .brand-text,
       .meta-text {
-        color: var(--muted);
+        color: var(--muted-on-dark);
         font-size: 0.9rem;
       }
 
@@ -199,36 +239,39 @@ const {
         display: inline-flex;
         padding: 0.55rem 0.9rem;
         border-radius: 999px;
-        color: var(--muted);
-        font-size: 0.95rem;
+        color: rgba(243, 232, 208, 0.75);
+        font-size: 0.92rem;
         font-weight: 500;
         transition:
           background-color 160ms ease,
           color 160ms ease;
         border: 1px solid transparent;
+        font-family: "Space Grotesk", sans-serif;
       }
 
       .nav-link:hover,
       .nav-link.active {
-        background: var(--accent-soft);
-        color: var(--accent-deep);
+        background: rgba(127, 176, 105, 0.15);
+        color: var(--growth-green);
       }
 
       .nav-cta {
         display: inline-flex;
         padding: 0.55rem 1.1rem;
         border-radius: 999px;
-        background: var(--accent-deep);
-        color: #f8f7f1 !important;
-        font-size: 0.95rem;
-        font-weight: 600;
-        transition: background 160ms ease, transform 160ms ease;
+        background: var(--lantern-gold);
+        color: var(--midnight-blue) !important;
+        font-size: 0.92rem;
+        font-weight: 700;
+        font-family: "Space Grotesk", sans-serif;
+        transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
         margin-left: 0.5rem;
       }
 
       .nav-cta:hover {
-        background: var(--accent);
+        background: #fff0b3;
         transform: translateY(-1px);
+        box-shadow: var(--glow-gold);
       }
 
       /* ── Typography ── */
@@ -236,15 +279,16 @@ const {
         display: inline-block;
         margin-bottom: 0.75rem;
         text-transform: uppercase;
-        letter-spacing: 0.12em;
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--terra);
+        letter-spacing: 0.14em;
+        font-size: 0.75rem;
+        font-weight: 700;
+        font-family: "Space Grotesk", sans-serif;
+        color: var(--lantern-gold);
       }
 
       h1, h2, h3, h4 {
-        font-family: "Cormorant Garamond", serif;
-        line-height: 1.1;
+        font-family: "Fraunces", serif;
+        line-height: 1.08;
         margin: 0;
         font-weight: 600;
         color: var(--text);
@@ -253,19 +297,19 @@ const {
 
       h1 {
         font-size: clamp(2.8rem, 6vw, 5rem);
-        max-width: 14ch;
+        max-width: 16ch;
         text-wrap: balance;
-        line-height: 1.05;
+        line-height: 1.04;
       }
 
       h2 {
         font-size: clamp(1.9rem, 3.5vw, 2.75rem);
         margin-bottom: 0.75rem;
-        line-height: 1.12;
+        line-height: 1.1;
       }
 
       h3 {
-        font-size: 1.5rem;
+        font-size: 1.45rem;
         margin-bottom: 0.5rem;
         line-height: 1.2;
       }
@@ -274,13 +318,38 @@ const {
         margin: 0;
         color: var(--muted);
         font-size: 1.05rem;
-        line-height: 1.75;
+        line-height: 1.8;
         max-width: 68ch;
       }
 
       strong {
         color: var(--text);
-        font-weight: 600;
+        font-weight: 700;
+      }
+
+      /* ── Cosmic section utility ── */
+      .cosmic {
+        background: var(--midnight-blue);
+        color: var(--text-on-dark);
+      }
+
+      .cosmic h1, .cosmic h2, .cosmic h3, .cosmic h4 {
+        color: var(--starlight);
+      }
+
+      .cosmic p {
+        color: var(--muted-on-dark);
+      }
+
+      .cosmic .eyebrow {
+        color: var(--lantern-gold);
+      }
+
+      /* ── Focus styles ── */
+      :focus-visible {
+        outline: 2px solid var(--jedi-blue);
+        outline-offset: 3px;
+        border-radius: 4px;
       }
 
       /* ── Hero ── */
@@ -322,10 +391,10 @@ const {
         align-items: center;
         justify-content: center;
         min-height: 3rem;
-        padding: 0.8rem 1.5rem;
+        padding: 0.8rem 1.6rem;
         border-radius: 999px;
         border: 1.5px solid transparent;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Space Grotesk", sans-serif;
         font-weight: 600;
         font-size: 0.95rem;
         cursor: pointer;
@@ -337,27 +406,28 @@ const {
       }
 
       .button {
-        background: var(--accent-deep);
-        color: #f8f7f1;
-        box-shadow: 0 8px 24px rgba(58, 94, 58, 0.28);
+        background: var(--seed-green);
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(127, 176, 105, 0.30);
       }
 
       .button:hover {
-        background: var(--accent);
+        background: var(--accent-deep);
         transform: translateY(-2px);
-        box-shadow: 0 12px 32px rgba(58, 94, 58, 0.32);
+        box-shadow: var(--glow-green);
       }
 
       .button-terra {
-        background: var(--terra);
-        color: #fff;
-        box-shadow: 0 8px 24px rgba(196, 123, 74, 0.30);
+        background: var(--lantern-gold);
+        color: var(--midnight-blue);
+        font-weight: 700;
+        box-shadow: 0 8px 24px rgba(242, 199, 102, 0.28);
       }
 
       .button-terra:hover {
-        background: var(--terra-deep);
+        background: #fff0b3;
         transform: translateY(-2px);
-        box-shadow: 0 12px 32px rgba(196, 123, 74, 0.36);
+        box-shadow: var(--glow-gold);
       }
 
       /* ── Bio section ── */
@@ -406,9 +476,33 @@ const {
       }
 
       .button-secondary:hover {
-        border-color: var(--accent);
+        border-color: var(--seed-green);
         background: var(--accent-soft);
         color: var(--accent-deep);
+        transform: translateY(-1px);
+      }
+
+      /* Ghost button for dark/cosmic sections */
+      .button-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3rem;
+        padding: 0.8rem 1.6rem;
+        border-radius: 999px;
+        border: 1.5px solid rgba(243, 232, 208, 0.35);
+        background: transparent;
+        color: var(--text-on-dark);
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+      }
+
+      .button-ghost:hover {
+        border-color: var(--lantern-gold);
+        background: rgba(242, 199, 102, 0.08);
         transform: translateY(-1px);
       }
 
@@ -421,14 +515,15 @@ const {
         background: var(--surface);
         border: 1px solid var(--line);
         border-radius: var(--radius);
-        box-shadow: var(--shadow-soft);
-        transition: box-shadow 200ms ease, transform 200ms ease;
+        box-shadow: var(--shadow-card);
+        transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
       }
 
       .resource-card:hover,
       .blog-card:hover {
         box-shadow: var(--shadow-hover);
         transform: translateY(-3px);
+        border-color: var(--warm-sand);
       }
 
       .panel,
@@ -469,15 +564,44 @@ const {
         grid-template-columns: 1fr;
       }
 
-      /* ── Sections ── */
+      /* ── Sections — planet surface + galaxy nebula treatment ── */
       .section {
+        position: relative;
         padding: 4rem 0 6rem;
+        background:
+          radial-gradient(ellipse 55% 35% at 90% 10%, rgba(200,158,60,0.07) 0%, transparent 65%),
+          radial-gradient(ellipse 35% 25% at 10% 90%, rgba(160,120,50,0.05) 0%, transparent 60%),
+          var(--bg);
       }
 
       .section-soft {
         position: relative;
-        background: var(--bg-soft);
         padding: 4rem 0 6rem;
+        background:
+          radial-gradient(ellipse 50% 40% at 5% 95%, rgba(80,140,80,0.08) 0%, transparent 65%),
+          radial-gradient(ellipse 35% 30% at 95% 5%, rgba(100,160,100,0.05) 0%, transparent 60%),
+          var(--bg-soft);
+      }
+
+      /* Dark cosmic section — nebula galaxy */
+      .section-cosmic {
+        position: relative;
+        padding: 5rem 0 6rem;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse 55% 65% at 90% 10%, rgba(90,30,140,0.38) 0%, transparent 60%),
+          radial-gradient(ellipse 40% 30% at 10% 90%, rgba(20,80,130,0.26) 0%, transparent 55%),
+          var(--midnight-blue);
+      }
+
+      .section-deep {
+        position: relative;
+        padding: 5rem 0 6rem;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse 50% 55% at 15% 80%, rgba(20,110,130,0.35) 0%, transparent 60%),
+          radial-gradient(ellipse 35% 30% at 85% 15%, rgba(70,20,110,0.22) 0%, transparent 55%),
+          var(--deep-navy);
       }
 
       .section-head {
@@ -513,8 +637,10 @@ const {
         border-radius: 999px;
         background: var(--accent-soft);
         color: var(--accent-deep);
-        font-weight: 600;
-        font-size: 0.8rem;
+        font-weight: 700;
+        font-size: 0.78rem;
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: 0.02em;
       }
 
       .resource-tagline {
@@ -537,21 +663,22 @@ const {
 
       .resource-footer a,
       .card-link a {
-        color: var(--accent);
-        font-weight: 600;
+        color: var(--accent-deep);
+        font-weight: 700;
         font-size: 0.92rem;
+        font-family: "Space Grotesk", sans-serif;
         transition: color 160ms ease;
       }
 
       .resource-footer a:hover,
       .card-link a:hover {
-        color: var(--terra);
+        color: var(--lantern-gold-deep);
       }
 
       /* ── Misc components ── */
       .split-callout {
         padding: 2rem;
-        background: linear-gradient(135deg, rgba(236, 244, 232, 0.9), rgba(255, 253, 248, 0.95));
+        background: linear-gradient(135deg, rgba(127, 176, 105, 0.08), rgba(248, 244, 232, 0.95));
       }
 
       .stack {
@@ -578,7 +705,7 @@ const {
         content: "→";
         position: absolute;
         left: 0;
-        color: var(--terra);
+        color: var(--lantern-gold-deep);
         font-size: 0.85rem;
       }
 
@@ -591,9 +718,10 @@ const {
         position: relative;
         overflow: hidden;
         padding: 2rem;
-        background: linear-gradient(145deg, rgba(236, 244, 232, 0.95), rgba(255, 253, 248, 0.9));
-        border: 1px solid var(--line);
+        background: linear-gradient(145deg, rgba(14, 22, 40, 0.92), rgba(20, 33, 61, 0.85));
+        border: 1px solid var(--line-cosmic);
         border-radius: var(--radius-lg);
+        box-shadow: var(--glow-blue);
       }
 
       .brand-chip {
@@ -603,21 +731,24 @@ const {
         gap: 0.5rem;
         padding: 0.4rem 0.8rem;
         border-radius: 999px;
-        border: 1px solid var(--line-strong);
-        background: rgba(255, 253, 248, 0.95);
-        color: var(--accent-deep);
-        font-size: 0.82rem;
-        font-weight: 600;
-        letter-spacing: 0.02em;
+        border: 1px solid rgba(125, 211, 252, 0.25);
+        background: rgba(20, 33, 61, 0.8);
+        color: var(--jedi-blue);
+        font-size: 0.78rem;
+        font-weight: 700;
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
       }
 
       .brand-chip::before {
         content: "";
-        width: 0.55rem;
-        height: 0.55rem;
+        width: 0.5rem;
+        height: 0.5rem;
         border-radius: 50%;
-        background: var(--accent);
+        background: var(--seed-green);
         flex-shrink: 0;
+        box-shadow: 0 0 6px var(--seed-green);
       }
 
       .hero-support {
@@ -633,17 +764,17 @@ const {
       .micro-card {
         padding: 1rem;
         border-radius: var(--radius-sm);
-        background: rgba(255, 253, 249, 0.85);
-        border: 1px solid var(--line);
+        background: rgba(14, 22, 40, 0.6);
+        border: 1px solid var(--line-cosmic);
       }
 
       .micro-card strong {
         display: block;
         margin-bottom: 0.25rem;
-        font-family: "Cormorant Garamond", serif;
-        font-size: 1.15rem;
-        font-weight: 600;
-        color: var(--accent-deep);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--growth-green);
       }
 
       .micro-card p {
@@ -654,20 +785,22 @@ const {
 
       .accent-note {
         padding-left: 1rem;
-        border-left: 3px solid var(--terra);
+        border-left: 3px solid var(--lantern-gold);
         color: var(--text);
         font-style: italic;
       }
 
       /* ── Trust bar ── */
       .trust-bar {
-        background: var(--accent-deep);
-        color: rgba(255, 253, 248, 0.85);
-        padding: 0.65rem 0;
-        font-size: 0.85rem;
+        background: var(--space-black);
+        color: rgba(243, 232, 208, 0.75);
+        padding: 0.6rem 0;
+        font-size: 0.8rem;
         font-weight: 500;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.04em;
         text-align: center;
+        font-family: "Space Grotesk", sans-serif;
+        border-bottom: 1px solid rgba(125, 211, 252, 0.08);
       }
 
       .trust-bar-inner {
@@ -681,24 +814,26 @@ const {
       .trust-item {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
-        color: rgba(255, 253, 248, 0.9);
+        gap: 0.45rem;
+        color: rgba(243, 232, 208, 0.8);
       }
 
       .trust-dot {
         width: 4px;
         height: 4px;
         border-radius: 50%;
-        background: var(--terra);
+        background: var(--seed-green);
         flex-shrink: 0;
+        box-shadow: 0 0 4px var(--seed-green);
       }
 
       /* ── Footer ── */
       .site-footer {
-        background: var(--accent-deep);
-        color: rgba(255, 253, 248, 0.8);
+        background: var(--deep-navy);
+        color: var(--muted-on-dark);
         padding: 4rem 0 2rem;
         margin-top: 4rem;
+        border-top: 1px solid var(--line-cosmic);
       }
 
       .footer-grid {
@@ -706,15 +841,15 @@ const {
         grid-template-columns: 1.4fr 1fr 1fr;
         gap: 3rem;
         padding-bottom: 3rem;
-        border-bottom: 1px solid rgba(255, 253, 248, 0.12);
+        border-bottom: 1px solid rgba(125, 211, 252, 0.08);
       }
 
       .footer-brand p {
-        color: rgba(255, 253, 248, 0.65);
+        color: var(--muted-on-dark);
         font-size: 0.95rem;
         max-width: 32ch;
         margin-top: 0.75rem;
-        line-height: 1.65;
+        line-height: 1.7;
       }
 
       .footer-logo {
@@ -725,12 +860,13 @@ const {
       }
 
       .footer-heading {
-        font-family: "Cormorant Garamond", serif;
-        font-size: 1.15rem;
-        font-weight: 600;
-        color: rgba(255, 253, 248, 0.95);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--lantern-gold);
         margin-bottom: 1rem;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
       }
 
       .footer-links {
@@ -742,13 +878,13 @@ const {
       }
 
       .footer-links a {
-        color: rgba(255, 253, 248, 0.65);
+        color: var(--muted-on-dark);
         font-size: 0.95rem;
         transition: color 160ms ease;
       }
 
       .footer-links a:hover {
-        color: rgba(255, 253, 248, 0.95);
+        color: var(--text-on-dark);
       }
 
       .footer-bottom {
@@ -757,19 +893,20 @@ const {
         justify-content: space-between;
         padding-top: 1.5rem;
         font-size: 0.85rem;
-        color: rgba(255, 253, 248, 0.45);
+        color: rgba(243, 232, 208, 0.35);
         flex-wrap: wrap;
         gap: 1rem;
+        font-family: "Space Grotesk", sans-serif;
       }
 
       .footer-email a {
-        color: rgba(255, 253, 248, 0.75);
+        color: var(--growth-green);
         font-weight: 500;
         transition: color 160ms ease;
       }
 
       .footer-email a:hover {
-        color: #fff;
+        color: var(--seed-green);
       }
 
       /* ── Responsive ── */
@@ -838,9 +975,213 @@ const {
           text-align: center;
         }
       }
+
+      /* ══════════════════════════════════════════
+         PHASE 11 — Accessibility Fixes
+         ══════════════════════════════════════════ */
+
+      /* ── Skip-to-content link ── */
+      .skip-link {
+        position: absolute;
+        top: -100%;
+        left: 1rem;
+        z-index: 9999;
+        padding: 0.6rem 1.2rem;
+        background: var(--lantern-gold);
+        color: var(--space-black);
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+        text-decoration: none;
+        transition: top 160ms ease;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      /* ── Eyebrow contrast fix on light/parchment sections ──
+         --lantern-gold (#F2C766) on parchment (#F8F4E8) = 2.42:1 — fails WCAG AA.
+         On light sections override to accent-deep (#4A6B54) = 5.42:1 ✅
+      */
+      .section .eyebrow,
+      .section-soft .eyebrow,
+      .page-hero .eyebrow,
+      .about-hero .eyebrow,
+      .post-hero .eyebrow {
+        color: var(--accent-deep);
+      }
+
+      /* Keep gold for explicitly dark/cosmic contexts */
+      .section-cosmic .eyebrow,
+      .section-deep .eyebrow,
+      .cosmic .eyebrow,
+      .hero-cosmic .eyebrow,
+      .fn-hero .eyebrow,
+      .sh-hero .eyebrow,
+      .res-hero .eyebrow,
+      .cls-hero .eyebrow,
+      .lw-hero .eyebrow,
+      .panel-dark .eyebrow {
+        color: var(--lantern-gold) !important;
+      }
+
+      /* ══════════════════════════════════════════
+         PHASE 10 — Animation & Interaction Polish
+         ══════════════════════════════════════════ */
+
+      /* ── Trust pip pulse ── */
+      @keyframes pip-pulse {
+        0%, 100% {
+          box-shadow: 0 0 4px var(--seed-green);
+          transform: scale(1);
+        }
+        50% {
+          box-shadow: 0 0 10px var(--seed-green), 0 0 22px rgba(127,176,105,0.25);
+          transform: scale(1.35);
+        }
+      }
+
+      .trust-dot {
+        animation: pip-pulse 3.5s ease-in-out infinite;
+      }
+
+      .trust-item:nth-child(2) .trust-dot { animation-delay: 0.85s; }
+      .trust-item:nth-child(3) .trust-dot { animation-delay: 1.7s; }
+      .trust-item:nth-child(4) .trust-dot { animation-delay: 2.55s; }
+
+      /* ── Brand hover nudge ── */
+      .brand {
+        transition: transform 220ms ease, opacity 220ms ease;
+      }
+      .brand:hover {
+        transform: scale(1.025);
+        opacity: 0.95;
+      }
+
+      /* ── Nav link — soft glow on hover/active ── */
+      .nav-link {
+        transition:
+          background-color 180ms ease,
+          color 180ms ease,
+          box-shadow 180ms ease;
+      }
+      .nav-link:hover {
+        box-shadow: 0 0 0 1.5px rgba(127,176,105,0.2), inset 0 0 14px rgba(127,176,105,0.06);
+      }
+      .nav-link.active {
+        box-shadow: 0 0 0 1.5px rgba(127,176,105,0.25), inset 0 0 16px rgba(127,176,105,0.08);
+      }
+
+      /* ── Nav CTA — gold glow bloom ── */
+      .nav-cta:hover {
+        box-shadow: 0 0 24px rgba(242,199,102,0.45), 0 4px 12px rgba(242,199,102,0.2);
+      }
+
+      /* ── Button active (tactile press) ── */
+      .button:active,
+      .button-terra:active,
+      .button-ghost:active,
+      .button-secondary:active {
+        transform: translateY(0) scale(0.97);
+        transition-duration: 60ms;
+      }
+
+      /* ── Scroll fade-up ── */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 550ms ease, transform 550ms ease;
+        will-change: opacity, transform;
+      }
+
+      .fade-up.in-view {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Stagger siblings */
+      .fade-up.in-view:nth-child(2) { transition-delay: 80ms; }
+      .fade-up.in-view:nth-child(3) { transition-delay: 160ms; }
+      .fade-up.in-view:nth-child(4) { transition-delay: 240ms; }
+      .fade-up.in-view:nth-child(5) { transition-delay: 320ms; }
+      .fade-up.in-view:nth-child(6) { transition-delay: 400ms; }
+
+      /* ── Hero entrance ── */
+      @keyframes hero-rise {
+        from { opacity: 0; transform: translateY(28px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .anim-rise {
+        animation: hero-rise 650ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+      }
+
+      .anim-d1 { animation-delay: 80ms; }
+      .anim-d2 { animation-delay: 220ms; }
+      .anim-d3 { animation-delay: 360ms; }
+      .anim-d4 { animation-delay: 480ms; }
+      .anim-d5 { animation-delay: 580ms; }
+      .anim-d6 { animation-delay: 680ms; }
+
+      /* ── Pathway card glow (homepage) ── */
+      .pathway-card {
+        transition:
+          transform 240ms ease,
+          box-shadow 240ms ease,
+          border-color 240ms ease;
+      }
+
+      .pathway-card.glow-blue:hover {
+        box-shadow: 0 8px 40px rgba(125,211,252,0.22), 0 0 0 1.5px rgba(125,211,252,0.3);
+      }
+
+      .pathway-card.glow-gold:hover {
+        box-shadow: 0 8px 40px rgba(242,199,102,0.22), 0 0 0 1.5px rgba(242,199,102,0.3);
+      }
+
+      .pathway-card.glow-green:hover {
+        box-shadow: 0 8px 40px rgba(127,176,105,0.22), 0 0 0 1.5px rgba(127,176,105,0.3);
+      }
+
+      /* ── prefers-reduced-motion — comprehensive fallback ── */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          transition-delay: 0ms !important;
+        }
+
+        .fade-up {
+          opacity: 1;
+          transform: none;
+        }
+
+        .anim-rise {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+
+        .trust-dot {
+          animation: none;
+        }
+
+        .stars-2,
+        .stars-3 {
+          animation: none;
+        }
+      }
     </style>
   </head>
   <body>
+    <!-- Skip to main content — keyboard / screen reader accessibility -->
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
     <div class="trust-bar">
       <div class="shell trust-bar-inner">
         <span class="trust-item"><span class="trust-dot"></span>Created by a classroom teacher</span>
@@ -850,9 +1191,51 @@ const {
       </div>
     </div>
     <Header currentPath={currentPath} />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <Footer />
+
+    <script>
+      /* ── Scroll fade-up observer ── */
+      (function () {
+        if (!('IntersectionObserver' in window)) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const TARGETS = [
+          '.resource-card',
+          '.fn-card',
+          '.rcard',
+          '.panel',
+          '.feature-card',
+          '.blog-card',
+          '.section-head',
+        ].join(', ');
+
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.08, rootMargin: '0px 0px -32px 0px' }
+        );
+
+        document.querySelectorAll<HTMLElement>(TARGETS).forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          // Elements already fully above the fold skip the animation
+          if (rect.bottom < 0 || rect.top > window.innerHeight * 0.85) {
+            el.classList.add('fade-up');
+            obs.observe(el);
+          } else {
+            // In initial viewport — show immediately, no flicker
+            el.classList.add('fade-up', 'in-view');
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

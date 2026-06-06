@@ -3,6 +3,9 @@
     "slug": "why-i-built-the-seed-lab",
     "title": "Why I Built The SEED Lab",
     "date": "June 2026",
+    "dateISO": "2026-06-01",
+    "category": "Reflection",
+    "readingTime": 3,
     "summary": "This is not a showroom. It is a small educational greenhouse — and here is the story of how it started.",
     "content": [
       "The seed for this project was planted through my work mentoring another teacher, Gatis, during his clinical practice journey. What began as lesson feedback, reflective conversations, and practical teaching support slowly grew into something bigger: a collection of tools and ideas that could help make good teaching more visible, thoughtful, and shareable.",
@@ -12,17 +15,22 @@
       "The SEED Lab is where I gather those ideas: practical teaching tools, curriculum thinking, wellbeing resources, visual supports, mentoring notes, and honest reflections from inside the classroom. Some are designed for PE and movement spaces. Others are for any teacher trying to create safer, calmer, more connected learning environments.",
       "This is not a showroom. It is a small educational greenhouse. Some ideas are fully grown, some are still sprouting, and some are here simply because they might help someone else start something useful.",
       "Thanks for stopping by. I hope you find something here worth planting in your own setting."
-    ]
+    ],
+    "relatedResources": ["how-you-start-shapes-everything", "making-learning-visible"]
   },
   {
     "slug": "starting-with-calm",
     "title": "Starting With Calm",
     "date": "March 2026",
+    "dateISO": "2026-03-01",
+    "category": "Classroom Systems",
+    "readingTime": 1,
     "summary": "A calm start is not about silence for its own sake. It gives everyone a shared rhythm and a clear first step.",
     "content": [
       "When a lesson begins with one predictable routine, teachers spend less energy gathering attention and students spend less energy guessing what comes next.",
       "That routine does not need to be complicated. A short visual prompt, one settling question, or a familiar task on the board can create a softer landing into learning.",
       "For new classrooms or busy weeks, calm beginnings are often one of the simplest ways to build trust."
-    ]
+    ],
+    "relatedResources": ["how-you-start-shapes-everything", "say-less-get-more"]
   }
 ]
