@@ -656,7 +656,7 @@ const DATA = {
                             'Kick with the inside of your foot for accuracy',
                             'Follow through toward the goal and count your scores'
                         ],
-                        video: 'https://www.youtube.com/embed/k7OMGmjpDqs',
+                        video: 'https://drive.google.com/file/d/1svCZvqSc2aIr3mrKd5pYDipnlp-BGdHl/preview',
                         reflect: 'Which part of your foot gave you the most control?'
                     },
                     medium: {
@@ -670,7 +670,7 @@ const DATA = {
                             'Keep your body over the ball as you kick',
                             'Count how many hit your target corner'
                         ],
-                        video: 'https://www.youtube.com/embed/k7OMGmjpDqs',
+                        video: 'https://drive.google.com/file/d/1GTTR1PYynL0WNddtVVHtNjz5ozMASeyu/preview',
                         reflect: 'How did deciding your target before kicking help your accuracy?'
                     },
                     hard: {
@@ -684,7 +684,7 @@ const DATA = {
                             'Strike through the centre of the ball',
                             'Count how many reach your target area'
                         ],
-                        video: 'https://www.youtube.com/embed/k7OMGmjpDqs',
+                        video: 'https://drive.google.com/file/d/1m0OKVPz8ISTtxDmYwb3GjKhifhH7d-UK/preview',
                         reflect: 'What is the hardest part of combining power and accuracy?'
                     }
                 }
@@ -1808,6 +1808,16 @@ function renderLevel() {
     ];
     let html = `<div class="section-label">${currentAct.icon} ${currentAct.name}</div>`;
     html += `<p style="color:#718096;font-size:15px;margin-bottom:18px;">${currentAct.desc}</p>`;
+
+    // Show Review button if Learn It exists and has been completed
+    if (LEARN[actId] && isLearned(actId)) {
+        html += `<div style="margin-bottom:16px">
+            <button onclick="showLearnIt('${actId}')" style="width:100%;background:white;border:2px solid #ed8936;color:#ed8936;border-radius:14px;padding:12px 16px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;">
+                📖 Review Demo, Coaching Points &amp; Quiz
+            </button>
+        </div>`;
+    }
+
     html += `<div class="section-label">Solo Challenges</div>`;
     lvls.forEach(lv => {
         const d = currentAct.levels[lv.key];
