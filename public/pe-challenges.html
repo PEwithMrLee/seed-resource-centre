@@ -477,6 +477,57 @@
         .everyone-card .ec-icon { font-size: 36px; width: 52px; text-align: center; }
         .everyone-card .ec-name { font-size: 17px; font-weight: 700; color: #2d3748; }
         .everyone-card .ec-desc { font-size: 13px; color: #718096; margin-top: 3px; }
+
+        /* ── Progress pills ── */
+        .progress-pills { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+        .pill { display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .pill-done    { background: #c6f6d5; color: #276749; }
+        .pill-pending { background: #e2e8f0; color: #a0aec0; }
+        .pill-amber   { background: #feebc8; color: #c05621; }
+
+        /* ── Find a Spotter button ── */
+        .spotter-btn { width: 100%; background: linear-gradient(135deg,#ed8936,#dd6b20); color: white; border: none; border-radius: 16px; padding: 16px 20px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 14px; min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(237,137,54,0.35); }
+
+        /* ── Spotter flow shared ── */
+        .spotter-screen { padding: 4px 0 0; }
+        .spotter-heading { font-size: 26px; font-weight: 800; color: #2d3748; margin-bottom: 8px; }
+        .spotter-sub { font-size: 15px; color: #718096; line-height: 1.6; margin-bottom: 20px; }
+        .spotter-name-input { width: 100%; font-size: 20px; padding: 16px; border: 3px solid #e2e8f0; border-radius: 16px; font-family: inherit; outline: none; -webkit-appearance: none; background: white; }
+        .spotter-name-input:focus { border-color: #667eea; }
+        .spotter-start-btn { width: 100%; background: linear-gradient(135deg,#667eea,#764ba2); color: white; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 14px; min-height: 56px; opacity: 0.35; transition: opacity 0.2s; }
+        .spotter-start-btn.active { opacity: 1; cursor: pointer; }
+        .spotter-cancel-btn { width: 100%; background: white; color: #718096; border: 2px solid #e2e8f0; border-radius: 16px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 10px; min-height: 52px; }
+
+        /* ── Spotter checklist ── */
+        .checklist-item { display: flex; align-items: flex-start; gap: 14px; background: white; border-radius: 16px; padding: 18px; margin-bottom: 12px; border: 3px solid #e2e8f0; cursor: pointer; transition: border-color 0.15s, background 0.15s; min-height: 52px; -webkit-tap-highlight-color: transparent; }
+        .checklist-item.checked { border-color: #48bb78; background: #f0fff4; }
+        .checklist-box { width: 28px; height: 28px; border-radius: 8px; border: 3px solid #cbd5e0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; transition: all 0.15s; margin-top: 1px; }
+        .checklist-item.checked .checklist-box { background: #48bb78; border-color: #48bb78; }
+        .checklist-label { font-size: 17px; font-weight: 600; color: #2d3748; line-height: 1.4; }
+        .approve-btn { width: 100%; background: #c6f6d5; color: #276749; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 16px; min-height: 56px; transition: background 0.2s, box-shadow 0.2s; }
+        .approve-btn.active { background: linear-gradient(135deg,#48bb78,#38a169); color: white; box-shadow: 0 4px 14px rgba(72,187,120,0.45); }
+        .try-again-btn { width: 100%; background: white; color: #e53e3e; border: 2px solid #feb2b2; border-radius: 16px; padding: 16px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; margin-top: 10px; min-height: 52px; }
+
+        /* ── Mastered screen ── */
+        .mastered-hero { text-align: center; padding: 24px 0 16px; }
+        .mastered-emoji { font-size: 72px; }
+        .mastered-title { font-size: 36px; font-weight: 900; color: #276749; margin-top: 8px; }
+        .mastered-sub   { font-size: 17px; color: #718096; margin-top: 6px; }
+        .mastered-receipt { background: white; border-radius: 20px; padding: 22px; margin: 18px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 2px solid #c6f6d5; }
+        .receipt-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #f0fff4; font-size: 15px; }
+        .receipt-row:last-child { border-bottom: none; }
+        .receipt-label { color: #718096; font-weight: 600; flex-shrink: 0; margin-right: 12px; }
+        .receipt-val   { color: #2d3748; font-weight: 700; text-align: right; }
+        .get-cert-btn { width: 100%; background: linear-gradient(135deg,#667eea,#764ba2); color: white; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .skip-cert-btn { width: 100%; background: white; color: #718096; border: 2px solid #e2e8f0; border-radius: 16px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 10px; min-height: 52px; }
+
+        /* ── Certificate screen ── */
+        .cert-soon-box { text-align: center; background: linear-gradient(135deg,#faf5ff,#fff); border: 2px solid #e9d8fd; border-radius: 20px; padding: 32px 20px; margin-bottom: 20px; }
+        .cert-soon-box .cert-emoji { font-size: 56px; }
+        .cert-soon-box h2 { font-size: 20px; font-weight: 800; color: #2d3748; margin-top: 12px; }
+        .cert-soon-box p  { color: #718096; font-size: 14px; line-height: 1.6; margin-top: 8px; }
+        .cert-download-btn { width: 100%; background: linear-gradient(135deg,#48bb78,#38a169); color: white; border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 700; cursor: pointer; font-family: inherit; min-height: 56px; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0.5; }
+        .cert-download-btn.ready { opacity: 1; box-shadow: 0 4px 14px rgba(72,187,120,0.4); }
     </style>
 </head>
 <body>
@@ -604,6 +655,26 @@
 <!-- EVERYONE SUB-CATEGORY -->
 <div class="screen" id="screen-everyone-sub">
     <div id="everyone-sub-content"></div>
+</div>
+
+<!-- SPOTTER HANDOFF -->
+<div class="screen" id="screen-spotter-handoff">
+    <div id="spotter-handoff-content"></div>
+</div>
+
+<!-- SPOTTER CHECKLIST -->
+<div class="screen" id="screen-spotter-checklist">
+    <div id="spotter-checklist-content"></div>
+</div>
+
+<!-- SPOTTER MASTERED -->
+<div class="screen" id="screen-spotter-mastered">
+    <div id="spotter-mastered-content"></div>
+</div>
+
+<!-- CERTIFICATE / BADGE -->
+<div class="screen" id="screen-cert">
+    <div id="cert-content"></div>
 </div>
 
 <div class="toast" id="toast">✅ Result saved!</div>
@@ -1729,6 +1800,65 @@ const EVERYONE = {
 };
 
 // ═══════════════════════════════════════════
+//  SPOTTER CRITERIA
+//  2-3 observable things per challenge per level
+// ═══════════════════════════════════════════
+const SPOTTER_CRITERIA = {
+    'basketball': {
+        easy:   ['Stood at the free throw line', 'Knees bent and ball held above head before shooting', 'Ball reached the hoop or backboard'],
+        medium: ['Used correct elbow-in shooting form', 'Followed through with the wrist after releasing', 'Made at least 3 successful shots'],
+        hard:   ['Started at the 3-point line with the ball', 'Used correct two-step footwork before the layup', 'Ball reached the hoop on the attempt']
+    },
+    'soccer': {
+        easy:   ['Used the inside of the foot to kick', 'Ball stayed along the ground', 'Kicked from 10 metres'],
+        medium: ['Kicked from 15 metres', 'Ball aimed at a corner of the goal', 'No wild or uncontrolled kicks'],
+        hard:   ['Lofted the ball up and over the obstacle', 'Used laces with a leaning-back technique to generate lift', 'Ball cleared the obstacle at least once']
+    },
+    'throw-catch': {
+        easy:   ['Threw the ball with one hand using L-shape technique', 'Ball hit the wall', 'Caught the ball after one bounce using soup hands'],
+        medium: ['Threw above head height using L-shape', 'Caught the ball before it bounced — in the air', 'Three successful catches in a row'],
+        hard:   ['Balanced stance at the point of release', 'Arm fully extended on the throw', 'Caught the ball cleanly with one hand 3 times']
+    }
+};
+
+// ═══════════════════════════════════════════
+//  CERTIFICATE CONFIG (templates TBC)
+//  Fill in x/y coords once Canva PNGs are ready
+// ═══════════════════════════════════════════
+const CERT_CONFIG = {
+    'basketball': {
+        template: '/certificates/basketball.png',
+        fields: {
+            studentName: { x: null, y: null, size: 48, color: '#070A12' },
+            class:       { x: null, y: null, size: 28, color: '#3d3d3a' },
+            challenge:   { x: null, y: null, size: 32, color: '#3B6D11' },
+            date:        { x: null, y: null, size: 22, color: '#888780' },
+            spotter:     { x: null, y: null, size: 22, color: '#888780' }
+        }
+    },
+    'soccer': {
+        template: '/certificates/soccer.png',
+        fields: {
+            studentName: { x: null, y: null, size: 48, color: '#070A12' },
+            class:       { x: null, y: null, size: 28, color: '#3d3d3a' },
+            challenge:   { x: null, y: null, size: 32, color: '#3B6D11' },
+            date:        { x: null, y: null, size: 22, color: '#888780' },
+            spotter:     { x: null, y: null, size: 22, color: '#888780' }
+        }
+    },
+    'throw-catch': {
+        template: '/certificates/throw-catch.png',
+        fields: {
+            studentName: { x: null, y: null, size: 48, color: '#070A12' },
+            class:       { x: null, y: null, size: 28, color: '#3d3d3a' },
+            challenge:   { x: null, y: null, size: 32, color: '#3B6D11' },
+            date:        { x: null, y: null, size: 22, color: '#888780' },
+            spotter:     { x: null, y: null, size: 22, color: '#888780' }
+        }
+    }
+};
+
+// ═══════════════════════════════════════════
 //  CONFIG — paste your Apps Script URL below
 // ═══════════════════════════════════════════
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziy4ZYCRgUg0tW-7Vep52T7p-ldscRzOOhVsGALG4C_GCe6exi-OlHRXQd2r5auGVj/exec';
@@ -1743,6 +1873,35 @@ let currentAct  = null;
 let currentLv   = null;
 let navStack    = ['home'];
 let selectedStars = 0;
+let currentSpotterName     = '';
+let currentCheckedCriteria = [];
+
+// ── Spotter / Badge localStorage helpers ──
+function isSpotterApproved(actId) {
+    try { return JSON.parse(localStorage.getItem('pe-challenges-spotter-' + actId) || '{}').approved === true; } catch(e) { return false; }
+}
+function getSpotterData(actId) {
+    try { return JSON.parse(localStorage.getItem('pe-challenges-spotter-' + actId) || 'null'); } catch(e) { return null; }
+}
+function markSpotterApproved(actId, spotterName, criteria) {
+    localStorage.setItem('pe-challenges-spotter-' + actId, JSON.stringify({
+        approved: true, spotterName, timestamp: new Date().toISOString(), criteriaChecked: criteria
+    }));
+}
+function getAttemptCount(actId) {
+    try { return JSON.parse(localStorage.getItem('pe-challenges-attempts-' + actId) || '{"count":0}').count; } catch(e) { return 0; }
+}
+function incrementAttemptCount(actId) {
+    const count = getAttemptCount(actId) + 1;
+    localStorage.setItem('pe-challenges-attempts-' + actId, JSON.stringify({ count }));
+    return count;
+}
+function isCertDownloaded(actId) {
+    try { return JSON.parse(localStorage.getItem('pe-challenges-cert-' + actId) || '{}').downloaded === true; } catch(e) { return false; }
+}
+function markCertDownloaded(actId) {
+    localStorage.setItem('pe-challenges-cert-' + actId, JSON.stringify({ downloaded: true, date: new Date().toLocaleDateString('en-GB') }));
+}
 
 // ═══════════════════════════════════════════
 //  NAVIGATION
@@ -1766,13 +1925,17 @@ function goBack() {
     if (prev === 'home')              { showScreen('home'); }
     else if (prev === 'category')     { renderCategory();       showScreen('category'); }
     else if (prev === 'level')        { renderLevel();          showScreen('level'); }
-    else if (prev === 'results')      { renderResults();        showScreen('results'); }
-    else if (prev === 'pin')          { showScreen('pin'); }
-    else if (prev === 'teacher')      { renderTeacher();        showScreen('teacher'); }
-    else if (prev === 'game')         { showScreen('game'); }
-    else if (prev === 'learn')        { showScreen('learn'); }
-    else if (prev === 'everyone')     { showScreen('everyone'); }
-    else if (prev === 'everyone-sub') { showScreen('everyone-sub'); }
+    else if (prev === 'results')           { renderResults();        showScreen('results'); }
+    else if (prev === 'pin')               { showScreen('pin'); }
+    else if (prev === 'teacher')           { renderTeacher();        showScreen('teacher'); }
+    else if (prev === 'game')              { showScreen('game'); }
+    else if (prev === 'learn')             { showScreen('learn'); }
+    else if (prev === 'everyone')          { showScreen('everyone'); }
+    else if (prev === 'everyone-sub')      { showScreen('everyone-sub'); }
+    else if (prev === 'spotter-handoff')   { renderLevel(); showScreen('level'); }
+    else if (prev === 'spotter-checklist') { showScreen('spotter-handoff'); }
+    else if (prev === 'spotter-mastered')  { renderLevel(); showScreen('level'); }
+    else if (prev === 'cert')              { renderLevel(); showScreen('level'); }
 }
 
 // ═══════════════════════════════════════════
@@ -1800,13 +1963,28 @@ function renderCategory() {
     let html = `<div class="${cat.bgClass}">`;
     html += `<div class="section-label">${cat.icon} Choose a Challenge</div>`;
     cat.activities.forEach(act => {
-        const hasLearn = !!LEARN[act.id];
-        const learned  = hasLearn && isLearned(act.id);
-        const badge    = hasLearn
+        const hasLearn   = !!LEARN[act.id];
+        const learned    = hasLearn && isLearned(act.id);
+        const badge      = hasLearn
             ? (learned
                 ? `<span class="learn-badge learn-badge-done">✅ Learned</span>`
                 : `<span class="learn-badge learn-badge-locked">📖 Learn It First</span>`)
             : '';
+        const easyDone   = isDone(act.id, 'easy');
+        const mediumDone = isDone(act.id, 'medium');
+        const hardDone   = isDone(act.id, 'hard');
+        const spotterDone = isSpotterApproved(act.id);
+        const certDone   = isCertDownloaded(act.id);
+        const allLevelsDone = easyDone && mediumDone && hardDone;
+        const hasSpotter = !!SPOTTER_CRITERIA[act.id];
+        const pillsHtml  = `
+            <div class="progress-pills">
+                <span class="pill ${easyDone   ? 'pill-done' : 'pill-pending'}">Easy</span>
+                <span class="pill ${mediumDone ? 'pill-done' : 'pill-pending'}">Medium</span>
+                <span class="pill ${hardDone   ? 'pill-done' : 'pill-pending'}">Hard</span>
+                ${hasSpotter ? `<span class="pill ${spotterDone ? 'pill-done' : (allLevelsDone ? 'pill-amber' : 'pill-pending')}">Spotter</span>` : ''}
+                ${hasSpotter ? `<span class="pill ${certDone   ? 'pill-done' : 'pill-pending'}">Badge</span>` : ''}
+            </div>`;
         html += `
             <div class="activity-card" onclick="handleActivityTap('${act.id}')">
                 <div class="act-icon">${act.icon}</div>
@@ -1814,6 +1992,7 @@ function renderCategory() {
                     <div class="act-name">${act.name}</div>
                     <div class="act-desc">${act.desc}</div>
                     ${badge ? `<div style="margin-top:6px">${badge}</div>` : ''}
+                    ${pillsHtml}
                 </div>
                 <div class="act-arrow">›</div>
             </div>`;
@@ -1915,6 +2094,33 @@ function renderLevel() {
                         <div class="game-card-desc">${game.tagline}</div>
                     </div>`;
             });
+        }
+    }
+
+    // ── Spotter / Mastered section ──
+    const hasSpotter = !!SPOTTER_CRITERIA[actId];
+    if (hasSpotter) {
+        const spotterDone = isSpotterApproved(actId);
+        const allLevelsDone = easyDone && mediumDone && hardDone;
+        if (spotterDone) {
+            const sd = getSpotterData(actId);
+            html += `
+                <div style="background:linear-gradient(135deg,#f0fff4,#fff);border:2px solid #c6f6d5;border-radius:18px;padding:18px 20px;margin-top:12px;display:flex;align-items:center;gap:14px;">
+                    <div style="font-size:32px">🏅</div>
+                    <div style="flex:1">
+                        <div style="font-weight:800;color:#276749;font-size:17px;">Mastered!</div>
+                        <div style="font-size:13px;color:#4a5568;margin-top:3px;">Approved by ${sd ? sd.spotterName : 'your Spotter'}</div>
+                    </div>
+                    <button onclick="showCertDownload()" style="background:#667eea;color:white;border:none;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;min-height:44px;">🎓 Badge</button>
+                </div>`;
+        } else if (allLevelsDone) {
+            html += `
+                <div style="margin-top:6px">
+                    <button class="spotter-btn" onclick="showSpotterHandoff()">
+                        👀 Find a Spotter
+                    </button>
+                    <p style="text-align:center;font-size:13px;color:#a0aec0;margin-top:8px;">All levels done! Get a classmate to watch and approve your best attempt.</p>
+                </div>`;
         }
     }
 
@@ -2553,6 +2759,206 @@ function showEveryoneLevel(actId) {
     currentCat = 'everyone-' + currentEveryone;
     renderLevel();
     navigate('level');
+}
+
+// ═══════════════════════════════════════════
+//  SPOTTER FLOW
+// ═══════════════════════════════════════════
+
+function showSpotterHandoff() {
+    document.getElementById('headerTitle').textContent = '👀 Find a Spotter';
+    const lvLabel = currentLv ? currentLv.charAt(0).toUpperCase() + currentLv.slice(1) : 'Hard';
+    document.getElementById('spotter-handoff-content').innerHTML = `
+        <div style="padding:20px">
+            <div class="spotter-heading">Find a Spotter 👀</div>
+            <div class="spotter-sub">Hand your device to a classmate — they'll watch your best attempt and tick what they see.</div>
+            <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:18px;padding:18px 20px;color:white;margin-bottom:20px;">
+                <div style="font-size:12px;font-weight:700;opacity:0.75;text-transform:uppercase;letter-spacing:0.07em;">Challenge</div>
+                <div style="font-size:19px;font-weight:800;margin-top:4px;">${currentAct.name}</div>
+                <div style="font-size:14px;opacity:0.85;margin-top:2px;">Hard level — best attempt</div>
+            </div>
+            <label class="form-label" style="font-size:16px;font-weight:700;color:#2d3748;margin-bottom:10px;display:block;">Spotter: type your name</label>
+            <input type="text" class="spotter-name-input" id="spotterNameInput" placeholder="Spotter's name..." oninput="checkSpotterName()" autocomplete="off" autocorrect="off">
+            <button class="spotter-start-btn" id="startSpotterBtn" onclick="startSpotterChecklist()" disabled>
+                👁️ Start Spotter Test
+            </button>
+            <button class="spotter-cancel-btn" onclick="goBack()">← Cancel</button>
+            <div class="spacer"></div>
+        </div>
+    `;
+    navigate('spotter-handoff');
+}
+
+function checkSpotterName() {
+    const val = document.getElementById('spotterNameInput').value.trim();
+    const btn = document.getElementById('startSpotterBtn');
+    btn.disabled = val.length < 2;
+    btn.classList.toggle('active', val.length >= 2);
+}
+
+function startSpotterChecklist() {
+    currentSpotterName     = document.getElementById('spotterNameInput').value.trim();
+    currentCheckedCriteria = [];
+    renderSpotterChecklist();
+    navigate('spotter-checklist');
+}
+
+function renderSpotterChecklist() {
+    document.getElementById('headerTitle').textContent = '✅ Spotter Checklist';
+    const criteria = (SPOTTER_CRITERIA[currentAct.id] && SPOTTER_CRITERIA[currentAct.id]['hard']) || [];
+
+    const checkboxes = criteria.map((c, i) => `
+        <div class="checklist-item" id="check-item-${i}" onclick="toggleCriteria(${i}, ${criteria.length})">
+            <div class="checklist-box" id="check-box-${i}"></div>
+            <div class="checklist-label">${c}</div>
+        </div>
+    `).join('');
+
+    document.getElementById('spotter-checklist-content').innerHTML = `
+        <div style="padding:20px">
+            <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:18px;padding:18px 20px;color:white;margin-bottom:16px;">
+                <div style="font-size:12px;font-weight:700;opacity:0.75;text-transform:uppercase;letter-spacing:0.07em;">Watching</div>
+                <div style="font-size:19px;font-weight:800;margin-top:4px;">${currentAct.name}</div>
+                <div style="font-size:14px;opacity:0.85;margin-top:2px;">Hard level</div>
+            </div>
+            <div class="spotter-sub">Spotter — watch carefully and tick everything you see ✅</div>
+            ${checkboxes}
+            <button class="approve-btn" id="approveBtn" onclick="handleSpotterApprove()" disabled>
+                ✅ Approve — I saw it all!
+            </button>
+            <button class="try-again-btn" onclick="handleSpotterTryAgain()">
+                ❌ Not yet — try again
+            </button>
+            <div class="spacer"></div>
+        </div>
+    `;
+}
+
+function toggleCriteria(index, total) {
+    const item     = document.getElementById('check-item-' + index);
+    const box      = document.getElementById('check-box-' + index);
+    const criteria = (SPOTTER_CRITERIA[currentAct.id] && SPOTTER_CRITERIA[currentAct.id]['hard']) || [];
+    const label    = criteria[index];
+
+    if (item.classList.contains('checked')) {
+        item.classList.remove('checked');
+        box.textContent = '';
+        currentCheckedCriteria = currentCheckedCriteria.filter(c => c !== label);
+    } else {
+        item.classList.add('checked');
+        box.textContent = '✓';
+        if (!currentCheckedCriteria.includes(label)) currentCheckedCriteria.push(label);
+    }
+
+    const approveBtn = document.getElementById('approveBtn');
+    approveBtn.disabled = currentCheckedCriteria.length < total;
+    approveBtn.classList.toggle('active', currentCheckedCriteria.length >= total);
+}
+
+function handleSpotterApprove() {
+    markSpotterApproved(currentAct.id, currentSpotterName, currentCheckedCriteria);
+    renderMasteredScreen();
+    navigate('spotter-mastered');
+}
+
+function handleSpotterTryAgain() {
+    incrementAttemptCount(currentAct.id);
+    // Strip spotter screens from stack and return to level
+    navStack = navStack.filter(s => !['spotter-handoff','spotter-checklist'].includes(s));
+    renderLevel();
+    showScreen('level');
+}
+
+function renderMasteredScreen() {
+    document.getElementById('headerTitle').textContent = '🏅 Mastered!';
+    const actId    = currentAct.id;
+    const attempts = getAttemptCount(actId);
+    const today    = new Date().toLocaleDateString('en-GB');
+    const attemptText = attempts === 0 ? 'First attempt! 🌟' : `Mastered on attempt ${attempts + 1}`;
+
+    const criteriaList = currentCheckedCriteria.map(c =>
+        `<div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:14px;color:#2d3748;">
+            <span style="color:#48bb78;font-weight:800;flex-shrink:0;">✓</span><span>${c}</span>
+         </div>`
+    ).join('');
+
+    document.getElementById('spotter-mastered-content').innerHTML = `
+        <div style="padding:20px">
+            <div class="mastered-hero">
+                <div class="mastered-emoji">🏅</div>
+                <div class="mastered-title">Mastered!</div>
+                <div class="mastered-sub">${currentAct.name}</div>
+            </div>
+            <div class="mastered-receipt">
+                <div class="receipt-row"><span class="receipt-label">Challenge</span><span class="receipt-val">${currentAct.name}</span></div>
+                <div class="receipt-row"><span class="receipt-label">Spotter</span><span class="receipt-val">${currentSpotterName}</span></div>
+                <div class="receipt-row"><span class="receipt-label">Date</span><span class="receipt-val">${today}</span></div>
+                <div class="receipt-row"><span class="receipt-label">Attempts</span><span class="receipt-val">${attemptText}</span></div>
+                <div style="margin-top:12px;padding-top:12px;border-top:2px solid #f0fff4;">
+                    <div style="font-size:12px;font-weight:700;color:#a0aec0;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">Spotter confirmed:</div>
+                    ${criteriaList}
+                </div>
+            </div>
+            <button class="get-cert-btn" onclick="showCertDownload()">
+                🎓 Get Your Badge
+            </button>
+            <button class="skip-cert-btn" onclick="skipToHub()">Done — back to challenges</button>
+            <div class="spacer"></div>
+        </div>
+    `;
+}
+
+function showCertDownload() {
+    document.getElementById('headerTitle').textContent = '🎓 Get Your Badge';
+    document.getElementById('cert-content').innerHTML = `
+        <div style="padding:20px">
+            <div class="cert-soon-box">
+                <div class="cert-emoji">🎓</div>
+                <h2>Certificate coming soon</h2>
+                <p>Check back after your teacher sets it up — your <strong>Mastered</strong> badge for <strong>${currentAct.name}</strong> is on the way!</p>
+            </div>
+            <div style="background:white;border-radius:20px;padding:22px;margin-bottom:16px;box-shadow:0 4px 15px rgba(0,0,0,0.08);">
+                <div class="form-gap">
+                    <div>
+                        <label class="form-label">Your name</label>
+                        <input type="text" class="name-input" id="certStudentName" placeholder="Your first name..." style="font-size:18px;" oninput="checkCertReady()">
+                    </div>
+                    <div>
+                        <label class="form-label">Your class / grade</label>
+                        <input type="text" class="name-input" id="certStudentClass" placeholder="e.g. Grade 3B..." style="font-size:18px;" oninput="checkCertReady()">
+                    </div>
+                </div>
+            </div>
+            <button class="cert-download-btn" id="certDownloadBtn" onclick="downloadCertificate()" disabled>
+                ⬇️ Download Badge
+            </button>
+            <button class="skip-cert-btn" style="margin-top:10px" onclick="skipToHub()">← Back to challenges</button>
+            <div class="spacer"></div>
+        </div>
+    `;
+    navigate('cert');
+}
+
+function checkCertReady() {
+    const name  = (document.getElementById('certStudentName')  || {}).value || '';
+    const cls   = (document.getElementById('certStudentClass') || {}).value || '';
+    const btn   = document.getElementById('certDownloadBtn');
+    if (!btn) return;
+    const ready = name.trim().length >= 2 && cls.trim().length >= 1;
+    btn.disabled = !ready;
+    btn.classList.toggle('ready', ready);
+}
+
+function downloadCertificate() {
+    markCertDownloaded(currentAct.id);
+    // Template coordinates not yet set — placeholder message
+    alert('🎓 Certificate templates are being set up by your teacher — check back soon!');
+}
+
+function skipToHub() {
+    navStack = ['home', 'category', 'level'];
+    renderLevel();
+    showScreen('level');
 }
 </script>
 </body>
