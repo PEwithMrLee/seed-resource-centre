@@ -740,53 +740,56 @@ const DATA = {
                 }
             },
             {
-                id: 'long-jump',
-                name: 'Standing Long Jump',
-                icon: '🏃',
-                desc: 'Jump as far as you can',
-                unit: 'centimetres',
+                id: 'throw-catch',
+                name: 'Throw & Catch',
+                icon: '🎾',
+                desc: 'Throw a tennis ball against the wall and catch it',
+                unit: 'catches / 10 throws',
                 levels: {
                     easy: {
-                        title: 'Jump & Land',
-                        passScore: 80,
-                        goal: 'Jump as far as you can — best of 3 jumps! Hit 80cm+ to unlock Medium!',
+                        title: 'One Bounce Catch',
+                        passScore: 6,
+                        goal: 'Throw against the wall — allow one bounce then catch with TWO hands. Score 6+ to unlock Medium! 10 throws!',
                         steps: [
-                            'Stand with feet shoulder-width apart behind the line',
-                            'Bend your knees and swing your arms back',
-                            'Jump forward swinging both arms forward at the same time',
-                            'Land on both feet with soft, bent knees',
-                            'Measure from the line to where your heels land — record your best'
+                            'Stand 5 metres from the wall with a tennis ball',
+                            'Use the L-shape throw — elbow up, arm back like an L, step forward and release',
+                            'Throw at the wall at a medium height',
+                            'Let the ball bounce once on the floor',
+                            'Move your feet toward the ball — use SOUP HANDS to catch (like splashing soup on your shirt!)',
+                            'Eyes on the ball all the way into your hands — count your catches'
                         ],
-                        video: 'https://www.youtube.com/embed/lVBW0yYFeSk',
-                        reflect: 'How did using your arms change how far you jumped?'
+                        video: 'https://drive.google.com/file/d/11L7Ilw4eszlOiqlsMpF54KpzRKo09W5O/preview',
+                        reflect: 'Did moving your feet to the ball make catching easier?'
                     },
                     medium: {
-                        title: 'Power Jump',
-                        passScore: 110,
-                        goal: 'Maximise your distance — full arm swing and explosive push. Hit 110cm+ to unlock Hard! Best of 3!',
+                        title: 'Fly Catch',
+                        passScore: 6,
+                        goal: 'Throw against the wall — catch it in the air before it bounces! Score 6+ to unlock Hard! 10 throws!',
                         steps: [
-                            'Start with feet together at the line',
-                            'Drop into a half-squat — thighs almost parallel to the floor',
-                            'Explode forward, driving arms up and forward hard',
-                            'Stretch your legs out in front to land further',
-                            'Measure from line to back heel — record your best in cm'
+                            'Stand 5 metres from the wall with a tennis ball',
+                            'Use the L-shape throw — elbow up, arm back, step and release',
+                            'Throw at the wall and watch the ball off the wall immediately',
+                            'Move quickly to get under or behind the ball',
+                            'Use SOUP HANDS — two-handed catch before it hits the ground',
+                            'Eyes on the ball the whole time — count your clean catches'
                         ],
-                        video: 'https://www.youtube.com/embed/lVBW0yYFeSk',
-                        reflect: 'Which part of the jump do you think adds the most distance?'
+                        video: 'https://drive.google.com/file/d/1kZhpXOfH2XfAcZQZhNW5ITP94ydo4ejW/preview',
+                        reflect: 'How did watching the ball off the wall help you get in position?'
                     },
                     hard: {
-                        title: 'Consistency Challenge',
-                        passScore: 120,
-                        goal: 'Do 5 jumps — record your average. Hit 120cm+ average to unlock the Games!',
+                        title: 'One Hand Challenge',
+                        passScore: 5,
+                        goal: 'Throw and catch with ONE hand — no bounce! Score 5+ to unlock the Games! 10 throws! Bonus: try your non-dominant hand!',
                         steps: [
-                            'Complete 5 standing long jumps with maximum effort',
-                            'Measure and note each jump distance in cm',
-                            'Add all 5 together and divide by 5 to get your average',
-                            'Enter your average as your score',
-                            'Bonus: What was the difference between your best and worst?'
+                            'Stand 5 metres from the wall with a tennis ball',
+                            'Use the L-shape throw with your dominant hand',
+                            'Catch the ball in the air with ONE hand',
+                            'Move your feet — get your body behind the ball, not just your arm',
+                            'Bonus challenge: throw AND catch using your non-dominant hand',
+                            'Eyes on the ball — count your one-handed catches'
                         ],
-                        video: 'https://www.youtube.com/embed/lVBW0yYFeSk',
-                        reflect: 'What caused the difference between your best and worst jumps?'
+                        video: 'https://drive.google.com/file/d/1QIp48TRDfghRcfdaNl_KdCTyG2nvPkx5/preview',
+                        reflect: 'How did using one hand change how you had to move your feet?'
                     }
                 }
             },
@@ -1250,33 +1253,34 @@ const LEARN = {
             }
         ]
     },
-    'long-jump': {
+    'throw-catch': {
         video: '',
         points: [
-            { icon: '💪', text: 'Swing your arms forward and up explosively as you jump — they add real distance' },
-            { icon: '🦵', text: 'Bend your knees deeply before jumping — load the spring!' },
-            { icon: '🦶', text: 'Push off from the balls of your feet, not your heels' },
-            { icon: '🌊', text: 'Reach your legs forward at the end of the jump — stretch for every centimetre' },
-            { icon: '🛬', text: 'Land with soft, bent knees — absorb the impact safely' }
+            { icon: '📐', text: 'L-shape throw — bend your elbow up to make an L shape, step forward with the opposite foot and release. This gives you power and accuracy!' },
+            { icon: '🍲', text: 'SOUP HANDS to catch — hold your hands together like a bowl ready to splash soup on your shirt. This gives you a big soft target for the ball!' },
+            { icon: '👀', text: 'Eyes on the ball — watch it leave your hand, watch it hit the wall, and track it all the way into your hands. Never look away early!' },
+            { icon: '🦶', text: 'Move your feet — don\'t just reach with your arms. Shuffle toward the ball so your body is behind it when you catch' },
+            { icon: '🤲', text: 'Soft hands — let the ball come to you and "give" slightly as it arrives. Stiff hands cause drops!' },
+            { icon: '🎯', text: 'Aim for the middle of the wall at a consistent height — the more consistent your throw, the easier your catch' }
         ],
         mistakes: [
-            { icon: '❌', text: 'Arms by your side — not using your arms can cost you 30cm or more' },
-            { icon: '❌', text: 'Jumping up instead of forward — aim your energy at 45 degrees outward' },
-            { icon: '❌', text: 'Straight-leg landing — always bend your knees to absorb impact safely' },
-            { icon: '❌', text: 'Shallow knee bend — the less you load, the less power you get' }
+            { icon: '❌', text: 'Throwing with a straight arm — use the L-shape! A straight-arm throw has no power and poor accuracy' },
+            { icon: '❌', text: 'Looking at the wall, not the ball — your eyes must follow the ball the whole time' },
+            { icon: '❌', text: 'Standing still and reaching — move your feet to get behind the ball before it arrives' },
+            { icon: '❌', text: 'Snatching at the ball — relax your hands and let the ball land into them softly' }
         ],
         quiz: [
             {
-                q: 'What role do your arms play in a standing long jump?',
-                options: ['They don\'t help — only legs matter', 'They help with balance only', 'They add power and distance by swinging forward', 'They should be held still'],
-                answer: 2,
-                explanation: '✅ Correct! A strong arm swing can add 20–30cm to your jump — never leave them by your side!'
+                q: 'What is the L-shape throw?',
+                options: ['Throw with a straight arm above your head', 'Bend your elbow up like an L, step forward with opposite foot, then release', 'Throw underarm with two hands', 'Hold the ball at your side and flick your wrist'],
+                answer: 1,
+                explanation: '✅ Correct! The L-shape gives your throw power and direction — elbow up, step and release!'
             },
             {
-                q: 'How should you land in a standing long jump?',
-                options: ['On straight, locked legs', 'On your heels first, legs straight', 'With soft, bent knees to absorb impact', 'On your toes only'],
+                q: 'What are SOUP HANDS?',
+                options: ['Catching with one hand only', 'Hands flat like a high-five', 'Hands cupped together like a bowl — ready to "splash soup on your shirt"', 'Arms crossed in front of your chest'],
                 answer: 2,
-                explanation: '✅ Correct! Soft bent knees protect your joints and help you land further forward.'
+                explanation: '✅ Correct! Soup hands give you a big soft target. Imagine splashing soup on your shirt as the ball lands in!'
             }
         ]
     },
@@ -1418,38 +1422,38 @@ const GAMES = {
             tip: '💡 Tip: Make closer targets worth less points than far targets to make it fair for all skill levels'
         }
     ],
-    'long-jump': [
+    'throw-catch': [
         {
-            id: 'jump-off',
+            id: 'catch-rally',
             video: '',
-            name: 'Jump Off',
-            icon: '⚡',
+            name: 'Catch Rally',
+            icon: '🔥',
             players: '2 players',
-            tagline: 'Best of 3 rounds — furthest jump wins each round!',
+            tagline: 'Take turns — how many catches in a row can you get as a pair?',
             steps: [
-                'Both players stand side by side at the jump line',
-                'On "3, 2, 1, Jump!" — both jump at the same time',
-                'Measure both jumps. Furthest jump wins that round',
-                'Play 3 rounds. Most round wins takes the match',
-                'If 1-1 after 2 rounds — the 3rd is the decider! 🏅'
+                'Stand side by side, 5 metres from the wall',
+                'Player 1 throws and catches — then Player 2 goes',
+                'Keep a shared count — every clean catch adds to your total',
+                'If anyone drops, the count resets to zero',
+                'Challenge: can you reach 20 clean catches between you?'
             ],
-            tip: '💡 Tip: Swing your arms hard — it adds real distance to your jump!'
+            tip: '💡 Tip: Call out the count together — it builds team focus!'
         },
         {
-            id: 'long-jump-league',
+            id: 'catch-knockout',
             video: '',
-            name: 'Long Jump League',
-            icon: '🥇',
+            name: 'Catch Knockout',
+            icon: '⚡',
             players: '3+ players',
-            tagline: 'Everyone jumps — gold, silver, bronze awarded!',
+            tagline: 'Miss a catch and you\'re out — last one standing wins!',
             steps: [
-                'Everyone gets 3 jumps each — record every distance',
-                'Each player\'s best jump is their final score',
-                'After everyone has jumped, rank all players from furthest to shortest',
-                'Award 🥇 Gold, 🥈 Silver, 🥉 Bronze to the top 3',
-                'Optional: record results and try to beat them next lesson!'
+                'Players stand in a line, each taking turns to throw and catch',
+                'Use the fly catch (no bounce) for this game',
+                'If you drop the ball, you\'re out — step to the side',
+                'If the player who knocked you out gets knocked out, you come back in — they sit out instead!',
+                'Last player still catching wins the round!'
             ],
-            tip: '💡 Tip: Rest between jumps — you\'ll jump further when fresh'
+            tip: '💡 Tip: Consistent throws make consistent catches — don\'t go too hard!'
         }
     ],
     'wall-rally': [
