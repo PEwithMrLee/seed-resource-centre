@@ -52,6 +52,22 @@
         .home-hero h2 { font-size: 28px; font-weight: 800; color: #2d3748; margin-top: 8px; }
         .home-hero p { color: #718096; font-size: 16px; margin-top: 6px; }
 
+        /* ── Testimonials ── */
+        .testimonials { margin-top: 28px; }
+        .testimonials-heading { font-size: 13px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin-bottom: 12px; }
+        .testimonial-card {
+            background: linear-gradient(135deg, #f7f4ff, #fff);
+            border: 2px solid #e9d8fd;
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+        .testimonial-quote { font-size: 15px; color: #4a5568; line-height: 1.6; font-style: italic; }
+        .testimonial-quote::before { content: '\201C'; font-size: 22px; color: #9f7aea; font-style: normal; line-height: 0; vertical-align: -5px; margin-right: 2px; }
+        .testimonial-quote::after  { content: '\201D'; font-size: 22px; color: #9f7aea; font-style: normal; line-height: 0; vertical-align: -5px; margin-left: 2px; }
+        .testimonial-attr { margin-top: 10px; font-size: 13px; font-weight: 700; color: #9f7aea; }
+
         /* ── Generic card ── */
         .card {
             background: white;
@@ -513,6 +529,22 @@
         <div>
             <div class="card-title" style="font-size:16px;">Teacher View</div>
             <div class="card-sub">See all student results</div>
+        </div>
+    </div>
+
+    <div class="testimonials">
+        <div class="testimonials-heading">⭐ What students say</div>
+        <div class="testimonial-card">
+            <div class="testimonial-quote">It helps me practise different skills and get better at them and videos helped me understand what to do.</div>
+            <div class="testimonial-attr">— Imogen, Grade 3</div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-quote">I liked all the different challenges and that there were easy and hard challenges. It made me want to keep trying.</div>
+            <div class="testimonial-attr">— Junot, Grade 3</div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-quote">You can choose what you want to learn about and you can do it on your own without needing the teacher all the time.</div>
+            <div class="testimonial-attr">— Kenan, Grade 3</div>
         </div>
     </div>
 </div>
