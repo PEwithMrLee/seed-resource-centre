@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup D — Easter Eggs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "DM Sans", sans-serif; background: #faf8f3; color: #2c2c2c; }
+
+  /* Identical to real site — professional */
+  .header { background: rgba(250,248,243,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(80,105,75,0.15); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; min-height: 5rem; position: sticky; top: 0; z-index: 10; }
+  .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
+  .brand-logo { height: 3rem; width: auto; }
+  .brand-text { display: flex; flex-direction: column; }
+  .brand-mark { font-family: "Cormorant Garamond", serif; font-size: 1.7rem; font-weight: 600; color: #3a5e3a; line-height: 1.1; }
+  .brand-sub { font-size: 0.72rem; color: #888; }
+
+  /* Easter egg — logo tooltip on hover */
+  .brand:hover .brand-mark::after { content: " 🌟 Use the Force, Lee"; font-size: 0.9rem; font-style: italic; color: #22c55e; font-family: "DM Sans", sans-serif; }
+
+  .nav { display: flex; gap: 0.25rem; align-items: center; }
+  .nav a { padding: 0.55rem 0.9rem; border-radius: 999px; color: #666; font-size: 0.95rem; font-weight: 500; text-decoration: none; transition: all 160ms ease; }
+  .nav a:hover { background: #dce8d8; color: #3a5e3a; }
+  .nav .cta { background: #3a5e3a; color: #fff; margin-left: 0.5rem; }
+
+  /* Trust bar */
+  .trust-bar { background: #3a5e3a; color: rgba(255,253,248,0.85); padding: 0.65rem 0; font-size: 0.85rem; font-weight: 500; text-align: center; }
+  .trust-bar-inner { display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+  .trust-item { display: flex; align-items: center; gap: 0.4rem; }
+  .trust-dot { width: 4px; height: 4px; border-radius: 50%; background: #c47b4a; }
+
+  /* Hero */
+  .hero { padding: 6rem 2rem 3.5rem; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center; }
+  .eyebrow { display: inline-block; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.78rem; font-weight: 700; color: #c47b4a; margin-bottom: 0.75rem; }
+  h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.05; font-weight: 600; max-width: 14ch; margin-bottom: 1.25rem; }
+  .hero p { color: #666; font-size: 1.1rem; line-height: 1.75; max-width: 58ch; margin-bottom: 1.5rem; }
+  .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.5rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; text-decoration: none; border: 1.5px solid transparent; transition: all 160ms ease; position: relative; }
+  .btn-primary { background: #3a5e3a; color: #fff; box-shadow: 0 8px 24px rgba(58,94,58,0.28); }
+  .btn-primary:hover { background: #4a7c59; transform: translateY(-2px); }
+  /* Easter egg — hover tooltip on button */
+  .btn-primary::after { content: "May the resources be with you ✨"; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #4ade80; font-size: 0.72rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 200ms ease; font-style: italic; }
+  .btn-primary:hover::after { opacity: 1; }
+  .btn-sec { border-color: rgba(80,105,75,0.3); color: #2c2c2c; }
+  .btn-sec:hover { background: #dce8d8; }
+
+  /* Hero panel */
+  .hero-panel { background: linear-gradient(145deg, rgba(236,244,232,0.95), rgba(255,253,248,0.9)); border: 1px solid rgba(80,105,75,0.15); border-radius: 24px; padding: 2rem; box-shadow: 0 8px 32px rgba(40,65,40,0.07); }
+  .brand-chip { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,253,248,0.95); border: 1px solid rgba(80,105,75,0.25); color: #3a5e3a; font-size: 0.82rem; font-weight: 600; padding: 0.4rem 0.8rem; border-radius: 999px; margin-bottom: 1rem; }
+  .brand-chip::before { content: ""; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #4a7c59; flex-shrink: 0; }
+  .hero-panel h2 { font-family: "Cormorant Garamond", serif; font-size: 1.8rem; line-height: 1.12; margin-bottom: 0.75rem; }
+  .hero-panel p { color: #666; font-size: 0.98rem; line-height: 1.75; margin-bottom: 1.5rem; }
+  .micro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .micro-card { padding: 1rem; border-radius: 10px; background: rgba(255,253,249,0.85); border: 1px solid rgba(80,105,75,0.12); }
+  /* Easter egg — Yoda on hover */
+  .micro-card:hover .micro-label { display: none; }
+  .micro-card .yoda-text { display: none; font-style: italic; font-size: 0.72rem; color: #22c55e; line-height: 1.4; }
+  .micro-card:hover .yoda-text { display: block; }
+  .micro-card strong { font-family: "Cormorant Garamond", serif; font-size: 1.15rem; font-weight: 600; color: #3a5e3a; display: block; margin-bottom: 0.25rem; }
+  .micro-card .micro-label { font-size: 0.85rem; color: #666; line-height: 1.5; }
+
+  /* Section */
+  .section-soft { background: #e8efe4; padding: 4rem 0; }
+  .section-inner { max-width: 1120px; margin: 0 auto; padding: 0 2rem; }
+  .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem; }
+  .section-head h2 { font-family: "Cormorant Garamond", serif; font-size: 2.5rem; }
+  .resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .resource-card { background: rgba(255,253,248,0.92); border: 1px solid rgba(80,105,75,0.15); border-radius: 16px; padding: 1.5rem; box-shadow: 0 8px 32px rgba(40,65,40,0.07); transition: all 200ms ease; position: relative; overflow: hidden; }
+  .resource-card:hover { box-shadow: 0 16px 48px rgba(40,65,40,0.14); transform: translateY(-3px); }
+  /* Easter egg — floating badge on hover */
+  .resource-card::after { content: attr(data-egg); position: absolute; top: 0.75rem; right: 0.75rem; font-size: 0.68rem; font-style: italic; color: #3a5e3a; background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.25); padding: 0.2rem 0.5rem; border-radius: 999px; opacity: 0; transition: opacity 200ms ease; }
+  .resource-card:hover::after { opacity: 1; }
+  .card-img { width: 100%; border-radius: 8px; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 1.25rem; background: #dce8d8; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+  .pill { display: inline-block; background: #dce8d8; color: #3a5e3a; font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 999px; margin-bottom: 0.75rem; }
+  .resource-card h3 { font-family: "Cormorant Garamond", serif; font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .resource-card .tagline { color: #2c2c2c; font-weight: 500; font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .resource-card p { color: #666; font-size: 0.95rem; line-height: 1.7; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(80,105,75,0.12); }
+  .card-link { color: #4a7c59; font-weight: 600; font-size: 0.9rem; }
+
+  /* Footer */
+  .footer { background: #3a5e3a; color: rgba(255,253,248,0.8); padding: 2.5rem 2rem 1.5rem; }
+  .footer-inner { max-width: 1120px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; flex-wrap: wrap; }
+  .footer-brand p { color: rgba(255,253,248,0.55); font-size: 0.9rem; max-width: 30ch; margin-top: 0.5rem; line-height: 1.6; }
+  .footer-brand strong { color: rgba(255,253,248,0.9); font-size: 1.1rem; font-family: "Cormorant Garamond", serif; }
+  .footer-bottom { max-width: 1120px; margin: 1.5rem auto 0; padding-top: 1.25rem; border-top: 1px solid rgba(255,253,248,0.12); display: flex; justify-content: space-between; font-size: 0.82rem; color: rgba(255,253,248,0.4); flex-wrap: wrap; gap: 0.5rem; }
+  /* Easter egg — secret footer quote */
+  .footer-secret { font-size: 0.75rem; color: rgba(255,253,248,0.2); font-style: italic; text-align: center; margin-top: 1rem; }
+  .footer-secret:hover { color: rgba(255,253,248,0.7); transition: color 300ms ease; }
+
+  /* Konami hint */
+  .konami-hint { text-align: center; padding: 0.5rem; font-size: 0.72rem; color: rgba(255,253,248,0.15); font-family: monospace; }
+  .konami-hint:hover { color: rgba(255,253,248,0.5); }
+
+  /* Egg finder overlay */
+  .egg-finder { position: fixed; top: 1.5rem; right: 1.5rem; background: rgba(255,253,248,0.95); border: 1px solid rgba(80,105,75,0.2); border-radius: 12px; padding: 1rem 1.25rem; box-shadow: 0 8px 32px rgba(0,0,0,0.12); font-size: 0.82rem; max-width: 240px; }
+  .egg-finder h4 { font-weight: 700; margin-bottom: 0.5rem; color: #3a5e3a; font-size: 0.9rem; }
+  .egg-list { list-style: none; display: grid; gap: 0.3rem; }
+  .egg-list li { display: flex; align-items: center; gap: 0.4rem; color: #666; }
+  .egg-list li.found { color: #22c55e; text-decoration: line-through; }
+  .egg-list li::before { content: "○"; font-size: 0.6rem; }
+  .egg-list li.found::before { content: "✓"; color: #22c55e; }
+
+  .mockup-label { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #2c2c2c; color: #fff; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .back-link { position: fixed; bottom: 1.5rem; left: 1.5rem; background: #3a5e3a; color: #fff; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+</style>
+</head>
+<body>
+
+<!-- Easter Egg Finder (only in this demo) -->
+<div class="egg-finder">
+  <h4>🥚 Easter Egg Hunt</h4>
+  <ul class="egg-list">
+    <li id="egg1">Hover the main button</li>
+    <li id="egg2">Hover a feature card</li>
+    <li id="egg3">Hover a resource card</li>
+    <li id="egg4">Find the footer secret</li>
+    <li id="egg5">Hover the brand name</li>
+  </ul>
+</div>
+
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <span class="trust-item"><span class="trust-dot"></span>Created by a classroom teacher</span>
+    <span class="trust-item"><span class="trust-dot"></span>IB Primary PE specialist</span>
+    <span class="trust-item"><span class="trust-dot"></span>Free resources — no sign-up required</span>
+    <span class="trust-item"><span class="trust-dot"></span>New resources added regularly</span>
+  </div>
+</div>
+
+<header class="header">
+  <a class="brand" href="#">
+    <div style="width:44px;height:44px;background:linear-gradient(135deg,#dce8d8,#e8efe4);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:1px solid rgba(80,105,75,0.2)">🌱</div>
+    <div class="brand-text">
+      <span class="brand-mark">The SEED Lab</span>
+      <span class="brand-sub">Supporting Educators in Effective Development</span>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="#">Resources</a>
+    <a href="#">Inside My Classroom</a>
+    <a href="#">Listen & Watch</a>
+    <a href="#">Blog</a>
+    <a class="cta" href="#">Say Hello</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <span class="eyebrow">For teachers, by a teacher</span>
+    <h1>Practical ideas and tools for busy educators.</h1>
+    <p>The SEED Lab is a growing resource centre built around real classroom practice — downloadable tools, curriculum design examples, and teaching strategies you can use straight away.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#" onmouseenter="document.getElementById('egg1').classList.add('found')">Browse resources</a>
+      <a class="btn btn-sec" href="#">Inside my classroom →</a>
+    </div>
+  </div>
+
+  <div class="hero-panel">
+    <div class="brand-chip">What SEED stands for</div>
+    <h2>Supporting Educators in Effective Development.</h2>
+    <p>Not a blog. Not a course. A curated, growing collection of practical resources designed for teachers who want to improve without the noise.</p>
+    <div class="micro-grid">
+      <div class="micro-card" onmouseenter="document.getElementById('egg2').classList.add('found')">
+        <strong>Practical</strong>
+        <span class="micro-label">Tools you can use in your next lesson.</span>
+        <span class="yoda-text">"Ready your lessons must be." — Yoda</span>
+      </div>
+      <div class="micro-card" onmouseenter="document.getElementById('egg2').classList.add('found')">
+        <strong>Real</strong>
+        <span class="micro-label">Built from actual classroom experience.</span>
+        <span class="yoda-text">"Do or do not, teach you must." — Yoda</span>
+      </div>
+      <div class="micro-card" onmouseenter="document.getElementById('egg2').classList.add('found')">
+        <strong>Growing</strong>
+        <span class="micro-label">New resources added regularly.</span>
+        <span class="yoda-text">"Always in motion, the future is." — Yoda</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-soft">
+  <div class="section-inner">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Featured Resources</span>
+        <h2>Ready to download and use today.</h2>
+      </div>
+      <a class="btn btn-sec" href="#">See all resources</a>
+    </div>
+    <div class="resource-grid">
+      <div class="resource-card" data-egg="⚡ This one has the Force" onmouseenter="document.getElementById('egg3').classList.add('found')">
+        <div class="card-img">📋</div>
+        <span class="pill">Teacher Prompt Card</span>
+        <h3>How You Start... Shapes Everything</h3>
+        <p class="tagline">Your lesson opening sets everything in motion.</p>
+        <p>A practical prompt card built around the G.R.E.E.T framework.</p>
+        <div class="card-footer"><span class="pill">Teaching Practice</span><a class="card-link" href="#">Download PDF</a></div>
+      </div>
+      <div class="resource-card" data-egg="🌟 The Force is strong with this one" onmouseenter="document.getElementById('egg3').classList.add('found')">
+        <div class="card-img">💬</div>
+        <span class="pill">Teacher Prompt Card</span>
+        <h3>Say Less... Get More</h3>
+        <p class="tagline">Less talking. More thinking.</p>
+        <p>The L.E.S.S framework — reducing teacher talk in every lesson.</p>
+        <div class="card-footer"><span class="pill">Teaching Practice</span><a class="card-link" href="#">Download PDF</a></div>
+      </div>
+      <div class="resource-card" data-egg="🧙 A Jedi tool, this is" onmouseenter="document.getElementById('egg3').classList.add('found')">
+        <div class="card-img">📊</div>
+        <span class="pill">Infographic</span>
+        <h3>Vertical & Horizontal Alignment</h3>
+        <p class="tagline">See the whole curriculum picture.</p>
+        <p>A garden metaphor for curriculum design that actually makes sense.</p>
+        <div class="card-footer"><span class="pill">Curriculum Design</span><a class="card-link" href="#">Download PDF</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <strong>The SEED Lab</strong>
+      <p>A growing resource centre for teachers — practical tools, classroom-tested strategies, and curriculum design examples.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 The SEED Lab. Made by a teacher, for teachers.</span>
+    <span>Supporting Educators in Effective Development</span>
+  </div>
+  <p class="footer-secret" onmouseenter="document.getElementById('egg4').classList.add('found')">"This is The Way." — The Mandalorian (also: Lee's teaching philosophy)</p>
+  <p class="konami-hint">↑ ↑ ↓ ↓ ← → ← → B A · try it</p>
+</footer>
+
+<script>
+// Konami code easter egg
+let konamiCode = [];
+const sequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+document.addEventListener('keydown', (e) => {
+  konamiCode.push(e.key);
+  konamiCode = konamiCode.slice(-10);
+  if (konamiCode.join(',') === sequence.join(',')) {
+    document.body.style.transition = 'filter 500ms';
+    document.body.style.filter = 'hue-rotate(90deg)';
+    setTimeout(() => { document.body.style.filter = ''; }, 2000);
+    alert('🌟 You found the secret! "Unlimited power!" — The SEED Lab');
+  }
+});
+</script>
+
+<div class="mockup-label">Concept D — Easter Eggs Only</div>
+<a class="back-link" href="/mockup-index.html">← All concepts</a>
+
+</body>
+</html>

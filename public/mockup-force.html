@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup A — The Force of Teaching</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "DM Sans", sans-serif; background: #faf8f3; color: #2c2c2c; }
+
+  /* Header */
+  .header { background: rgba(250,248,243,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(80,105,75,0.15); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; min-height: 5rem; position: sticky; top: 0; z-index: 10; }
+  .brand { display: flex; align-items: center; gap: 0.75rem; }
+  .brand-text h2 { font-family: "Cormorant Garamond", serif; font-size: 1.6rem; color: #3a5e3a; font-weight: 600; }
+  .brand-text p { font-size: 0.72rem; color: #888; }
+  .nav { display: flex; gap: 0.5rem; align-items: center; }
+  .nav a { padding: 0.5rem 0.9rem; border-radius: 999px; color: #666; font-size: 0.9rem; font-weight: 500; text-decoration: none; }
+  .nav a:hover { background: #dce8d8; color: #3a5e3a; }
+  .nav .cta { background: #3a5e3a; color: #fff; }
+  .nav .cta:hover { background: #4a7c59; }
+
+  /* Jedi banner */
+  .jedi-banner { background: #1a1a2e; color: rgba(255,255,200,0.85); text-align: center; padding: 0.55rem; font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em; }
+  .jedi-banner span { color: #4ade80; margin: 0 1rem; }
+
+  /* Hero */
+  .hero { padding: 5rem 2rem 3rem; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.78rem; font-weight: 700; color: #c47b4a; margin-bottom: 0.75rem; }
+  .eyebrow-saber { width: 20px; height: 3px; background: linear-gradient(90deg, #4ade80, #22c55e); border-radius: 999px; box-shadow: 0 0 6px #4ade8088; }
+  h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.05; font-weight: 600; color: #2c2c2c; max-width: 14ch; margin-bottom: 1.25rem; }
+  .hero p { color: #666; font-size: 1.1rem; line-height: 1.75; max-width: 58ch; margin-bottom: 0.75rem; }
+  .jedi-quote { font-style: italic; font-family: "Cormorant Garamond", serif; font-size: 1.1rem; color: #3a5e3a; border-left: 3px solid #4ade80; padding-left: 1rem; margin: 1rem 0 1.5rem; }
+  .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.5rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; text-decoration: none; cursor: pointer; border: 1.5px solid transparent; transition: all 160ms ease; }
+  .btn-primary { background: #3a5e3a; color: #fff; box-shadow: 0 8px 24px rgba(58,94,58,0.28); }
+  .btn-primary:hover { background: #4a7c59; transform: translateY(-2px); }
+  .btn-sec { border-color: rgba(80,105,75,0.3); color: #2c2c2c; }
+  .btn-sec:hover { background: #dce8d8; border-color: #3a5e3a; }
+
+  /* Hero panel */
+  .hero-panel { background: linear-gradient(145deg, #0f1923, #1a2a1a); border-radius: 20px; padding: 2rem; color: #fff; position: relative; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.3); }
+  .hero-panel::before { content: ""; position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(74,222,128,0.15), transparent 70%); border-radius: 50%; }
+  .panel-chip { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; font-size: 0.78rem; font-weight: 700; padding: 0.3rem 0.75rem; border-radius: 999px; margin-bottom: 1rem; letter-spacing: 0.05em; }
+  .hero-panel h2 { font-family: "Cormorant Garamond", serif; font-size: 1.8rem; line-height: 1.15; margin-bottom: 1rem; color: #f0fdf0; }
+  .hero-panel p { color: rgba(255,255,255,0.65); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+  .force-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .force-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 0.85rem 0.6rem; text-align: center; }
+  .force-card .ico { font-size: 1.2rem; margin-bottom: 0.25rem; }
+  .force-card strong { display: block; font-size: 0.78rem; color: #4ade80; font-weight: 700; margin-bottom: 0.15rem; }
+  .force-card p { font-size: 0.68rem; color: rgba(255,255,255,0.5); line-height: 1.4; }
+
+  /* Lightsaber divider */
+  .saber-divider { max-width: 1120px; margin: 2rem auto; padding: 0 2rem; display: flex; align-items: center; gap: 1rem; }
+  .saber-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(74,222,128,0.4), transparent); }
+  .saber-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+
+  /* Features */
+  .features { max-width: 1120px; margin: 0 auto 4rem; padding: 0 2rem; }
+  .features-label { text-align: center; margin-bottom: 2rem; }
+  .features-label .eyebrow { justify-content: center; }
+  .features-label h2 { font-family: "Cormorant Garamond", serif; font-size: 2.5rem; color: #2c2c2c; margin-top: 0.5rem; }
+  .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .feat-card { background: #fff; border: 1px solid rgba(80,105,75,0.15); border-radius: 16px; padding: 1.5rem; border-top: 3px solid; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .feat-card.green { border-top-color: #22c55e; }
+  .feat-card.blue { border-top-color: #3b82f6; }
+  .feat-card.purple { border-top-color: #8b5cf6; }
+  .feat-card .icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .feat-card h4 { font-family: "Cormorant Garamond", serif; font-size: 1.2rem; color: #2c2c2c; margin-bottom: 0.4rem; }
+  .feat-card p { font-size: 0.9rem; color: #666; line-height: 1.6; }
+  .feat-card .jedi-tag { display: inline-block; font-size: 0.7rem; font-style: italic; color: #888; margin-top: 0.5rem; }
+
+  /* Label */
+  .mockup-label { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #1a1a2e; color: #4ade80; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.3); letter-spacing: 0.05em; }
+
+  .back-link { position: fixed; bottom: 1.5rem; left: 1.5rem; background: #3a5e3a; color: #fff; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+</style>
+</head>
+<body>
+
+<div class="jedi-banner">
+  Behaviour is information <span>✦</span> Children do well when they can <span>✦</span> The adult's job is not to win the moment — but to teach the missing skill
+</div>
+
+<header class="header">
+  <div class="brand">
+    <div style="width:44px;height:44px;background:linear-gradient(135deg,#3a5e3a,#1a2a1a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🌱</div>
+    <div class="brand-text">
+      <h2>The SEED Lab</h2>
+      <p>Supporting Educators in Effective Development</p>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#">Resources</a>
+    <a href="#">Inside My Classroom</a>
+    <a href="#">Listen & Watch</a>
+    <a href="#">Blog</a>
+    <a class="cta" href="#">Say Hello</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <p class="eyebrow"><span class="eyebrow-saber"></span> For teachers, by a teacher</p>
+    <h1>Practical ideas and tools for busy educators.</h1>
+    <p>The SEED Lab is a growing resource centre built around real classroom practice — downloadable tools, curriculum design examples, and teaching strategies you can use straight away.</p>
+    <blockquote class="jedi-quote">"In a dark place we find ourselves, and a little more knowledge lights our way." — Yoda (on professional development)</blockquote>
+    <div class="actions">
+      <a class="btn btn-primary" href="#">🌱 Browse resources</a>
+      <a class="btn btn-sec" href="#">Inside my classroom →</a>
+    </div>
+  </div>
+
+  <div class="hero-panel">
+    <div class="panel-chip">⚡ What SEED stands for</div>
+    <h2>Supporting Educators in Effective Development.</h2>
+    <p>Not a blog. Not a course. A curated collection of practical tools — for teachers who want to improve their practice without the noise.</p>
+    <div class="force-cards">
+      <div class="force-card">
+        <div class="ico">🎯</div>
+        <strong>Practical</strong>
+        <p>Use it in your next lesson</p>
+      </div>
+      <div class="force-card">
+        <div class="ico">🏫</div>
+        <strong>Real</strong>
+        <p>From actual classrooms</p>
+      </div>
+      <div class="force-card">
+        <div class="ico">🌱</div>
+        <strong>Growing</strong>
+        <p>New resources always</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="saber-divider">
+  <div class="saber-line"></div>
+  <div class="saber-dot"></div>
+  <div class="saber-line"></div>
+</div>
+
+<div class="features">
+  <div class="features-label">
+    <p class="eyebrow"><span class="eyebrow-saber"></span> Your teaching toolkit</p>
+    <h2>Choose your path, young educator.</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card green">
+      <div class="icon">📥</div>
+      <h4>Resources</h4>
+      <p>Downloadable tools, prompt cards, and infographics — tested in real classrooms and ready to use today.</p>
+      <span class="jedi-tag">— "Always pass on what you have learned." — Yoda</span>
+    </div>
+    <div class="feat-card blue">
+      <div class="icon">🏫</div>
+      <h4>Inside My Classroom</h4>
+      <p>Real lesson examples, planning walkthroughs, and honest reflections. See what teaching actually looks like.</p>
+      <span class="jedi-tag">— "Do or do not. There is no try." — Yoda</span>
+    </div>
+    <div class="feat-card purple">
+      <div class="icon">🧭</div>
+      <h4>Apps & Tools</h4>
+      <p>Teacher-built apps for PE, wellbeing, team culture, and behaviour — free, no login, no nonsense.</p>
+      <span class="jedi-tag">— "The greatest teacher, failure is." — Yoda</span>
+    </div>
+  </div>
+</div>
+
+<div class="mockup-label">Concept A — The Force of Teaching</div>
+<a class="back-link" href="/mockup-index.html">← All concepts</a>
+
+</body>
+</html>

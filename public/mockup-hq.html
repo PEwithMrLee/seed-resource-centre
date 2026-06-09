@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup C — Secret Base / HQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "DM Sans", sans-serif; background: #0d1117; color: #e6edf3; }
+
+  /* Header */
+  .header { background: rgba(13,17,23,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(74,222,128,0.15); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; min-height: 5rem; position: sticky; top: 0; z-index: 10; }
+  .brand { display: flex; align-items: center; gap: 0.75rem; }
+  .brand-logo { width: 44px; height: 44px; background: linear-gradient(135deg, #22c55e, #166534); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 0 16px rgba(34,197,94,0.3); }
+  .brand-text h2 { font-family: "Cormorant Garamond", serif; font-size: 1.6rem; color: #22c55e; font-weight: 600; }
+  .brand-text p { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+  .nav { display: flex; gap: 0.5rem; align-items: center; }
+  .nav a { padding: 0.5rem 0.9rem; border-radius: 6px; color: rgba(255,255,255,0.6); font-size: 0.88rem; font-weight: 500; text-decoration: none; font-family: monospace; letter-spacing: 0.03em; transition: all 160ms ease; }
+  .nav a:hover { color: #22c55e; background: rgba(34,197,94,0.08); }
+  .nav .cta { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); border-radius: 6px; }
+  .nav .cta:hover { background: rgba(34,197,94,0.25); }
+
+  /* Status bar */
+  .status-bar { background: #0a0e13; border-bottom: 1px solid rgba(74,222,128,0.1); padding: 0.4rem 2rem; display: flex; align-items: center; gap: 2rem; font-size: 0.75rem; font-family: monospace; }
+  .status-item { display: flex; align-items: center; gap: 0.4rem; color: rgba(255,255,255,0.4); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .status-item.amber .status-dot { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+
+  /* Hero */
+  .hero { padding: 5rem 2rem 3rem; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center; }
+  .mission-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: #22c55e; font-size: 0.75rem; font-weight: 700; padding: 0.3rem 0.8rem; border-radius: 4px; margin-bottom: 1rem; font-family: monospace; letter-spacing: 0.08em; }
+  h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.05; font-weight: 600; color: #e6edf3; max-width: 14ch; margin-bottom: 1.25rem; }
+  h1 span { color: #22c55e; }
+  .hero p { color: rgba(255,255,255,0.55); font-size: 1.05rem; line-height: 1.75; max-width: 58ch; margin-bottom: 1.5rem; }
+  .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: 600; font-size: 0.9rem; text-decoration: none; border: 1px solid transparent; transition: all 160ms ease; font-family: monospace; }
+  .btn-primary { background: #22c55e; color: #0d1117; }
+  .btn-primary:hover { background: #4ade80; }
+  .btn-sec { border-color: rgba(34,197,94,0.3); color: #22c55e; }
+  .btn-sec:hover { background: rgba(34,197,94,0.08); }
+
+  /* Briefing panel */
+  .briefing { background: #161b22; border: 1px solid rgba(74,222,128,0.2); border-radius: 12px; padding: 1.5rem; font-family: monospace; }
+  .briefing-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .briefing-title { font-size: 0.75rem; color: #22c55e; font-weight: 700; letter-spacing: 0.1em; }
+  .briefing-status { font-size: 0.68rem; color: rgba(255,255,255,0.3); }
+  .briefing-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .briefing-item:last-child { border-bottom: none; }
+  .bi-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .bi-label { font-size: 0.7rem; color: #22c55e; letter-spacing: 0.08em; margin-bottom: 0.15rem; }
+  .bi-text { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.4; }
+  .bi-classify { font-size: 0.65rem; color: rgba(255,255,255,0.25); margin-top: 0.15rem; }
+
+  /* Field tools */
+  .field-tools { padding: 3rem 2rem; max-width: 1120px; margin: 0 auto; }
+  .ft-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2rem; }
+  .ft-title { font-family: "Cormorant Garamond", serif; font-size: 2rem; color: #e6edf3; }
+  .ft-sub { font-size: 0.8rem; color: rgba(255,255,255,0.3); font-family: monospace; }
+  .ft-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .ft-card { background: #161b22; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1.25rem; transition: all 200ms ease; cursor: pointer; }
+  .ft-card:hover { border-color: rgba(34,197,94,0.3); background: #1c2128; transform: translateY(-2px); }
+  .ft-card .ft-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .ft-card .ft-type { font-size: 0.65rem; color: #22c55e; font-family: monospace; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+  .ft-card h4 { font-size: 0.95rem; color: #e6edf3; font-weight: 600; margin-bottom: 0.35rem; }
+  .ft-card p { font-size: 0.78rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
+  .ft-card .ft-status { display: inline-block; font-size: 0.65rem; font-family: monospace; margin-top: 0.6rem; padding: 0.2rem 0.5rem; border-radius: 4px; }
+  .ft-status.active { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.2); }
+  .ft-status.classified { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.2); }
+
+  /* Debrief log */
+  .debrief { background: #0d1117; border-top: 1px solid rgba(74,222,128,0.1); padding: 3rem 2rem; }
+  .debrief-inner { max-width: 1120px; margin: 0 auto; }
+  .debrief h2 { font-family: "Cormorant Garamond", serif; font-size: 2rem; color: #e6edf3; margin-bottom: 1.5rem; }
+  .log-entry { background: #161b22; border: 1px solid rgba(255,255,255,0.07); border-left: 3px solid #22c55e; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .log-meta { font-size: 0.68rem; color: rgba(255,255,255,0.3); font-family: monospace; margin-bottom: 0.4rem; }
+  .log-title { font-weight: 600; color: #e6edf3; font-size: 0.95rem; margin-bottom: 0.25rem; }
+  .log-preview { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+  .mockup-label { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #22c55e; color: #0d1117; padding: 0.6rem 1.1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; box-shadow: 0 4px 20px rgba(34,197,94,0.3); font-family: monospace; }
+  .back-link { position: fixed; bottom: 1.5rem; left: 1.5rem; background: #161b22; color: #22c55e; padding: 0.6rem 1.1rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; text-decoration: none; border: 1px solid rgba(34,197,94,0.3); font-family: monospace; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-logo">🌱</div>
+    <div class="brand-text">
+      <h2>The SEED Lab</h2>
+      <p>// Secure Educational Educator Database</p>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#">/field-tools</a>
+    <a href="#">/classroom</a>
+    <a href="#">/transmissions</a>
+    <a href="#">/debrief</a>
+    <a class="cta" href="#">[ Contact ]</a>
+  </nav>
+</header>
+
+<div class="status-bar">
+  <div class="status-item"><div class="status-dot"></div> HQ Online</div>
+  <div class="status-item"><div class="status-dot"></div> 4 Field Tools Active</div>
+  <div class="status-item amber"><div class="status-dot"></div> 5 Resources Available</div>
+  <div class="status-item"><div class="status-dot"></div> Nanjing Base · UTC+8</div>
+</div>
+
+<section class="hero">
+  <div>
+    <div class="mission-tag">// MISSION BRIEF · ACTIVE</div>
+    <h1>Practical tools for <span>field teachers.</span></h1>
+    <p>The SEED Lab is a growing resource centre built around real classroom operations — downloadable intel, field-tested strategies, and tools built by an educator in active deployment.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#">→ Access Field Tools</a>
+      <a class="btn btn-sec" href="#">View Mission Log</a>
+    </div>
+  </div>
+
+  <div class="briefing">
+    <div class="briefing-header">
+      <div class="briefing-title">// CURRENT MISSION BRIEF</div>
+      <div class="briefing-status">CLEARANCE: OPEN</div>
+    </div>
+    <div class="briefing-item">
+      <div class="bi-icon">🎯</div>
+      <div>
+        <div class="bi-label">OBJECTIVE</div>
+        <div class="bi-text">Help teachers move from "how do I stop this?" to "what is this child showing me?"</div>
+        <div class="bi-classify">// PRIMARY MISSION</div>
+      </div>
+    </div>
+    <div class="briefing-item">
+      <div class="bi-icon">🌱</div>
+      <div>
+        <div class="bi-label">APPROACH</div>
+        <div class="bi-text">Regulation-informed, relationship-centred tools. Practical, not theoretical.</div>
+        <div class="bi-classify">// METHODOLOGY</div>
+      </div>
+    </div>
+    <div class="briefing-item">
+      <div class="bi-icon">📍</div>
+      <div>
+        <div class="bi-label">BASE OF OPERATIONS</div>
+        <div class="bi-text">Primary PE classroom, Nanjing, China. IB PYP context.</div>
+        <div class="bi-classify">// FIELD LOCATION</div>
+      </div>
+    </div>
+    <div class="briefing-item">
+      <div class="bi-icon">🔓</div>
+      <div>
+        <div class="bi-label">ACCESS LEVEL</div>
+        <div class="bi-text">All resources free. No login required. No nonsense.</div>
+        <div class="bi-classify">// CLEARANCE: PUBLIC</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="field-tools">
+  <div class="ft-header">
+    <h2 class="ft-title">Field Tools</h2>
+    <span class="ft-sub">// 4 ACTIVE · 0 CLASSIFIED</span>
+  </div>
+  <div class="ft-grid">
+    <div class="ft-card">
+      <div class="ft-icon">🏀</div>
+      <div class="ft-type">// STUDENT TOOL</div>
+      <h4>PE Challenges</h4>
+      <p>Challenge tracker for gym deployment. Progressive difficulty. No login required.</p>
+      <div class="ft-status active">● ACTIVE</div>
+    </div>
+    <div class="ft-card">
+      <div class="ft-icon">⭕</div>
+      <div class="ft-type">// TEACHER TOOL</div>
+      <h4>PE Circle</h4>
+      <p>Lesson opening and closing system. Real-time student readiness tracking.</p>
+      <div class="ft-status classified">⚠ RESTRICTED</div>
+    </div>
+    <div class="ft-card">
+      <div class="ft-icon">🧭</div>
+      <div class="ft-type">// WELLBEING TOOL</div>
+      <h4>Class Compass</h4>
+      <p>Behaviour support intelligence. Translates what you see into what kids need.</p>
+      <div class="ft-status active">● ACTIVE</div>
+    </div>
+    <div class="ft-card">
+      <div class="ft-icon">🏆</div>
+      <div class="ft-type">// TEAM TOOL</div>
+      <h4>Team Quest</h4>
+      <p>Team culture and ATL progression system. IB-aligned. G1–G5 compatible.</p>
+      <div class="ft-status active">● ACTIVE</div>
+    </div>
+  </div>
+</section>
+
+<section class="debrief">
+  <div class="debrief-inner">
+    <h2>// Mission Debrief Log</h2>
+    <div class="log-entry">
+      <div class="log-meta">ENTRY 001 · June 2026 · Category: ORIGIN</div>
+      <div class="log-title">Why I Built The SEED Lab</div>
+      <div class="log-preview">The seed for this project was planted through my work mentoring another teacher, Gatis, during his clinical practice journey. What began as lesson feedback slowly grew into something bigger...</div>
+    </div>
+    <div class="log-entry">
+      <div class="log-meta">ENTRY 002 · March 2026 · Category: CLASSROOM INTEL</div>
+      <div class="log-title">Starting With Calm</div>
+      <div class="log-preview">When a lesson begins with one predictable routine, teachers spend less energy gathering attention and students spend less energy guessing what comes next...</div>
+    </div>
+  </div>
+</section>
+
+<div class="mockup-label">Concept C — Secret Base / HQ</div>
+<a class="back-link" href="/mockup-index.html">← All concepts</a>
+
+</body>
+</html>

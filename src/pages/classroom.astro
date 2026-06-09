@@ -499,6 +499,139 @@ import { withBase } from "../utils/withBase";
     </div>
   </section>
 
+  <!-- LP Ambassadors -->
+  <section class="section">
+    <div class="shell">
+      <div class="tech-top lp-tech-top">
+        <div class="tech-text stack">
+          <div class="circle-badges">
+            <span class="badge-tool">Student-Facing</span>
+            <span class="badge-tool">IB Learner Profile</span>
+            <span class="badge-tool">Badge & Portfolio App</span>
+          </div>
+          <span class="eyebrow">LP Ambassadors</span>
+          <h2>Earn your Learner Profile badge — one trait at a time.</h2>
+          <p>
+            LP Ambassadors is a student-facing badge and portfolio app for the 10 IB Learner Profile traits.
+            Students work through progressive levels — Explorer, Practitioner, Researcher, Ambassador —
+            watching real classroom videos, completing quizzes, and reflecting on how each trait shows up in their lives.
+          </p>
+          <ul class="tech-feature-list">
+            <li>10 IB Learner Profile traits — each with 4 progressive levels</li>
+            <li>Wonder → Watch → Quiz → Reflect → Badge journey per level</li>
+            <li>Downloadable PNG badge with student name and date earned</li>
+            <li>ATL skills tagged and tracked at every level</li>
+            <li>No login — runs in any browser, saves to device</li>
+          </ul>
+          <div class="tech-intro-actions">
+            <a class="button" href="/lp-ambassadors.html" target="_blank">Open LP Ambassadors →</a>
+            <a class="button-secondary" href={withBase("/say-hello")}>Request a demo</a>
+          </div>
+        </div>
+        <div class="lp-phones">
+          <!-- Phone 1: Home / trait selector -->
+          <div class="lp-phone">
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="lp-mockup">
+                  <div class="lp-header">
+                    <span class="lp-wordmark">LP Ambassadors</span>
+                    <span class="lp-logo">S</span>
+                  </div>
+                  <div class="lp-body">
+                    <div class="lp-eyebrow">IB Learner Profile</div>
+                    <div class="lp-screen-title">Choose a trait to begin</div>
+                    <div class="lp-grid">
+                      <div class="lp-card lp-locked"><strong>Inquirer</strong><span>Ask questions, love learning</span><span class="lp-lock">🔒</span></div>
+                      <div class="lp-card lp-locked"><strong>Knowledgeable</strong><span>Explore ideas</span><span class="lp-lock">🔒</span></div>
+                      <div class="lp-card lp-locked"><strong>Thinker</strong><span>Solve problems</span><span class="lp-lock">🔒</span></div>
+                      <div class="lp-card lp-locked"><strong>Communicator</strong><span>Express yourself</span><span class="lp-lock">🔒</span></div>
+                      <div class="lp-card lp-active"><strong>Principled</strong><span>Act with integrity</span><span class="lp-active-tag">Active</span></div>
+                      <div class="lp-card lp-locked"><strong>Caring</strong><span>Show empathy</span><span class="lp-lock">🔒</span></div>
+                      <div class="lp-card lp-locked"><strong>Open-minded</strong><span>Respect others</span><span class="lp-lock">🔒</span></div>
+                      <div class="lp-card lp-locked"><strong>Balanced</strong><span>Mind &amp; body</span><span class="lp-lock">🔒</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="phone-caption">Trait selector</p>
+          </div>
+
+          <!-- Phone 2: Principled detail / level selector -->
+          <div class="lp-phone">
+            <div class="phone-frame">
+              <div class="phone-notch"></div>
+              <div class="phone-screen">
+                <div class="lp-mockup">
+                  <div class="lp-header">
+                    <span class="lp-back">← Back</span>
+                  </div>
+                  <div class="lp-body">
+                    <div class="lp-eyebrow">IB Learner Profile · Principled</div>
+                    <div class="lp-screen-title" style="font-size:0.85rem">Principled</div>
+                    <div class="lp-progress-bar"><div class="lp-progress-fill" style="width:25%"></div></div>
+                    <div class="lp-progress-label">1 of 4 levels complete</div>
+                    <div class="lp-levels">
+                      <div class="lp-level lp-level--earned" style="border-left-color:#185FA5">
+                        <div class="lp-level-row">
+                          <span class="lp-level-name" style="color:#6db3f2">Level 1 — Explorer</span>
+                          <span class="lp-level-tag lp-tag-earned">Earned</span>
+                        </div>
+                        <div class="lp-level-atl"><span>Thinking skills</span><span>Self-reflection</span></div>
+                      </div>
+                      <div class="lp-level lp-level--start" style="border-left-color:#0F6E56">
+                        <div class="lp-level-row">
+                          <span class="lp-level-name" style="color:#5dcead">Level 2 — Practitioner</span>
+                          <span class="lp-level-tag lp-tag-start">Start</span>
+                        </div>
+                        <div class="lp-level-atl lp-atl-dim"><span>Communication</span><span>Social skills</span></div>
+                      </div>
+                      <div class="lp-level lp-level--locked" style="border-left-color:#854F0B">
+                        <div class="lp-level-row">
+                          <span class="lp-level-name" style="color:#e8a84a">Level 3 — Researcher</span>
+                          <span class="lp-level-tag lp-tag-locked">Locked</span>
+                        </div>
+                        <div class="lp-level-atl lp-atl-dim"><span>Research skills</span><span>Critical thinking</span></div>
+                      </div>
+                      <div class="lp-level lp-level--locked" style="border-left-color:#993C1D">
+                        <div class="lp-level-row">
+                          <span class="lp-level-name" style="color:#f28b6e">Level 4 — Ambassador</span>
+                          <span class="lp-level-tag lp-tag-locked">Locked</span>
+                        </div>
+                        <div class="lp-level-atl lp-atl-dim"><span>Leadership</span><span>Self-management</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p class="phone-caption">Level selector</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-features">
+        <div class="tech-feat-card green-top">
+          <span class="tech-feat-icon">🛡️</span>
+          <h4>Badge Journey</h4>
+          <p>Each level is a structured 5-step journey — Wonder, Watch, Quiz, Reflect, Badge. Students earn a downloadable PNG badge with their name and date when they complete a level.</p>
+        </div>
+        <div class="tech-feat-card orange-top">
+          <span class="tech-feat-icon">🎯</span>
+          <h4>IB & ATL Aligned</h4>
+          <p>All 10 IB Learner Profile traits, 4 levels each. Every level maps to specific ATL skills — so badges represent real, named learning, not just participation.</p>
+        </div>
+        <div class="tech-feat-card purple-top">
+          <span class="tech-feat-icon">🌱</span>
+          <h4>Student-Paced Portfolio</h4>
+          <p>Progress saves automatically to the device — no login, no accounts. Students can pick up where they left off across multiple sessions and build a full LP portfolio over the year.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section">
     <div class="shell two-column">
       <div class="quote-card stack">
@@ -1228,6 +1361,274 @@ import { withBase } from "../utils/withBase";
     font-size: 0.68rem;
     color: #c47b4a;
     font-weight: 600;
+  }
+
+  /* ── LP Ambassadors — two phone mockups ── */
+  .lp-phones {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .lp-phone {
+    flex: 1;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .phone-frame {
+    width: 100%;
+    background: #1a1a1e;
+    border-radius: 28px;
+    box-shadow:
+      0 0 0 1px #3a3a3a,
+      0 24px 60px rgba(0,0,0,0.5),
+      inset 0 0 0 2px #2a2a2a;
+    padding: 10px 7px;
+    position: relative;
+  }
+
+  .phone-notch {
+    width: 60px;
+    height: 8px;
+    background: #1a1a1e;
+    border-radius: 999px;
+    margin: 0 auto 6px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .phone-screen {
+    background: #070A12;
+    border-radius: 18px;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 9/17;
+  }
+
+  .phone-caption {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+    margin: 0;
+    max-width: none;
+    font-style: italic;
+  }
+
+  .lp-mockup {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #070A12;
+  }
+
+  .lp-header {
+    background: #0E1628;
+    padding: 0.45rem 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(243,232,208,0.08);
+    flex-shrink: 0;
+  }
+
+  .lp-wordmark {
+    font-weight: 700;
+    font-size: 0.58rem;
+    color: #F3E8D0;
+    letter-spacing: 0.02em;
+  }
+
+  .lp-back {
+    font-size: 0.58rem;
+    color: #A8C69F;
+    font-weight: 500;
+  }
+
+  .lp-logo {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0E1628;
+    border: 1px solid rgba(127,176,105,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    font-weight: 700;
+    color: #A8C69F;
+  }
+
+  .lp-body {
+    padding: 0.45rem 0.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    overflow: hidden;
+  }
+
+  .lp-eyebrow {
+    font-size: 0.48rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #A8C69F;
+  }
+
+  .lp-screen-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #F3E8D0;
+    line-height: 1.25;
+    font-family: "Fraunces", Georgia, serif;
+  }
+
+  .lp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.28rem;
+    flex: 1;
+  }
+
+  .lp-card {
+    background: #0E1628;
+    border-radius: 6px;
+    border: 1px solid rgba(243,232,208,0.08);
+    padding: 0.35rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+  }
+
+  .lp-card strong {
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #F3E8D0;
+    line-height: 1.2;
+  }
+
+  .lp-card span {
+    font-size: 0.48rem;
+    color: rgba(243,232,208,0.4);
+    line-height: 1.3;
+  }
+
+  .lp-card.lp-active {
+    border-color: #7FB069;
+    box-shadow: 0 0 0 1px #7FB069;
+  }
+
+  .lp-lock {
+    font-size: 0.5rem;
+    opacity: 0.35;
+  }
+
+  .lp-active-tag {
+    display: inline-block;
+    background: #7FB069;
+    color: #0a1a08 !important;
+    font-size: 0.44rem !important;
+    font-weight: 700 !important;
+    padding: 1px 4px;
+    border-radius: 999px;
+    opacity: 1 !important;
+    align-self: flex-start;
+    margin-top: auto;
+  }
+
+  /* Level cards in phone 2 */
+  .lp-progress-bar {
+    height: 3px;
+    background: rgba(243,232,208,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .lp-progress-fill {
+    height: 100%;
+    background: #7FB069;
+    border-radius: 2px;
+  }
+
+  .lp-progress-label {
+    font-size: 0.48rem;
+    color: rgba(243,232,208,0.45);
+  }
+
+  .lp-levels {
+    display: flex;
+    flex-direction: column;
+    gap: 0.28rem;
+    flex: 1;
+  }
+
+  .lp-level {
+    background: #0E1628;
+    border-radius: 6px;
+    border: 1px solid rgba(243,232,208,0.08);
+    border-left: 3px solid;
+    padding: 0.35rem 0.5rem;
+  }
+
+  .lp-level--earned { border-color: #185FA5; }
+  .lp-level--start  { border-color: #0F6E56; }
+  .lp-level--locked { border-color: rgba(243,232,208,0.1); opacity: 0.55; }
+
+  .lp-level-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.3rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .lp-level-name {
+    font-size: 0.55rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .lp-level-tag {
+    font-size: 0.42rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .lp-tag-earned  { background: rgba(127,176,105,0.2);  color: #7FB069; border: 1px solid #7FB069; }
+  .lp-tag-start   { background: rgba(127,176,105,0.12); color: #7FB069; border: 1px solid rgba(127,176,105,0.3); }
+  .lp-tag-locked  { background: rgba(243,232,208,0.05); color: rgba(243,232,208,0.4); border: 1px solid rgba(243,232,208,0.1); }
+
+  .lp-level-atl {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .lp-level-atl span {
+    font-size: 0.44rem;
+    color: rgba(243,232,208,0.5);
+    background: rgba(243,232,208,0.06);
+    border: 1px solid rgba(243,232,208,0.1);
+    padding: 1px 5px;
+    border-radius: 999px;
+  }
+
+  .lp-atl-dim span { opacity: 0.6; }
+
+  .lp-tech-top {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
   }
 
   @media (max-width: 900px) {

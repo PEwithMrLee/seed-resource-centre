@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LP Ambassadors — The SEED Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       GALAXY GREENHOUSE — DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --space-black: #070A12;
+      --deep-navy:   #0E1628;
+      --moss:        #7FB069;
+      --sage:        #A8C69F;
+      --starlight:   #F3E8D0;
+      --muted:       rgba(243,232,208,0.55);
+
+      --level-1: #185FA5;
+      --level-2: #0F6E56;
+      --level-3: #854F0B;
+      --level-4: #993C1D;
+
+      --radius-card:   14px;
+      --radius-pill:   20px;
+      --radius-circle: 50%;
+
+      --font-heading: 'Fraunces', Georgia, serif;
+      --font-ui:      'Space Grotesk', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      background: var(--space-black);
+      color: var(--starlight);
+      font-family: var(--font-ui);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       SCREEN ROUTER
+    ============================================================ */
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    .screen.active { display: flex; }
+
+    /* ============================================================
+       SHARED COMPONENTS
+    ============================================================ */
+
+    /* --- top bar --- */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .wordmark {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      color: var(--starlight);
+      letter-spacing: 0.02em;
+      opacity: 0.85;
+    }
+    .seed-logo-stub {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-circle);
+      background: var(--deep-navy);
+      border: 1px solid rgba(127,176,105,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--sage);
+      font-weight: 600;
+    }
+
+    /* --- back button --- */
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--sage);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 0;
+      margin-bottom: 20px;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+    .btn-back:hover { opacity: 1; }
+
+    /* --- eyebrow --- */
+    .eyebrow {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 8px;
+    }
+
+    /* --- headings --- */
+    h1.screen-title {
+      font-family: var(--font-heading);
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 700;
+      color: var(--starlight);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    h2.screen-title {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 700;
+      color: var(--starlight);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    /* --- subtitle / body text --- */
+    .screen-sub {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+
+    /* --- progress pips --- */
+    .pips {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .pip {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--radius-circle);
+      background: rgba(243,232,208,0.2);
+      transition: background 0.3s;
+    }
+    .pip.active { background: var(--moss); }
+    .pip.done   { background: var(--moss); opacity: 0.6; }
+
+    /* --- primary button --- */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--moss);
+      color: #0a1a08;
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 14px 28px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover  { opacity: 0.88; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    /* --- secondary button --- */
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--starlight);
+      font-family: var(--font-ui);
+      font-size: 15px;
+      font-weight: 500;
+      border: 1px solid rgba(243,232,208,0.25);
+      border-radius: var(--radius-pill);
+      padding: 13px 28px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+      transition: border-color 0.15s, opacity 0.15s;
+    }
+    .btn-secondary:hover { border-color: rgba(243,232,208,0.5); }
+
+    /* --- ATL pills --- */
+    .atl-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+    .atl-pill {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid;
+    }
+    .atl-pill.locked {
+      background: rgba(243,232,208,0.05);
+      border-color: rgba(243,232,208,0.15);
+      color: var(--muted);
+    }
+    .atl-pill.lit {
+      background: rgba(24,95,165,0.2);
+      border-color: rgba(24,95,165,0.5);
+      color: #6db3f2;
+    }
+
+    /* ============================================================
+       SCREEN A — HOME
+    ============================================================ */
+    #screen-home .home-intro {
+      margin-bottom: 28px;
+    }
+
+    .trait-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .trait-card {
+      background: var(--deep-navy);
+      border: 1px solid rgba(243,232,208,0.08);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .trait-card:hover { border-color: rgba(243,232,208,0.2); transform: translateY(-1px); }
+    .trait-card.locked { opacity: 0.55; cursor: pointer; }
+    .trait-card.active {
+      border-color: var(--moss);
+      box-shadow: 0 0 0 1px var(--moss), 0 4px 20px rgba(127,176,105,0.15);
+    }
+
+    .trait-card-name {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--starlight);
+      margin-bottom: 4px;
+    }
+    .trait-card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .trait-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .trait-pips {
+      display: flex;
+      gap: 4px;
+    }
+    .trait-pip {
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-circle);
+      background: rgba(243,232,208,0.15);
+    }
+    .trait-pip.earned { background: var(--moss); }
+    .lock-icon { font-size: 14px; opacity: 0.5; }
+    .active-badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      background: var(--moss);
+      color: #0a1a08;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* ============================================================
+       SCREEN B — TRAIT DETAIL
+    ============================================================ */
+    .trait-definition {
+      background: var(--deep-navy);
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(243,232,208,0.08);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .trait-definition p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .level-progress-bar {
+      margin-bottom: 24px;
+    }
+    .level-progress-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .level-progress-track {
+      height: 6px;
+      background: rgba(243,232,208,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .level-progress-fill {
+      height: 100%;
+      background: var(--moss);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    .level-cards { display: flex; flex-direction: column; gap: 12px; }
+
+    .level-card {
+      background: var(--deep-navy);
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(243,232,208,0.08);
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .level-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+    }
+    .level-card[data-level="1"]::before { background: var(--level-1); }
+    .level-card[data-level="2"]::before { background: var(--level-2); }
+    .level-card[data-level="3"]::before { background: var(--level-3); }
+    .level-card[data-level="4"]::before { background: var(--level-4); }
+
+    .level-card.locked   { opacity: 0.5; cursor: default; }
+    .level-card.unlocked:hover { border-color: rgba(243,232,208,0.2); transform: translateY(-1px); }
+    .level-card.earned   { border-color: var(--moss); }
+
+    .level-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .level-card-title {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .level-card[data-level="1"] .level-card-title { color: #6db3f2; }
+    .level-card[data-level="2"] .level-card-title { color: #5dcead; }
+    .level-card[data-level="3"] .level-card-title { color: #e8a84a; }
+    .level-card[data-level="4"] .level-card-title { color: #f28b6e; }
+
+    .level-status-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .tag-start    { background: rgba(127,176,105,0.15); color: var(--moss); border: 1px solid rgba(127,176,105,0.3); }
+    .tag-locked   { background: rgba(243,232,208,0.05); color: var(--muted); border: 1px solid rgba(243,232,208,0.1); }
+    .tag-earned   { background: rgba(127,176,105,0.2);  color: var(--moss); border: 1px solid var(--moss); }
+    .tag-progress { background: rgba(168,198,159,0.15); color: var(--sage); border: 1px solid rgba(168,198,159,0.3); }
+
+    .level-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+
+    /* ============================================================
+       SCREENS C1–C5 — JOURNEY
+    ============================================================ */
+    .journey-header {
+      margin-bottom: 24px;
+    }
+
+    /* C1 — Wonder */
+    .wonder-options { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .wonder-option {
+      background: var(--deep-navy);
+      border: 1px solid rgba(243,232,208,0.12);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--starlight);
+      text-align: left;
+      font-family: var(--font-ui);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .wonder-option:hover { border-color: var(--moss); background: rgba(127,176,105,0.06); }
+    .wonder-option.selected { border-color: var(--moss); background: rgba(127,176,105,0.12); }
+
+    .wonder-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 20px;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    /* C2 — Watch */
+    .video-blocks { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .video-block {
+      background: var(--deep-navy);
+      border: 1px solid rgba(243,232,208,0.1);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+    }
+    .video-embed-area {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #060810;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .video-play-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-circle);
+      background: rgba(127,176,105,0.15);
+      border: 2px solid rgba(127,176,105,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .video-coming-soon { font-size: 13px; opacity: 0.7; }
+
+    .video-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .video-block-meta {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .video-block-title { font-size: 14px; font-weight: 500; }
+    .video-duration { font-size: 12px; color: var(--muted); }
+
+    /* C3 — Quiz */
+    .quiz-counter {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .quiz-question {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--starlight);
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-option {
+      background: var(--deep-navy);
+      border: 1px solid rgba(243,232,208,0.12);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--starlight);
+      text-align: left;
+      font-family: var(--font-ui);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .quiz-option:hover:not(:disabled) { border-color: rgba(243,232,208,0.3); }
+    .quiz-option:disabled { cursor: default; }
+    .quiz-option.correct {
+      border-color: var(--moss);
+      background: rgba(127,176,105,0.15);
+      color: var(--moss);
+    }
+    .quiz-option.wrong {
+      border-color: #e05c5c;
+      background: rgba(224,92,92,0.1);
+      color: #e05c5c;
+    }
+    .quiz-feedback {
+      font-size: 13px;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.correct-msg { background: rgba(127,176,105,0.1); color: var(--moss); }
+    .quiz-feedback.wrong-msg   { background: rgba(224,92,92,0.1);   color: #e8a0a0; }
+
+    /* C4 — Reflect */
+    .wonder-recall-card {
+      background: var(--deep-navy);
+      border: 1px solid rgba(127,176,105,0.2);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+    .wonder-recall-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 6px;
+    }
+    .wonder-recall-text {
+      font-size: 15px;
+      color: var(--starlight);
+      font-style: italic;
+    }
+
+    .reflect-options { display: flex; flex-direction: column; gap: 10px; }
+    .reflect-option {
+      background: var(--deep-navy);
+      border: 1px solid rgba(243,232,208,0.12);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--starlight);
+      text-align: left;
+      font-family: var(--font-ui);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .reflect-option:hover { border-color: var(--moss); background: rgba(127,176,105,0.06); }
+
+    /* C5 — Badge */
+    .badge-pips-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .badge-pip {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--radius-circle);
+      background: var(--moss);
+    }
+
+    .badge-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: var(--radius-circle);
+      background: rgba(24,95,165,0.2);
+      border: 3px solid var(--level-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 48px;
+    }
+    .badge-title {
+      font-family: var(--font-heading);
+      font-size: clamp(28px, 6vw, 40px);
+      font-weight: 700;
+      text-align: center;
+      color: var(--starlight);
+      margin-bottom: 6px;
+    }
+    .badge-sub {
+      font-size: 14px;
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .badge-atl-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .badge-pills-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    /* ============================================================
+       MODALS
+    ============================================================ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7,10,18,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: var(--deep-navy);
+      border: 1px solid rgba(243,232,208,0.15);
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 420px;
+    }
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .modal-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .modal-input {
+      width: 100%;
+      background: rgba(243,232,208,0.06);
+      border: 1px solid rgba(243,232,208,0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: var(--font-ui);
+      font-size: 16px;
+      color: var(--starlight);
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.15s;
+    }
+    .modal-input:focus { border-color: var(--moss); }
+    .modal-input::placeholder { color: rgba(243,232,208,0.3); }
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-actions .btn-primary  { margin-top: 0; }
+    .modal-actions .btn-secondary { margin-top: 0; }
+
+    .coming-soon-icon {
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 400px) {
+      .trait-grid { grid-template-columns: 1fr; }
+      .screen { padding: 20px 14px 40px; }
+    }
+    @media (min-width: 600px) {
+      .screen { padding: 32px 24px 56px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     LP AMBASSADORS — CONFIG
+     Edit this block to update content. Do not edit below the
+     line that says "END CONFIG".
+============================================================ -->
+<script>
+// ---- TRAIT DATA ----
+const TRAITS = [
+  { id: 'inquirer',      name: 'Inquirer',      desc: 'Ask questions, love learning',          active: false },
+  { id: 'knowledgeable', name: 'Knowledgeable',  desc: 'Explore ideas across disciplines',      active: false },
+  { id: 'thinker',       name: 'Thinker',        desc: 'Solve problems with creativity',        active: false },
+  { id: 'communicator',  name: 'Communicator',   desc: 'Express yourself clearly',              active: false },
+  { id: 'principled',    name: 'Principled',     desc: 'Act with integrity and honesty',        active: true  },
+  { id: 'caring',        name: 'Caring',         desc: 'Show empathy, make a difference',       active: false },
+  { id: 'open-minded',   name: 'Open-minded',    desc: 'Respect other perspectives',            active: false },
+  { id: 'balanced',      name: 'Balanced',       desc: 'Look after mind, body and soul',        active: false },
+  { id: 'reflective',    name: 'Reflective',     desc: 'Think about how you learn',             active: false },
+  { id: 'risk-taker',    name: 'Risk-taker',     desc: 'Try new things with courage',           active: false }
+];
+
+// ---- TRAIT DEFINITIONS ----
+const TRAIT_DEFINITIONS = {
+  principled: `Being principled means acting with honesty and fairness — even when no one is watching. It's about knowing the difference between right and wrong, and choosing to do the right thing even when it's hard. Principled people take responsibility for their actions and stand up for what is fair.`
+};
+
+// ---- VIDEO CONFIG ----
+// Paste your Google Drive embed URLs into the src fields below.
+// Leave src as null to show a placeholder — the app will not break.
+const VIDEO_CONFIG = {
+  principled: {
+    explorer: [
+      { title: "Mr Lee · What makes me principled?", duration: "~90s", src: null },
+      { title: "Aisha, Grade 5 · My principled moment", duration: "~60s", src: null }
+    ]
+  }
+};
+
+// ---- QUIZ DATA ----
+const PRINCIPLED_EXPLORER_QUIZ = [
+  {
+    q: "What did Mr Lee say being principled sometimes costs you?",
+    opts: [
+      "Popularity or comfort",
+      "Extra homework",
+      "Your free time",
+      "Being liked by everyone"
+    ],
+    correct: 0
+  },
+  {
+    q: "Which best describes what 'principled' means?",
+    opts: [
+      "Only following school rules",
+      "Acting with integrity even when it's hard",
+      "Being the best in your class",
+      "Agreeing with your teacher"
+    ],
+    correct: 1
+  },
+  {
+    q: "Aisha said her principled moment happened when…",
+    opts: [
+      "She won a prize",
+      "She told the truth even though she got in trouble",
+      "She helped a friend with homework",
+      "She finished her project early"
+    ],
+    correct: 1
+  }
+];
+
+// ---- LEVEL DATA ----
+const LEVEL_META = [
+  { level: 1, name: 'Explorer',      colour: '#185FA5', textColour: '#6db3f2',
+    desc: 'Discover what this trait means and share your first ideas.',
+    atl: ['Thinking skills', 'Self-reflection'] },
+  { level: 2, name: 'Practitioner',  colour: '#0F6E56', textColour: '#5dcead',
+    desc: 'Connect this trait to your own life and experiences.',
+    atl: ['Communication skills', 'Social skills'] },
+  { level: 3, name: 'Researcher',    colour: '#854F0B', textColour: '#e8a84a',
+    desc: 'Investigate how this trait shows up in the wider world.',
+    atl: ['Research skills', 'Critical thinking'] },
+  { level: 4, name: 'Ambassador',    colour: '#993C1D', textColour: '#f28b6e',
+    desc: 'Lead and inspire others with this trait in action.',
+    atl: ['Leadership', 'Self-management'] }
+];
+
+// ---- CERTIFICATE CONFIG ----
+// Adjust Y coordinates after first test print.
+const CERT_CONFIG = {
+  width: 800,
+  height: 600,
+  bg: '#070A12',
+  accentColour: '#185FA5',
+  titleY: 220,
+  nameY: 290,
+  subtitleY: 340,
+  atlY: 400,
+  logoX: 400,
+  logoY: 520
+};
+
+// ---- MASTER CONFIG ----
+const APP_CONFIG = {
+  traits: TRAITS,
+  definitions: TRAIT_DEFINITIONS,
+  videos: VIDEO_CONFIG,
+  quiz: { principled: { explorer: PRINCIPLED_EXPLORER_QUIZ } },
+  levelMeta: LEVEL_META,
+  cert: CERT_CONFIG
+};
+// ============================================================
+// END CONFIG — do not edit below this line
+// ============================================================
+</script>
+
+<!-- ============================================================
+     SCREENS
+============================================================ -->
+
+<!-- SCREEN A — HOME -->
+<section id="screen-home" class="screen active">
+  <div class="top-bar">
+    <span class="wordmark">LP Ambassadors</span>
+    <div class="seed-logo-stub" title="The SEED Lab">S</div>
+  </div>
+
+  <div class="home-intro">
+    <div class="eyebrow">IB Learner Profile</div>
+    <h1 class="screen-title">Choose a Learner Profile trait to begin</h1>
+    <p class="screen-sub">Work through all 10 traits, earn badges, and become an LP Ambassador.</p>
+  </div>
+
+  <div class="trait-grid" id="trait-grid">
+    <!-- Rendered by JS -->
+  </div>
+</section>
+
+<!-- SCREEN B — TRAIT DETAIL -->
+<section id="screen-trait" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-home')">
+    ← Back
+  </button>
+
+  <div class="eyebrow" id="trait-eyebrow">IB Learner Profile · Principled</div>
+  <h2 class="screen-title" id="trait-heading">Principled</h2>
+  <p class="screen-sub" id="trait-descriptor">Act with integrity and honesty</p>
+
+  <div class="trait-definition">
+    <p id="trait-definition-text"></p>
+  </div>
+
+  <div class="level-progress-bar">
+    <div class="level-progress-label" id="level-progress-label">0 of 4 levels complete</div>
+    <div class="level-progress-track">
+      <div class="level-progress-fill" id="level-progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="level-cards" id="level-cards">
+    <!-- Rendered by JS -->
+  </div>
+</section>
+
+<!-- SCREEN C1 — WONDER -->
+<section id="screen-wonder" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-trait')">← Back</button>
+  <div class="journey-header">
+    <div class="eyebrow">IB Learner Profile · Principled</div>
+    <div class="pips" id="wonder-pips"></div>
+    <h2 class="screen-title">What does it mean to be Principled?</h2>
+    <p class="screen-sub">Before we start — what do YOU think? No right or wrong answer.</p>
+  </div>
+  <div class="wonder-options" id="wonder-options">
+    <!-- Rendered by JS -->
+  </div>
+  <p class="wonder-note">Your answer is saved — we'll come back to it at the end</p>
+</section>
+
+<!-- SCREEN C2 — WATCH -->
+<section id="screen-watch" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-wonder')">← Back</button>
+  <div class="journey-header">
+    <div class="eyebrow">Watch</div>
+    <div class="pips" id="watch-pips"></div>
+    <h2 class="screen-title">Hear from someone who lives this every day</h2>
+    <p class="screen-sub">Watch these short videos — then answer a few quick questions.</p>
+  </div>
+  <div class="video-blocks" id="video-blocks">
+    <!-- Rendered by JS -->
+  </div>
+  <button class="btn-primary" onclick="showScreen('screen-quiz'); initQuiz()">
+    I've watched both →
+  </button>
+</section>
+
+<!-- SCREEN C3 — QUIZ -->
+<section id="screen-quiz" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-watch')">← Back</button>
+  <div class="journey-header">
+    <div class="eyebrow">Quick check</div>
+    <div class="pips" id="quiz-pips"></div>
+    <div class="quiz-counter" id="quiz-counter">Question 1 of 3</div>
+    <div class="quiz-question" id="quiz-question"></div>
+  </div>
+  <div class="quiz-options" id="quiz-options"></div>
+  <div class="quiz-feedback" id="quiz-feedback"></div>
+</section>
+
+<!-- SCREEN C4 — REFLECT -->
+<section id="screen-reflect" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-quiz')">← Back</button>
+  <div class="journey-header">
+    <div class="eyebrow">Reflect</div>
+    <div class="pips" id="reflect-pips"></div>
+    <h2 class="screen-title">Has your thinking changed?</h2>
+    <p class="screen-sub">After watching the videos, being principled is also about…</p>
+  </div>
+  <div class="wonder-recall-card">
+    <div class="wonder-recall-label">Your first answer</div>
+    <div class="wonder-recall-text" id="reflect-recall-text">—</div>
+  </div>
+  <div class="reflect-options" id="reflect-options">
+    <!-- Rendered by JS -->
+  </div>
+</section>
+
+<!-- SCREEN C5 — BADGE EARNED -->
+<section id="screen-badge" class="screen">
+  <div class="badge-pips-row">
+    <div class="badge-pip"></div>
+    <div class="badge-pip"></div>
+    <div class="badge-pip"></div>
+    <div class="badge-pip"></div>
+    <div class="badge-pip"></div>
+  </div>
+  <div class="badge-circle">🛡️</div>
+  <div class="badge-title">Principled Explorer</div>
+  <div class="badge-sub">LP Ambassadors · Level 1</div>
+  <div class="badge-atl-label">ATL Skills earned</div>
+  <div class="badge-pills-row">
+    <span class="atl-pill lit">Thinking skills</span>
+    <span class="atl-pill lit">Self-reflection</span>
+  </div>
+  <button class="btn-primary" onclick="openCertModal()">Download my badge →</button>
+  <button class="btn-secondary" onclick="unlockPractitionerAndReturn()">Continue to Practitioner →</button>
+</section>
+
+<!-- ============================================================
+     MODALS
+============================================================ -->
+
+<!-- Certificate name modal -->
+<div id="modal-cert-name" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-title">What is your name?</div>
+    <p class="modal-sub">Your name will appear on your Principled Explorer badge.</p>
+    <input type="text" class="modal-input" id="cert-name-input" placeholder="Your name…" maxlength="40" />
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeCertModal()" style="flex:0 0 auto;width:auto;padding:13px 20px;">Cancel</button>
+      <button class="btn-primary" onclick="generateAndDownload()" style="flex:1;margin-top:0;">Create my badge</button>
+    </div>
+  </div>
+</div>
+
+<!-- Coming soon modal -->
+<div id="modal-coming-soon" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal-box" style="text-align:center">
+    <div class="coming-soon-icon">🌱</div>
+    <div class="modal-title">Coming soon</div>
+    <p class="modal-sub">This trait will be unlocked in a future update. Keep building your LP journey!</p>
+    <button class="btn-primary" onclick="closeComingSoon()">Got it</button>
+  </div>
+</div>
+
+<!-- Hidden canvas for badge generation -->
+<canvas id="cert-canvas" style="display:none"></canvas>
+
+<!-- ============================================================
+     APP LOGIC
+============================================================ -->
+<script>
+// ---- STATE ----
+const STORAGE_KEY = 'lp-ambassadors-v1';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return {
+    badges: {
+      principled: {
+        explorer:     { earned: false, earnedDate: null },
+        practitioner: { earned: false, earnedDate: null },
+        researcher:   { earned: false, earnedDate: null },
+        ambassador:   { earned: false, earnedDate: null }
+      }
+    },
+    wonderAnswers: {}
+  };
+}
+
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let appState = loadState();
+
+// ---- SCREEN ROUTER ----
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ---- PIP HELPERS ----
+function renderPips(containerId, total, activeIndex) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const pip = document.createElement('div');
+    pip.className = 'pip' + (i < activeIndex ? ' done' : i === activeIndex ? ' active' : '');
+    el.appendChild(pip);
+  }
+}
+
+// ---- SCREEN A — HOME ----
+function renderHomeGrid() {
+  const grid = document.getElementById('trait-grid');
+  const state = loadState();
+  grid.innerHTML = '';
+
+  APP_CONFIG.traits.forEach(trait => {
+    const traitBadges = state.badges[trait.id] || {};
+    const earned = Object.values(traitBadges).filter(b => b.earned).length;
+
+    const card = document.createElement('div');
+    card.className = 'trait-card' + (trait.active ? ' active' : ' locked');
+
+    let pipsHtml = '';
+    for (let i = 0; i < 4; i++) {
+      const lvlKey = ['explorer','practitioner','researcher','ambassador'][i];
+      const isEarned = traitBadges[lvlKey] && traitBadges[lvlKey].earned;
+      pipsHtml += `<div class="trait-pip${isEarned ? ' earned' : ''}"></div>`;
+    }
+
+    const footerRight = trait.active
+      ? `<span class="active-badge">Active</span>`
+      : `<span class="lock-icon">🔒</span>`;
+
+    card.innerHTML = `
+      <div class="trait-card-name">${trait.name}</div>
+      <div class="trait-card-desc">${trait.desc}</div>
+      <div class="trait-card-footer">
+        <div class="trait-pips">${pipsHtml}</div>
+        ${footerRight}
+      </div>
+    `;
+
+    card.addEventListener('click', () => {
+      if (trait.active) {
+        openTraitDetail(trait.id);
+      } else {
+        document.getElementById('modal-coming-soon').classList.add('active');
+      }
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+// ---- SCREEN B — TRAIT DETAIL ----
+function openTraitDetail(traitId) {
+  const trait = APP_CONFIG.traits.find(t => t.id === traitId);
+  const state = loadState();
+  const traitBadges = state.badges[traitId] || {};
+
+  document.getElementById('trait-eyebrow').textContent = `IB Learner Profile · ${trait.name}`;
+  document.getElementById('trait-heading').textContent = trait.name;
+  document.getElementById('trait-descriptor').textContent = trait.desc;
+  document.getElementById('trait-definition-text').textContent =
+    APP_CONFIG.definitions[traitId] || '';
+
+  const earnedCount = Object.values(traitBadges).filter(b => b.earned).length;
+  document.getElementById('level-progress-label').textContent =
+    `${earnedCount} of 4 levels complete`;
+  document.getElementById('level-progress-fill').style.width =
+    `${(earnedCount / 4) * 100}%`;
+
+  renderLevelCards(traitId, traitBadges);
+  showScreen('screen-trait');
+}
+
+function renderLevelCards(traitId, traitBadges) {
+  const container = document.getElementById('level-cards');
+  container.innerHTML = '';
+
+  const levelKeys = ['explorer','practitioner','researcher','ambassador'];
+
+  APP_CONFIG.levelMeta.forEach((meta, i) => {
+    const key = levelKeys[i];
+    const badge = traitBadges[key] || { earned: false };
+
+    // Unlock logic: first level always unlocked; others unlock when prev earned
+    const prevKey = i > 0 ? levelKeys[i-1] : null;
+    const prevEarned = i === 0 || (traitBadges[prevKey] && traitBadges[prevKey].earned);
+    const isUnlocked = prevEarned;
+
+    let statusClass, statusLabel;
+    if (badge.earned)         { statusClass = 'tag-earned';   statusLabel = 'Earned'; }
+    else if (!isUnlocked)     { statusClass = 'tag-locked';   statusLabel = 'Locked'; }
+    else                      { statusClass = 'tag-start';    statusLabel = 'Start'; }
+
+    const stateClass = badge.earned ? 'earned' : (isUnlocked ? 'unlocked' : 'locked');
+
+    const atlPills = meta.atl.map(skill => {
+      const lit = badge.earned;
+      return `<span class="atl-pill ${lit ? 'lit' : 'locked'}">${skill}</span>`;
+    }).join('');
+
+    const card = document.createElement('div');
+    card.className = `level-card ${stateClass}`;
+    card.dataset.level = meta.level;
+    card.innerHTML = `
+      <div class="level-card-header">
+        <div class="level-card-title">Level ${meta.level} — ${meta.name}</div>
+        <div class="level-status-tag ${statusClass}">${statusLabel}</div>
+      </div>
+      <div class="level-card-desc">${meta.desc}</div>
+      <div class="atl-pills">${atlPills}</div>
+    `;
+
+    if (isUnlocked && !badge.earned) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', () => {
+        if (traitId === 'principled' && key === 'explorer') {
+          startExplorerJourney();
+        }
+      });
+    }
+
+    container.appendChild(card);
+  });
+}
+
+// ---- SCREENS C1–C5: PRINCIPLED EXPLORER JOURNEY ----
+const WONDER_OPTIONS = [
+  "Being honest even when it's hard",
+  "Following the rules at school",
+  "Doing the right thing when no-one is watching",
+  "Standing up for what is fair"
+];
+
+const REFLECT_OPTIONS = [
+  "All of these things — it's bigger than I thought",
+  "Taking responsibility, not just following rules",
+  "My first answer still feels most true",
+  "It depends on the situation"
+];
+
+function startExplorerJourney() {
+  renderWonderScreen();
+  showScreen('screen-wonder');
+}
+
+// C1 — WONDER
+function renderWonderScreen() {
+  renderPips('wonder-pips', 5, 0);
+  const container = document.getElementById('wonder-options');
+  container.innerHTML = '';
+  const state = loadState();
+  const saved = state.wonderAnswers && state.wonderAnswers.principled;
+
+  WONDER_OPTIONS.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'wonder-option' + (saved === opt ? ' selected' : '');
+    btn.textContent = opt;
+    btn.addEventListener('click', () => {
+      const s = loadState();
+      if (!s.wonderAnswers) s.wonderAnswers = {};
+      s.wonderAnswers.principled = opt;
+      saveState(s);
+      document.querySelectorAll('.wonder-option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      setTimeout(() => {
+        renderWatchScreen();
+        showScreen('screen-watch');
+      }, 350);
+    });
+    container.appendChild(btn);
+  });
+}
+
+// C2 — WATCH
+function renderWatchScreen() {
+  renderPips('watch-pips', 5, 1);
+  const container = document.getElementById('video-blocks');
+  container.innerHTML = '';
+  const videos = APP_CONFIG.videos.principled.explorer;
+
+  videos.forEach(v => {
+    const block = document.createElement('div');
+    block.className = 'video-block';
+
+    const embedArea = document.createElement('div');
+    embedArea.className = 'video-embed-area';
+
+    if (v.src) {
+      const iframe = document.createElement('iframe');
+      iframe.className = 'video-iframe';
+      iframe.src = v.src;
+      iframe.allow = 'autoplay; encrypted-media';
+      iframe.allowFullscreen = true;
+      embedArea.appendChild(iframe);
+    } else {
+      embedArea.innerHTML = `
+        <div class="video-placeholder">
+          <div class="video-play-icon">▶</div>
+          <div class="video-coming-soon">Video coming soon</div>
+        </div>
+      `;
+    }
+
+    block.innerHTML = `
+      <div class="video-block-meta">
+        <div class="video-block-title">${v.title}</div>
+        <div class="video-duration">${v.duration}</div>
+      </div>
+    `;
+    block.insertBefore(embedArea, block.firstChild);
+    container.appendChild(block);
+  });
+}
+
+// C3 — QUIZ
+let quizState = { current: 0, answered: false };
+
+function initQuiz() {
+  renderPips('quiz-pips', 5, 2);
+  quizState = { current: 0, answered: false };
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const questions = APP_CONFIG.quiz.principled.explorer;
+  const q = questions[quizState.current];
+
+  document.getElementById('quiz-counter').textContent =
+    `Question ${quizState.current + 1} of ${questions.length}`;
+  document.getElementById('quiz-question').textContent = q.q;
+
+  const optContainer = document.getElementById('quiz-options');
+  optContainer.innerHTML = '';
+  const feedback = document.getElementById('quiz-feedback');
+  feedback.className = 'quiz-feedback';
+  feedback.textContent = '';
+
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => handleQuizAnswer(i));
+    optContainer.appendChild(btn);
+  });
+
+  quizState.answered = false;
+}
+
+function handleQuizAnswer(selectedIndex) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+
+  const questions = APP_CONFIG.quiz.principled.explorer;
+  const q = questions[quizState.current];
+  const isCorrect = selectedIndex === q.correct;
+
+  const buttons = document.querySelectorAll('.quiz-option');
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === selectedIndex && !isCorrect) btn.classList.add('wrong');
+  });
+
+  const feedback = document.getElementById('quiz-feedback');
+  if (isCorrect) {
+    feedback.textContent = '✓ Correct!';
+    feedback.className = 'quiz-feedback show correct-msg';
+  } else {
+    feedback.textContent = 'Not quite — see the correct answer above.';
+    feedback.className = 'quiz-feedback show wrong-msg';
+  }
+
+  const delay = isCorrect ? 900 : 1400;
+  setTimeout(() => {
+    quizState.current++;
+    if (quizState.current < questions.length) {
+      renderQuizQuestion();
+    } else {
+      renderReflectScreen();
+      showScreen('screen-reflect');
+    }
+  }, delay);
+}
+
+// C4 — REFLECT
+function renderReflectScreen() {
+  renderPips('reflect-pips', 5, 3);
+  const state = loadState();
+  const saved = (state.wonderAnswers && state.wonderAnswers.principled) || '—';
+  document.getElementById('reflect-recall-text').textContent = `"${saved}"`;
+
+  const container = document.getElementById('reflect-options');
+  container.innerHTML = '';
+
+  REFLECT_OPTIONS.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'reflect-option';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => {
+      btn.style.borderColor = 'var(--moss)';
+      btn.style.background = 'rgba(127,176,105,0.1)';
+      setTimeout(() => {
+        earnExplorerBadge();
+        showScreen('screen-badge');
+      }, 350);
+    });
+    container.appendChild(btn);
+  });
+}
+
+// C5 — BADGE EARNED
+function earnExplorerBadge() {
+  const state = loadState();
+  const today = new Date().toISOString().slice(0, 10);
+  if (!state.badges.principled) state.badges.principled = {};
+  state.badges.principled.explorer = { earned: true, earnedDate: today };
+  saveState(state);
+  // Refresh home grid in background
+  renderHomeGrid();
+}
+
+function unlockPractitionerAndReturn() {
+  openTraitDetail('principled');
+}
+
+// ---- CERT MODAL ----
+function openCertModal() {
+  document.getElementById('modal-cert-name').classList.add('active');
+  setTimeout(() => document.getElementById('cert-name-input').focus(), 100);
+}
+
+function closeCertModal() {
+  document.getElementById('modal-cert-name').classList.remove('active');
+  document.getElementById('cert-name-input').value = '';
+}
+
+document.getElementById('cert-name-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') generateAndDownload();
+});
+
+function generateAndDownload() {
+  const name = document.getElementById('cert-name-input').value.trim() || 'Explorer';
+  closeCertModal();
+  generateBadgePNG(name);
+}
+
+function generateBadgePNG(studentName) {
+  const C = APP_CONFIG.cert;
+  const canvas = document.getElementById('cert-canvas');
+  canvas.width  = C.width;
+  canvas.height = C.height;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, C.width, C.height);
+
+  // Accent bar
+  ctx.fillStyle = C.accentColour;
+  ctx.fillRect(0, 0, C.width, 6);
+
+  // Badge circle
+  const cx = C.width / 2, cy = 120;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 60, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(24,95,165,0.2)';
+  ctx.fill();
+  ctx.strokeStyle = C.accentColour;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.font = '44px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🛡️', cx, cy);
+
+  // Title
+  ctx.font = `bold 42px Georgia, serif`;
+  ctx.fillStyle = '#F3E8D0';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('Principled Explorer', C.width / 2, C.titleY);
+
+  // Student name
+  ctx.font = `32px Georgia, serif`;
+  ctx.fillStyle = '#7FB069';
+  ctx.fillText(studentName, C.width / 2, C.nameY);
+
+  // Subtitle
+  ctx.font = `18px Arial, sans-serif`;
+  ctx.fillStyle = 'rgba(243,232,208,0.7)';
+  ctx.fillText('LP Ambassadors · Level 1', C.width / 2, C.subtitleY);
+
+  // Date
+  const state = loadState();
+  const dateEarned = (state.badges.principled && state.badges.principled.explorer &&
+    state.badges.principled.explorer.earnedDate) || new Date().toISOString().slice(0,10);
+  ctx.font = `14px Arial, sans-serif`;
+  ctx.fillStyle = 'rgba(243,232,208,0.45)';
+  ctx.fillText(`Earned ${dateEarned}`, C.width / 2, C.subtitleY + 36);
+
+  // ATL skills
+  ctx.font = `bold 13px Arial, sans-serif`;
+  ctx.fillStyle = 'rgba(168,198,159,0.8)';
+  ctx.fillText('ATL SKILLS: Thinking skills · Self-reflection', C.width / 2, C.atlY);
+
+  // SEED Lab wordmark
+  ctx.font = `bold 14px Arial, sans-serif`;
+  ctx.fillStyle = 'rgba(168,198,159,0.5)';
+  ctx.fillText('The SEED Lab · theseedlab.org', C.logoX, C.logoY);
+
+  // Download
+  const link = document.createElement('a');
+  link.download = 'principled-explorer-badge.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ---- COMING SOON MODAL ----
+function closeComingSoon() {
+  document.getElementById('modal-coming-soon').classList.remove('active');
+}
+
+// Close modals on overlay click
+document.getElementById('modal-coming-soon').addEventListener('click', function(e) {
+  if (e.target === this) closeComingSoon();
+});
+document.getElementById('modal-cert-name').addEventListener('click', function(e) {
+  if (e.target === this) closeCertModal();
+});
+
+// ---- INIT ----
+renderHomeGrid();
+renderPips('wonder-pips', 5, 0);
+renderPips('watch-pips',  5, 1);
+renderPips('quiz-pips',   5, 2);
+renderPips('reflect-pips',5, 3);
+</script>
+</body>
+</html>

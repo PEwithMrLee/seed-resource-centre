@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup B — Superhero Origin Story</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "DM Sans", sans-serif; background: #faf8f3; color: #2c2c2c; }
+
+  /* Header */
+  .header { background: rgba(250,248,243,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(80,105,75,0.15); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; min-height: 5rem; position: sticky; top: 0; z-index: 10; }
+  .brand { display: flex; align-items: center; gap: 0.75rem; }
+  .brand-shield { width: 44px; height: 44px; background: linear-gradient(135deg, #3a5e3a, #c47b4a); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(58,94,58,0.3); }
+  .brand-text h2 { font-family: "Cormorant Garamond", serif; font-size: 1.6rem; color: #3a5e3a; font-weight: 600; }
+  .brand-text p { font-size: 0.72rem; color: #888; }
+  .nav { display: flex; gap: 0.5rem; align-items: center; }
+  .nav a { padding: 0.5rem 0.9rem; border-radius: 999px; color: #666; font-size: 0.9rem; font-weight: 500; text-decoration: none; }
+  .nav a:hover { background: #dce8d8; color: #3a5e3a; }
+  .nav .cta { background: #c47b4a; color: #fff; }
+  .nav .cta:hover { background: #a85f30; }
+
+  /* Origin banner */
+  .origin-banner { background: linear-gradient(135deg, #3a5e3a, #c47b4a); color: #fff; text-align: center; padding: 0.6rem; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.05em; }
+
+  /* Hero */
+  .hero { padding: 5rem 2rem 3rem; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center; }
+  .origin-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: #fff3e0; border: 1px solid rgba(196,123,74,0.3); color: #c47b4a; font-size: 0.78rem; font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 999px; margin-bottom: 1rem; letter-spacing: 0.05em; }
+  h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.05; font-weight: 600; color: #2c2c2c; max-width: 14ch; margin-bottom: 1.25rem; }
+  .hero p { color: #666; font-size: 1.05rem; line-height: 1.75; max-width: 58ch; margin-bottom: 1rem; }
+  .origin-quote { font-family: "Cormorant Garamond", serif; font-size: 1.1rem; font-style: italic; color: #3a5e3a; border-left: 3px solid #c47b4a; padding-left: 1rem; margin: 0.5rem 0 1.5rem; }
+  .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.5rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; text-decoration: none; border: 1.5px solid transparent; transition: all 160ms ease; }
+  .btn-primary { background: #3a5e3a; color: #fff; box-shadow: 0 8px 24px rgba(58,94,58,0.28); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-sec { border-color: rgba(80,105,75,0.3); color: #2c2c2c; }
+  .btn-sec:hover { background: #dce8d8; }
+
+  /* Power cards */
+  .power-panel { display: grid; gap: 1rem; }
+  .power-card { background: #fff; border: 1px solid rgba(80,105,75,0.15); border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: relative; overflow: hidden; }
+  .power-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+  .power-card.pe::before { background: linear-gradient(180deg, #22c55e, #16a34a); }
+  .power-card.circle::before { background: linear-gradient(180deg, #0d9488, #0f766e); }
+  .power-card.compass::before { background: linear-gradient(180deg, #8b5cf6, #7c3aed); }
+  .power-card.quest::before { background: linear-gradient(180deg, #f59e0b, #d97706); }
+  .power-icon { font-size: 2rem; flex-shrink: 0; }
+  .power-info { flex: 1; }
+  .power-name { font-weight: 700; font-size: 0.95rem; color: #2c2c2c; margin-bottom: 0.1rem; }
+  .power-ability { font-size: 0.78rem; color: #c47b4a; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem; }
+  .power-desc { font-size: 0.82rem; color: #888; line-height: 1.4; }
+  .power-badge { background: #f0fdf4; border: 1px solid rgba(34,197,94,0.3); color: #16a34a; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+
+  /* Origin section */
+  .origin-section { background: linear-gradient(135deg, #1a1a1a, #2a2a1a); padding: 4rem 2rem; margin-top: 2rem; }
+  .origin-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .origin-text h2 { font-family: "Cormorant Garamond", serif; font-size: 2.5rem; color: #fff; margin-bottom: 1rem; line-height: 1.1; }
+  .origin-text p { color: rgba(255,255,255,0.65); font-size: 1rem; line-height: 1.75; margin-bottom: 1rem; }
+  .origin-text .origin-quote { color: #c47b4a; border-left-color: #c47b4a; }
+  .origin-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem; text-align: center; }
+  .stat-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .stat-number { font-family: "Cormorant Garamond", serif; font-size: 2rem; color: #c47b4a; font-weight: 600; display: block; }
+  .stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+
+  .mockup-label { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #c47b4a; color: #fff; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .back-link { position: fixed; bottom: 1.5rem; left: 1.5rem; background: #3a5e3a; color: #fff; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+</style>
+</head>
+<body>
+
+<div class="origin-banner">🦸 Every great teacher has a moment that changed everything. This is that space. 🌱</div>
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-shield">🌱</div>
+    <div class="brand-text">
+      <h2>The SEED Lab</h2>
+      <p>Supporting Educators in Effective Development</p>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="#">Resources</a>
+    <a href="#">Inside My Classroom</a>
+    <a href="#">Listen & Watch</a>
+    <a href="#">Blog</a>
+    <a class="cta" href="#">Say Hello</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="origin-tag">🦸 Origin Story · Chapter 1</div>
+    <h1>Every great teacher starts somewhere.</h1>
+    <p>The SEED Lab is a growing resource centre built around one teacher's real classroom practice — downloadable tools, teaching apps, and strategies you can use straight away.</p>
+    <blockquote class="origin-quote">"With great marking comes great responsibility." — Lee, 11pm on a Sunday</blockquote>
+    <div class="actions">
+      <a class="btn btn-primary" href="#">🌱 Browse resources</a>
+      <a class="btn btn-sec" href="#">Meet the tools →</a>
+    </div>
+  </div>
+
+  <div class="power-panel">
+    <div class="power-card pe">
+      <div class="power-icon">🏀</div>
+      <div class="power-info">
+        <div class="power-ability">Superpower: The Motivator</div>
+        <div class="power-name">PE Challenges</div>
+        <div class="power-desc">Turns any gym session into a level-up experience.</div>
+      </div>
+      <div class="power-badge">Free</div>
+    </div>
+    <div class="power-card circle">
+      <div class="power-icon">⭕</div>
+      <div class="power-info">
+        <div class="power-ability">Superpower: The Empath</div>
+        <div class="power-name">PE Circle</div>
+        <div class="power-desc">Sees every student before the lesson even starts.</div>
+      </div>
+      <div class="power-badge">Teacher</div>
+    </div>
+    <div class="power-card compass">
+      <div class="power-icon">🧭</div>
+      <div class="power-info">
+        <div class="power-ability">Superpower: The Mind Reader</div>
+        <div class="power-name">Class Compass</div>
+        <div class="power-desc">Translates behaviour into what a child actually needs.</div>
+      </div>
+      <div class="power-badge">Free</div>
+    </div>
+    <div class="power-card quest">
+      <div class="power-icon">🏆</div>
+      <div class="power-info">
+        <div class="power-ability">Superpower: The Alliance Builder</div>
+        <div class="power-name">Team Quest</div>
+        <div class="power-desc">Turns a group of kids into an actual team.</div>
+      </div>
+      <div class="power-badge">Free</div>
+    </div>
+  </div>
+</section>
+
+<section class="origin-section">
+  <div class="origin-inner">
+    <div class="origin-text">
+      <h2>The origin story behind SEED.</h2>
+      <p>It started with one teacher mentoring another. Lesson feedback. Late-night reflections. Practical tools that actually worked. Slowly, something bigger began to grow.</p>
+      <blockquote class="origin-quote">"Not all those who wander are lost — some are just planning their next unit." — Lee, probably</blockquote>
+      <p>The SEED Lab is where those ideas live — a growing collection of tools for teachers who believe good teaching matters and want to keep getting better at it.</p>
+    </div>
+    <div class="origin-stats">
+      <div class="stat-card">
+        <div class="stat-icon">📱</div>
+        <span class="stat-number">4</span>
+        <span class="stat-label">Teacher-built apps</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📄</div>
+        <span class="stat-number">5+</span>
+        <span class="stat-label">Free resources</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌍</div>
+        <span class="stat-number">1</span>
+        <span class="stat-label">Teacher behind it all</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">☕</div>
+        <span class="stat-number">∞</span>
+        <span class="stat-label">Coffees consumed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mockup-label">Concept B — Superhero Origin Story</div>
+<a class="back-link" href="/mockup-index.html">← All concepts</a>
+
+</body>
+</html>
