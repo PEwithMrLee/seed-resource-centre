@@ -7,1144 +7,369 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
-
   <style>
-    /* ============================================================
-       GALAXY GREENHOUSE — DESIGN TOKENS
-    ============================================================ */
+    /* ── TOKENS ── */
     :root {
-      --space-black: #070A12;
-      --deep-navy:   #0E1628;
-      --moss:        #7FB069;
-      --sage:        #A8C69F;
-      --starlight:   #F3E8D0;
-      --muted:       rgba(243,232,208,0.55);
+      --space-black:#070A12; --deep-navy:#0E1628;
+      --moss:#7FB069; --sage:#A8C69F;
+      --starlight:#F3E8D0; --muted:rgba(243,232,208,0.55);
+      --l1:#185FA5; --l2:#0F6E56; --l3:#854F0B; --l4:#993C1D;
+      --l1t:#6db3f2; --l2t:#5dcead; --l3t:#e8a84a; --l4t:#f28b6e;
+      --r-card:14px; --r-pill:20px;
+      --ff-h:'Fraunces',Georgia,serif; --ff-ui:'Space Grotesk',system-ui,sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{min-height:100%;background:var(--space-black);color:var(--starlight);font-family:var(--ff-ui);-webkit-font-smoothing:antialiased}
+    img{max-width:100%;display:block}
 
-      --level-1: #185FA5;
-      --level-2: #0F6E56;
-      --level-3: #854F0B;
-      --level-4: #993C1D;
+    /* ── SCREEN ROUTER ── */
+    .screen{display:none;flex-direction:column;min-height:100vh;width:100%;max-width:760px;margin:0 auto;padding:24px 16px 56px}
+    .screen.active{display:flex}
 
-      --radius-card:   14px;
-      --radius-pill:   20px;
-      --radius-circle: 50%;
+    /* ── SHARED ── */
+    .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .wordmark{font-family:var(--ff-h);font-size:15px;color:var(--starlight);opacity:.85;cursor:pointer;user-select:none}
+    .seed-logo{width:36px;height:36px;border-radius:50%;background:var(--deep-navy);border:1px solid rgba(127,176,105,.3);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--sage);font-weight:600;cursor:pointer;user-select:none;flex-shrink:0}
+    .btn-back{background:none;border:none;color:var(--sage);font-family:var(--ff-ui);font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;margin-bottom:20px;opacity:.85;transition:opacity .15s}
+    .btn-back:hover{opacity:1}
+    .eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:8px}
+    h1.t{font-family:var(--ff-h);font-size:clamp(26px,5vw,38px);font-weight:700;line-height:1.15;margin-bottom:10px}
+    h2.t{font-family:var(--ff-h);font-size:clamp(20px,4vw,28px);font-weight:700;line-height:1.2;margin-bottom:10px}
+    .sub{font-size:15px;color:var(--muted);line-height:1.55;margin-bottom:20px}
 
-      --font-heading: 'Fraunces', Georgia, serif;
-      --font-ui:      'Space Grotesk', system-ui, sans-serif;
-    }
+    /* ── PIPS ── */
+    .pips{display:flex;gap:6px;margin-bottom:20px}
+    .pip{width:10px;height:10px;border-radius:50%;background:rgba(243,232,208,.18);transition:background .3s}
+    .pip.on{background:var(--moss)}
+    .pip.past{background:var(--moss);opacity:.55}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── BUTTONS ── */
+    .btn-p{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--moss);color:#0a1a08;font-family:var(--ff-ui);font-size:15px;font-weight:600;border:none;border-radius:var(--r-pill);padding:14px 28px;cursor:pointer;width:100%;margin-top:10px;transition:opacity .15s,transform .1s}
+    .btn-p:hover{opacity:.88}
+    .btn-p:active{transform:scale(.98)}
+    .btn-p:disabled{opacity:.4;cursor:default}
+    .btn-s{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--starlight);font-family:var(--ff-ui);font-size:15px;font-weight:500;border:1px solid rgba(243,232,208,.25);border-radius:var(--r-pill);padding:13px 28px;cursor:pointer;width:100%;margin-top:10px;transition:border-color .15s}
+    .btn-s:hover{border-color:rgba(243,232,208,.5)}
+    .btn-s.dim{opacity:.4;cursor:default;pointer-events:none}
 
-    html, body {
-      min-height: 100%;
-      background: var(--space-black);
-      color: var(--starlight);
-      font-family: var(--font-ui);
-      -webkit-font-smoothing: antialiased;
-    }
+    /* ── CONTENT ROW ── */
+    .cr{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+    @media(max-width:640px){.cr{grid-template-columns:1fr}}
 
-    /* ============================================================
-       SCREEN ROUTER
-    ============================================================ */
-    .screen {
-      display: none;
-      flex-direction: column;
-      min-height: 100vh;
-      width: 100%;
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-    .screen.active { display: flex; }
+    /* ── PHOTO ── */
+    .photo-slot{border-radius:var(--r-card);overflow:hidden;background:var(--deep-navy);border:1px solid rgba(243,232,208,.08)}
+    .photo-slot img{width:100%;height:220px;object-fit:cover;display:block;cursor:pointer}
+    .photo-slot.stacked img{height:160px}
+    .photo-caption{font-size:12px;color:var(--muted);padding:10px 12px;line-height:1.4}
+    .photo-placeholder{width:100%;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:13px}
+    .photo-placeholder-icon{font-size:32px;opacity:.4}
+    .photo-stack{display:flex;flex-direction:column;gap:10px}
 
-    /* ============================================================
-       SHARED COMPONENTS
-    ============================================================ */
+    /* ── VIDEO ── */
+    .video-slot{border-radius:var(--r-card);overflow:hidden;background:#050810;border:1px solid rgba(243,232,208,.08)}
+    .video-slot iframe{width:100%;height:220px;border:none;display:block}
+    .video-placeholder{width:100%;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted)}
+    .video-play{width:52px;height:52px;border-radius:50%;background:rgba(127,176,105,.15);border:2px solid rgba(127,176,105,.3);display:flex;align-items:center;justify-content:center;font-size:18px}
+    .video-meta{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;background:var(--deep-navy)}
+    .video-title{font-size:13px;font-weight:500}
+    .video-dur{font-size:12px;color:var(--muted)}
 
-    /* --- top bar --- */
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 28px;
-    }
-    .wordmark {
-      font-family: var(--font-heading);
-      font-size: 15px;
-      color: var(--starlight);
-      letter-spacing: 0.02em;
-      opacity: 0.85;
-    }
-    .seed-logo-stub {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--radius-circle);
-      background: var(--deep-navy);
-      border: 1px solid rgba(127,176,105,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      color: var(--sage);
-      font-weight: 600;
-    }
+    /* ── OPTION BUTTONS (wonder / reflect) ── */
+    .opt-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+    .opt{background:var(--deep-navy);border:1px solid rgba(243,232,208,.12);border-radius:var(--r-card);padding:15px 18px;cursor:pointer;font-size:15px;color:var(--starlight);text-align:left;font-family:var(--ff-ui);transition:border-color .15s,background .15s;width:100%}
+    .opt:hover{border-color:var(--moss);background:rgba(127,176,105,.06)}
+    .opt.sel{border-color:var(--moss);background:rgba(127,176,105,.12)}
 
-    /* --- back button --- */
-    .btn-back {
-      background: none;
-      border: none;
-      color: var(--sage);
-      font-family: var(--font-ui);
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 0;
-      margin-bottom: 20px;
-      opacity: 0.85;
-      transition: opacity 0.15s;
-    }
-    .btn-back:hover { opacity: 1; }
+    /* ── CHECKLIST ── */
+    .cl-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+    .cl-item{background:var(--deep-navy);border:1px solid rgba(243,232,208,.1);border-radius:var(--r-card);padding:14px 16px;cursor:pointer;font-size:14px;line-height:1.5;color:var(--starlight);display:flex;gap:12px;align-items:flex-start;transition:border-color .15s}
+    .cl-item:hover{border-color:rgba(243,232,208,.25)}
+    .cl-item.sel{border-color:var(--moss);background:rgba(127,176,105,.08)}
+    .cl-item.locked{pointer-events:none}
+    .cl-check{width:20px;height:20px;border-radius:6px;border:2px solid rgba(243,232,208,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px;transition:all .2s}
+    .cl-item.sel .cl-check{background:var(--moss);border-color:var(--moss);color:#0a1a08}
+    .cl-fb{display:none;width:22px;height:22px;border-radius:50%;flex-shrink:0;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:0}
+    .cl-fb.show{display:flex}
+    .cl-fb.ok{background:rgba(127,176,105,.2);color:var(--moss)}
+    .cl-fb.bad{background:rgba(224,92,92,.15);color:#e05c5c}
+    .cl-score{font-size:14px;color:var(--muted);margin-top:14px;text-align:center;display:none}
+    .cl-score.show{display:block}
 
-    /* --- eyebrow --- */
-    .eyebrow {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 8px;
-    }
+    /* ── QUIZ ── */
+    .quiz-q{font-family:var(--ff-h);font-size:18px;font-weight:600;color:var(--starlight);line-height:1.3;margin-bottom:16px}
+    .quiz-counter{font-size:13px;color:var(--muted);margin-bottom:14px}
+    .quiz-opts{display:flex;flex-direction:column;gap:9px}
+    .quiz-opt{background:var(--deep-navy);border:1px solid rgba(243,232,208,.12);border-radius:var(--r-card);padding:14px 18px;cursor:pointer;font-size:14px;color:var(--starlight);text-align:left;font-family:var(--ff-ui);transition:border-color .15s}
+    .quiz-opt:hover:not(:disabled){border-color:rgba(243,232,208,.3)}
+    .quiz-opt:disabled{cursor:default}
+    .quiz-opt.ok{border-color:var(--moss)!important;background:rgba(127,176,105,.15);color:var(--moss)}
+    .quiz-opt.bad{border-color:#e05c5c!important;background:rgba(224,92,92,.1);color:#e05c5c}
+    .quiz-fb{font-size:13px;margin-top:12px;padding:9px 14px;border-radius:10px;text-align:center;display:none}
+    .quiz-fb.show{display:block}
+    .quiz-fb.ok-msg{background:rgba(127,176,105,.1);color:var(--moss)}
+    .quiz-fb.bad-msg{background:rgba(224,92,92,.1);color:#e8a0a0}
 
-    /* --- headings --- */
-    h1.screen-title {
-      font-family: var(--font-heading);
-      font-size: clamp(26px, 5vw, 36px);
-      font-weight: 700;
-      color: var(--starlight);
-      line-height: 1.15;
-      margin-bottom: 10px;
-    }
-    h2.screen-title {
-      font-family: var(--font-heading);
-      font-size: clamp(22px, 4vw, 30px);
-      font-weight: 700;
-      color: var(--starlight);
-      line-height: 1.2;
-      margin-bottom: 10px;
-    }
+    /* ── WONDER RECALL ── */
+    .recall-card{background:var(--deep-navy);border:1px solid rgba(127,176,105,.2);border-radius:var(--r-card);padding:14px 18px;margin-bottom:16px}
+    .recall-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);margin-bottom:5px}
+    .recall-text{font-size:15px;color:var(--starlight);font-style:italic}
 
-    /* --- subtitle / body text --- */
-    .screen-sub {
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.55;
-      margin-bottom: 24px;
-    }
+    /* ── TRAIT CARDS (home) ── */
+    .trait-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:400px){.trait-grid{grid-template-columns:1fr}}
+    .tc{background:var(--deep-navy);border:1px solid rgba(243,232,208,.08);border-radius:var(--r-card);padding:16px;cursor:pointer;transition:border-color .2s,transform .15s}
+    .tc:hover{border-color:rgba(243,232,208,.2);transform:translateY(-1px)}
+    .tc.active{border-color:var(--moss);box-shadow:0 0 0 1px var(--moss),0 4px 18px rgba(127,176,105,.15)}
+    .tc.locked{opacity:.55}
+    .tc-name{font-family:var(--ff-h);font-size:16px;font-weight:700;margin-bottom:4px}
+    .tc-desc{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4}
+    .tc-foot{display:flex;align-items:center;justify-content:space-between}
+    .tc-pips{display:flex;gap:4px}
+    .tc-pip{width:8px;height:8px;border-radius:50%;background:rgba(243,232,208,.15)}
+    .tc-pip.earned{background:var(--moss)}
+    .active-tag{font-size:10px;font-weight:600;background:var(--moss);color:#0a1a08;padding:3px 8px;border-radius:var(--r-pill)}
+    .lock-icon{font-size:14px;opacity:.5}
 
-    /* --- progress pips --- */
-    .pips {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 28px;
-    }
-    .pip {
-      width: 10px;
-      height: 10px;
-      border-radius: var(--radius-circle);
-      background: rgba(243,232,208,0.2);
-      transition: background 0.3s;
-    }
-    .pip.active { background: var(--moss); }
-    .pip.done   { background: var(--moss); opacity: 0.6; }
+    /* ── TRAIT DEFINITION ── */
+    .def-card{background:var(--deep-navy);border:1px solid rgba(243,232,208,.08);border-radius:var(--r-card);padding:16px 20px;margin-bottom:22px}
+    .def-card p{font-size:14px;line-height:1.65;color:var(--muted)}
 
-    /* --- primary button --- */
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: var(--moss);
-      color: #0a1a08;
-      font-family: var(--font-ui);
-      font-size: 15px;
-      font-weight: 600;
-      border: none;
-      border-radius: var(--radius-pill);
-      padding: 14px 28px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 8px;
-      transition: opacity 0.15s, transform 0.1s;
-    }
-    .btn-primary:hover  { opacity: 0.88; }
-    .btn-primary:active { transform: scale(0.98); }
+    /* ── LEVEL PROGRESS BAR ── */
+    .lv-prog{margin-bottom:22px}
+    .lv-prog-lbl{font-size:13px;color:var(--muted);margin-bottom:7px}
+    .lv-prog-track{height:5px;background:rgba(243,232,208,.1);border-radius:3px;overflow:hidden}
+    .lv-prog-fill{height:100%;background:var(--moss);border-radius:3px;transition:width .5s ease}
 
-    /* --- secondary button --- */
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: transparent;
-      color: var(--starlight);
-      font-family: var(--font-ui);
-      font-size: 15px;
-      font-weight: 500;
-      border: 1px solid rgba(243,232,208,0.25);
-      border-radius: var(--radius-pill);
-      padding: 13px 28px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 8px;
-      transition: border-color 0.15s, opacity 0.15s;
-    }
-    .btn-secondary:hover { border-color: rgba(243,232,208,0.5); }
+    /* ── LEVEL CARDS ── */
+    .lv-cards{display:flex;flex-direction:column;gap:12px}
+    .lv-card{background:var(--deep-navy);border:1px solid rgba(243,232,208,.08);border-radius:var(--r-card);padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s}
+    .lv-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+    .lv-card.l1::before{background:var(--l1)}
+    .lv-card.l2::before{background:var(--l2)}
+    .lv-card.l3::before{background:var(--l3)}
+    .lv-card.l4::before{background:var(--l4)}
+    .lv-card.unlocked{cursor:pointer}
+    .lv-card.unlocked:hover{border-color:rgba(243,232,208,.2);transform:translateY(-1px)}
+    .lv-card.earned{border-color:var(--moss)}
+    .lv-card.locked{opacity:.5}
+    .lv-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    .lv-card-name{font-family:var(--ff-h);font-size:17px;font-weight:700}
+    .lv-card.l1 .lv-card-name{color:var(--l1t)}
+    .lv-card.l2 .lv-card-name{color:var(--l2t)}
+    .lv-card.l3 .lv-card-name{color:var(--l3t)}
+    .lv-card.l4 .lv-card-name{color:var(--l4t)}
+    .lv-tag{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill)}
+    .lv-tag.start{background:rgba(127,176,105,.15);color:var(--moss);border:1px solid rgba(127,176,105,.3)}
+    .lv-tag.locked{background:rgba(243,232,208,.05);color:var(--muted);border:1px solid rgba(243,232,208,.1)}
+    .lv-tag.earned{background:rgba(127,176,105,.2);color:var(--moss);border:1px solid var(--moss)}
+    .lv-card-desc{font-size:13px;color:var(--muted);margin-bottom:10px}
+    .atl-pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+    .atl-pill{font-size:12px;font-weight:500;padding:5px 12px;border-radius:var(--r-pill);border:1px solid}
+    .atl-pill.dim{background:rgba(243,232,208,.05);border-color:rgba(243,232,208,.15);color:var(--muted)}
+    .atl-pill.lit1{background:rgba(24,95,165,.2);border-color:rgba(24,95,165,.5);color:var(--l1t)}
+    .atl-pill.lit2{background:rgba(15,110,86,.2);border-color:rgba(15,110,86,.5);color:var(--l2t)}
+    .atl-pill.lit3{background:rgba(133,79,11,.2);border-color:rgba(133,79,11,.5);color:var(--l3t)}
 
-    /* --- ATL pills --- */
-    .atl-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 10px;
-    }
-    .atl-pill {
-      font-size: 12px;
-      font-weight: 500;
-      padding: 5px 12px;
-      border-radius: var(--radius-pill);
-      border: 1px solid;
-    }
-    .atl-pill.locked {
-      background: rgba(243,232,208,0.05);
-      border-color: rgba(243,232,208,0.15);
-      color: var(--muted);
-    }
-    .atl-pill.lit {
-      background: rgba(24,95,165,0.2);
-      border-color: rgba(24,95,165,0.5);
-      color: #6db3f2;
-    }
+    /* ── BADGE SCREEN ── */
+    .badge-pips{display:flex;gap:8px;justify-content:center;margin-bottom:28px}
+    .badge-pip-full{width:12px;height:12px;border-radius:50%;background:var(--moss)}
+    .badge-circle{width:130px;height:130px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:48px}
+    .badge-title{font-family:var(--ff-h);font-size:clamp(26px,5vw,38px);font-weight:700;text-align:center;margin-bottom:6px}
+    .badge-sub{font-size:14px;text-align:center;color:var(--muted);margin-bottom:22px}
+    .badge-atl-lbl{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);text-align:center;margin-bottom:10px}
+    .badge-pills-row{display:flex;justify-content:center;gap:8px;margin-bottom:28px}
 
-    /* ============================================================
-       SCREEN A — HOME
-    ============================================================ */
-    #screen-home .home-intro {
-      margin-bottom: 28px;
-    }
+    /* Stacked prev-badges */
+    .prev-badges{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+    .prev-badge{display:flex;align-items:center;gap:12px;background:var(--deep-navy);border:1px solid;border-radius:10px;padding:10px 16px}
+    .prev-badge-icon{font-size:22px}
+    .prev-badge-info{flex:1}
+    .prev-badge-name{font-size:14px;font-weight:600;color:var(--starlight)}
+    .prev-badge-lvl{font-size:12px;color:var(--muted)}
+    .prev-badge-tick{font-size:16px}
 
-    .trait-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    /* ── SEESAW ── */
+    .seesaw-card{background:var(--deep-navy);border:1px solid rgba(243,232,208,.1);border-radius:var(--r-card);padding:18px 20px;margin-top:20px}
+    .seesaw-title{font-size:14px;font-weight:600;color:var(--sage);margin-bottom:12px;letter-spacing:.05em;text-transform:uppercase;font-size:11px}
+    .seesaw-steps{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .seesaw-steps li{display:flex;gap:10px;font-size:14px;line-height:1.5;color:var(--starlight)}
+    .seesaw-num{width:22px;height:22px;border-radius:50%;background:rgba(127,176,105,.15);border:1px solid rgba(127,176,105,.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--moss);flex-shrink:0;margin-top:1px}
+    .info-callout{background:rgba(127,176,105,.08);border:1px solid rgba(127,176,105,.2);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--muted);line-height:1.55;margin-top:16px}
 
-    .trait-card {
-      background: var(--deep-navy);
-      border: 1px solid rgba(243,232,208,0.08);
-      border-radius: var(--radius-card);
-      padding: 16px;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .trait-card:hover { border-color: rgba(243,232,208,0.2); transform: translateY(-1px); }
-    .trait-card.locked { opacity: 0.55; cursor: pointer; }
-    .trait-card.active {
-      border-color: var(--moss);
-      box-shadow: 0 0 0 1px var(--moss), 0 4px 20px rgba(127,176,105,0.15);
-    }
+    /* ── UNLOCK INPUT ── */
+    .unlock-section{margin-top:22px}
+    .unlock-label{font-size:14px;color:var(--starlight);font-weight:600;margin-bottom:10px}
+    .unlock-row{display:flex;gap:10px}
+    .unlock-input{flex:1;background:rgba(243,232,208,.06);border:1px solid rgba(243,232,208,.2);border-radius:10px;padding:12px 16px;font-family:var(--ff-ui);font-size:18px;font-weight:700;letter-spacing:.15em;color:var(--starlight);text-transform:uppercase;outline:none;transition:border-color .15s;text-align:center}
+    .unlock-input:focus{border-color:var(--moss)}
+    .unlock-input::placeholder{opacity:.3;letter-spacing:.05em;font-weight:400;font-size:15px}
+    .btn-unlock{background:var(--moss);color:#0a1a08;font-family:var(--ff-ui);font-size:15px;font-weight:700;border:none;border-radius:10px;padding:12px 20px;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+    .btn-unlock:hover{opacity:.85}
+    .unlock-err{color:#e05c5c;font-size:13px;margin-top:8px;display:none}
+    .unlock-err.show{display:block}
 
-    .trait-card-name {
-      font-family: var(--font-heading);
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--starlight);
-      margin-bottom: 4px;
-    }
-    .trait-card-desc {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.4;
-      margin-bottom: 12px;
-    }
-    .trait-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .trait-pips {
-      display: flex;
-      gap: 4px;
-    }
-    .trait-pip {
-      width: 8px;
-      height: 8px;
-      border-radius: var(--radius-circle);
-      background: rgba(243,232,208,0.15);
-    }
-    .trait-pip.earned { background: var(--moss); }
-    .lock-icon { font-size: 14px; opacity: 0.5; }
-    .active-badge {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      background: var(--moss);
-      color: #0a1a08;
-      padding: 3px 8px;
-      border-radius: var(--radius-pill);
-    }
+    /* ── REFLECTION TEXTAREA ── */
+    .reflect-ta{width:100%;background:rgba(243,232,208,.06);border:1px solid rgba(243,232,208,.15);border-radius:var(--r-card);padding:16px;font-family:var(--ff-ui);font-size:15px;color:var(--starlight);resize:vertical;min-height:120px;outline:none;line-height:1.6;transition:border-color .15s;margin-top:8px}
+    .reflect-ta:focus{border-color:var(--moss)}
+    .reflect-ta::placeholder{color:rgba(243,232,208,.3)}
+    .char-hint{font-size:12px;color:var(--muted);margin-top:6px}
 
-    /* ============================================================
-       SCREEN B — TRAIT DETAIL
-    ============================================================ */
-    .trait-definition {
-      background: var(--deep-navy);
-      border-radius: var(--radius-card);
-      border: 1px solid rgba(243,232,208,0.08);
-      padding: 16px 20px;
-      margin-bottom: 24px;
-    }
-    .trait-definition p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--muted);
-    }
+    /* ── INTERVIEW CARDS ── */
+    .ic-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:8px}
+    .ic-card{background:var(--deep-navy);border:1px solid rgba(243,232,208,.12);border-radius:var(--r-card);padding:28px 24px;width:100%;cursor:pointer;transition:border-color .2s,transform .1s;text-align:center;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+    .ic-card:hover{border-color:rgba(127,176,105,.3);transform:scale(1.01)}
+    .ic-card:active{transform:scale(.99)}
+    .ic-counter{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .ic-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
+    .ic-text{font-size:16px;line-height:1.55;color:var(--starlight)}
+    .ic-hint{font-size:12px;color:var(--muted);opacity:.6}
 
-    .level-progress-bar {
-      margin-bottom: 24px;
-    }
-    .level-progress-label {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .level-progress-track {
-      height: 6px;
-      background: rgba(243,232,208,0.1);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .level-progress-fill {
-      height: 100%;
-      background: var(--moss);
-      border-radius: 3px;
-      transition: width 0.5s ease;
-    }
+    /* ── WHAT YOU NEED CARD ── */
+    .need-card{background:var(--deep-navy);border:1px solid rgba(243,232,208,.08);border-radius:var(--r-card);padding:16px 18px;margin:16px 0}
+    .need-card ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .need-card li{font-size:14px;color:var(--muted);display:flex;gap:10px;line-height:1.4}
 
-    .level-cards { display: flex; flex-direction: column; gap: 12px; }
+    /* ── MODALS ── */
+    .modal{display:none;position:fixed;inset:0;background:rgba(7,10,18,.88);backdrop-filter:blur(6px);z-index:100;align-items:center;justify-content:center;padding:24px}
+    .modal.open{display:flex}
+    .modal-box{background:var(--deep-navy);border:1px solid rgba(243,232,208,.15);border-radius:var(--r-card);padding:28px 24px;width:100%;max-width:440px}
+    .modal-title{font-family:var(--ff-h);font-size:22px;font-weight:700;margin-bottom:8px}
+    .modal-sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+    .modal-input{width:100%;background:rgba(243,232,208,.06);border:1px solid rgba(243,232,208,.2);border-radius:10px;padding:12px 16px;font-family:var(--ff-ui);font-size:16px;color:var(--starlight);outline:none;margin-bottom:14px;transition:border-color .15s}
+    .modal-input:focus{border-color:var(--moss)}
+    .modal-input::placeholder{color:rgba(243,232,208,.3)}
+    .modal-actions{display:flex;gap:10px}
+    .modal-actions .btn-p,.modal-actions .btn-s{margin-top:0;flex:1}
 
-    .level-card {
-      background: var(--deep-navy);
-      border-radius: var(--radius-card);
-      border: 1px solid rgba(243,232,208,0.08);
-      padding: 18px 20px;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .level-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 4px;
-    }
-    .level-card[data-level="1"]::before { background: var(--level-1); }
-    .level-card[data-level="2"]::before { background: var(--level-2); }
-    .level-card[data-level="3"]::before { background: var(--level-3); }
-    .level-card[data-level="4"]::before { background: var(--level-4); }
+    /* Teacher panel extras */
+    .tp-section{margin-top:18px}
+    .tp-label{font-size:13px;color:var(--sage);margin-bottom:6px;font-weight:500}
+    .tp-select{width:100%;background:rgba(243,232,208,.06);border:1px solid rgba(243,232,208,.2);border-radius:10px;padding:11px 14px;font-family:var(--ff-ui);font-size:15px;color:var(--starlight);outline:none;margin-bottom:12px;cursor:pointer}
+    .tp-select option{background:#0E1628}
+    .tp-code-display{font-size:36px;font-weight:700;letter-spacing:.2em;color:var(--moss);text-align:center;padding:20px;background:rgba(127,176,105,.08);border-radius:10px;border:1px solid rgba(127,176,105,.2);margin-top:12px;display:none;font-family:var(--ff-ui)}
+    .tp-code-display.show{display:block}
+    .tp-pin-form{display:flex;flex-direction:column;gap:10px}
+    .tp-pin-err{font-size:13px;color:#e05c5c;display:none}
+    .tp-pin-err.show{display:block}
 
-    .level-card.locked   { opacity: 0.5; cursor: default; }
-    .level-card.unlocked:hover { border-color: rgba(243,232,208,0.2); transform: translateY(-1px); }
-    .level-card.earned   { border-color: var(--moss); }
+    /* Lightbox */
+    .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;align-items:center;justify-content:center;cursor:pointer;padding:20px}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:100%;max-height:90vh;border-radius:8px;object-fit:contain}
 
-    .level-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .level-card-title {
-      font-family: var(--font-heading);
-      font-size: 17px;
-      font-weight: 700;
-    }
-    .level-card[data-level="1"] .level-card-title { color: #6db3f2; }
-    .level-card[data-level="2"] .level-card-title { color: #5dcead; }
-    .level-card[data-level="3"] .level-card-title { color: #e8a84a; }
-    .level-card[data-level="4"] .level-card-title { color: #f28b6e; }
-
-    .level-status-tag {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: var(--radius-pill);
-    }
-    .tag-start    { background: rgba(127,176,105,0.15); color: var(--moss); border: 1px solid rgba(127,176,105,0.3); }
-    .tag-locked   { background: rgba(243,232,208,0.05); color: var(--muted); border: 1px solid rgba(243,232,208,0.1); }
-    .tag-earned   { background: rgba(127,176,105,0.2);  color: var(--moss); border: 1px solid var(--moss); }
-    .tag-progress { background: rgba(168,198,159,0.15); color: var(--sage); border: 1px solid rgba(168,198,159,0.3); }
-
-    .level-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
-
-    /* ============================================================
-       SCREENS C1–C5 — JOURNEY
-    ============================================================ */
-    .journey-header {
-      margin-bottom: 24px;
-    }
-
-    /* C1 — Wonder */
-    .wonder-options { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-    .wonder-option {
-      background: var(--deep-navy);
-      border: 1px solid rgba(243,232,208,0.12);
-      border-radius: var(--radius-card);
-      padding: 16px 20px;
-      cursor: pointer;
-      font-size: 15px;
-      color: var(--starlight);
-      text-align: left;
-      font-family: var(--font-ui);
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .wonder-option:hover { border-color: var(--moss); background: rgba(127,176,105,0.06); }
-    .wonder-option.selected { border-color: var(--moss); background: rgba(127,176,105,0.12); }
-
-    .wonder-note {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 20px;
-      text-align: center;
-      opacity: 0.7;
-    }
-
-    /* C2 — Watch */
-    .video-blocks { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
-    .video-block {
-      background: var(--deep-navy);
-      border: 1px solid rgba(243,232,208,0.1);
-      border-radius: var(--radius-card);
-      overflow: hidden;
-    }
-    .video-embed-area {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #060810;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .video-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--muted);
-    }
-    .video-play-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: var(--radius-circle);
-      background: rgba(127,176,105,0.15);
-      border: 2px solid rgba(127,176,105,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    .video-coming-soon { font-size: 13px; opacity: 0.7; }
-
-    .video-iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      position: absolute;
-      top: 0; left: 0;
-    }
-    .video-block-meta {
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .video-block-title { font-size: 14px; font-weight: 500; }
-    .video-duration { font-size: 12px; color: var(--muted); }
-
-    /* C3 — Quiz */
-    .quiz-counter {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-    .quiz-question {
-      font-family: var(--font-heading);
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--starlight);
-      line-height: 1.3;
-      margin-bottom: 20px;
-    }
-    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
-    .quiz-option {
-      background: var(--deep-navy);
-      border: 1px solid rgba(243,232,208,0.12);
-      border-radius: var(--radius-card);
-      padding: 16px 20px;
-      cursor: pointer;
-      font-size: 15px;
-      color: var(--starlight);
-      text-align: left;
-      font-family: var(--font-ui);
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .quiz-option:hover:not(:disabled) { border-color: rgba(243,232,208,0.3); }
-    .quiz-option:disabled { cursor: default; }
-    .quiz-option.correct {
-      border-color: var(--moss);
-      background: rgba(127,176,105,0.15);
-      color: var(--moss);
-    }
-    .quiz-option.wrong {
-      border-color: #e05c5c;
-      background: rgba(224,92,92,0.1);
-      color: #e05c5c;
-    }
-    .quiz-feedback {
-      font-size: 13px;
-      margin-top: 14px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      text-align: center;
-      display: none;
-    }
-    .quiz-feedback.show { display: block; }
-    .quiz-feedback.correct-msg { background: rgba(127,176,105,0.1); color: var(--moss); }
-    .quiz-feedback.wrong-msg   { background: rgba(224,92,92,0.1);   color: #e8a0a0; }
-
-    /* C4 — Reflect */
-    .wonder-recall-card {
-      background: var(--deep-navy);
-      border: 1px solid rgba(127,176,105,0.2);
-      border-radius: var(--radius-card);
-      padding: 16px 20px;
-      margin-bottom: 20px;
-    }
-    .wonder-recall-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 6px;
-    }
-    .wonder-recall-text {
-      font-size: 15px;
-      color: var(--starlight);
-      font-style: italic;
-    }
-
-    .reflect-options { display: flex; flex-direction: column; gap: 10px; }
-    .reflect-option {
-      background: var(--deep-navy);
-      border: 1px solid rgba(243,232,208,0.12);
-      border-radius: var(--radius-card);
-      padding: 16px 20px;
-      cursor: pointer;
-      font-size: 15px;
-      color: var(--starlight);
-      text-align: left;
-      font-family: var(--font-ui);
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .reflect-option:hover { border-color: var(--moss); background: rgba(127,176,105,0.06); }
-
-    /* C5 — Badge */
-    .badge-pips-row {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 32px;
-    }
-    .badge-pip {
-      width: 12px;
-      height: 12px;
-      border-radius: var(--radius-circle);
-      background: var(--moss);
-    }
-
-    .badge-circle {
-      width: 130px;
-      height: 130px;
-      border-radius: var(--radius-circle);
-      background: rgba(24,95,165,0.2);
-      border: 3px solid var(--level-1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px;
-      font-size: 48px;
-    }
-    .badge-title {
-      font-family: var(--font-heading);
-      font-size: clamp(28px, 6vw, 40px);
-      font-weight: 700;
-      text-align: center;
-      color: var(--starlight);
-      margin-bottom: 6px;
-    }
-    .badge-sub {
-      font-size: 14px;
-      text-align: center;
-      color: var(--muted);
-      margin-bottom: 24px;
-    }
-    .badge-atl-label {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--sage);
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .badge-pills-row {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 32px;
-    }
-
-    /* ============================================================
-       MODALS
-    ============================================================ */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(7,10,18,0.85);
-      backdrop-filter: blur(6px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal-box {
-      background: var(--deep-navy);
-      border: 1px solid rgba(243,232,208,0.15);
-      border-radius: var(--radius-card);
-      padding: 28px 24px;
-      width: 100%;
-      max-width: 420px;
-    }
-    .modal-title {
-      font-family: var(--font-heading);
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .modal-sub {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-    .modal-input {
-      width: 100%;
-      background: rgba(243,232,208,0.06);
-      border: 1px solid rgba(243,232,208,0.2);
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-family: var(--font-ui);
-      font-size: 16px;
-      color: var(--starlight);
-      outline: none;
-      margin-bottom: 16px;
-      transition: border-color 0.15s;
-    }
-    .modal-input:focus { border-color: var(--moss); }
-    .modal-input::placeholder { color: rgba(243,232,208,0.3); }
-    .modal-actions { display: flex; gap: 10px; }
-    .modal-actions .btn-primary  { margin-top: 0; }
-    .modal-actions .btn-secondary { margin-top: 0; }
-
-    .coming-soon-icon {
-      font-size: 40px;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    /* ============================================================
-       RESPONSIVE
-    ============================================================ */
-    @media (max-width: 400px) {
-      .trait-grid { grid-template-columns: 1fr; }
-      .screen { padding: 20px 14px 40px; }
-    }
-    @media (min-width: 600px) {
-      .screen { padding: 32px 24px 56px; }
-    }
+    /* ── RESPONSIVE ── */
+    @media(min-width:600px){.screen{padding:32px 28px 64px}}
   </style>
 </head>
 <body>
 
-<!-- ============================================================
-     LP AMBASSADORS — CONFIG
-     Edit this block to update content. Do not edit below the
-     line that says "END CONFIG".
-============================================================ -->
 <script>
-// ---- TRAIT DATA ----
+// ============================================================
+// LP AMBASSADORS — CONFIG BLOCK
+// Edit here only. Do not edit below this section.
+// ============================================================
+
 const TRAITS = [
-  { id: 'inquirer',      name: 'Inquirer',      desc: 'Ask questions, love learning',          active: false },
-  { id: 'knowledgeable', name: 'Knowledgeable',  desc: 'Explore ideas across disciplines',      active: false },
-  { id: 'thinker',       name: 'Thinker',        desc: 'Solve problems with creativity',        active: false },
-  { id: 'communicator',  name: 'Communicator',   desc: 'Express yourself clearly',              active: false },
-  { id: 'principled',    name: 'Principled',     desc: 'Act with integrity and honesty',        active: true  },
-  { id: 'caring',        name: 'Caring',         desc: 'Show empathy, make a difference',       active: false },
-  { id: 'open-minded',   name: 'Open-minded',    desc: 'Respect other perspectives',            active: false },
-  { id: 'balanced',      name: 'Balanced',       desc: 'Look after mind, body and soul',        active: false },
-  { id: 'reflective',    name: 'Reflective',     desc: 'Think about how you learn',             active: false },
-  { id: 'risk-taker',    name: 'Risk-taker',     desc: 'Try new things with courage',           active: false }
+  { id:'inquirer',      name:'Inquirer',      desc:'Ask questions, love learning',       active:false },
+  { id:'knowledgeable', name:'Knowledgeable', desc:'Explore ideas across disciplines',   active:false },
+  { id:'thinker',       name:'Thinker',       desc:'Solve problems with creativity',     active:false },
+  { id:'communicator',  name:'Communicator',  desc:'Express yourself clearly',           active:false },
+  { id:'principled',    name:'Principled',    desc:'Act with integrity and honesty',     active:true  },
+  { id:'caring',        name:'Caring',        desc:'Show empathy, make a difference',    active:false },
+  { id:'open-minded',   name:'Open-minded',   desc:'Respect other perspectives',         active:false },
+  { id:'balanced',      name:'Balanced',      desc:'Look after mind, body and soul',     active:false },
+  { id:'reflective',    name:'Reflective',    desc:'Think about how you learn',          active:false },
+  { id:'risk-taker',    name:'Risk-taker',    desc:'Try new things with courage',        active:false }
 ];
 
-// ---- TRAIT DEFINITIONS ----
-const TRAIT_DEFINITIONS = {
-  principled: `Being principled means acting with honesty and fairness — even when no one is watching. It's about knowing the difference between right and wrong, and choosing to do the right thing even when it's hard. Principled people take responsibility for their actions and stand up for what is fair.`
-};
-
-// ---- VIDEO CONFIG ----
-// Paste your Google Drive embed URLs into the src fields below.
-// Leave src as null to show a placeholder — the app will not break.
-const VIDEO_CONFIG = {
-  principled: {
-    explorer: [
-      { title: "Mr Lee · What makes me principled?", duration: "~90s", src: null },
-      { title: "Aisha, Grade 5 · My principled moment", duration: "~60s", src: null }
-    ]
-  }
-};
-
-// ---- QUIZ DATA ----
-const PRINCIPLED_EXPLORER_QUIZ = [
-  {
-    q: "What did Mr Lee say being principled sometimes costs you?",
-    opts: [
-      "Popularity or comfort",
-      "Extra homework",
-      "Your free time",
-      "Being liked by everyone"
-    ],
-    correct: 0
-  },
-  {
-    q: "Which best describes what 'principled' means?",
-    opts: [
-      "Only following school rules",
-      "Acting with integrity even when it's hard",
-      "Being the best in your class",
-      "Agreeing with your teacher"
-    ],
-    correct: 1
-  },
-  {
-    q: "Aisha said her principled moment happened when…",
-    opts: [
-      "She won a prize",
-      "She told the truth even though she got in trouble",
-      "She helped a friend with homework",
-      "She finished her project early"
-    ],
-    correct: 1
-  }
-];
-
-// ---- LEVEL DATA ----
-const LEVEL_META = [
-  { level: 1, name: 'Explorer',      colour: '#185FA5', textColour: '#6db3f2',
-    desc: 'Discover what this trait means and share your first ideas.',
-    atl: ['Thinking skills', 'Self-reflection'] },
-  { level: 2, name: 'Practitioner',  colour: '#0F6E56', textColour: '#5dcead',
-    desc: 'Connect this trait to your own life and experiences.',
-    atl: ['Communication skills', 'Social skills'] },
-  { level: 3, name: 'Researcher',    colour: '#854F0B', textColour: '#e8a84a',
-    desc: 'Investigate how this trait shows up in the wider world.',
-    atl: ['Research skills', 'Critical thinking'] },
-  { level: 4, name: 'Ambassador',    colour: '#993C1D', textColour: '#f28b6e',
-    desc: 'Lead and inspire others with this trait in action.',
-    atl: ['Leadership', 'Self-management'] }
-];
-
-// ---- CERTIFICATE CONFIG ----
-// Adjust Y coordinates after first test print.
-const CERT_CONFIG = {
-  width: 800,
-  height: 600,
-  bg: '#070A12',
-  accentColour: '#185FA5',
-  titleY: 220,
-  nameY: 290,
-  subtitleY: 340,
-  atlY: 400,
-  logoX: 400,
-  logoY: 520
-};
-
-// ---- MASTER CONFIG ----
 const APP_CONFIG = {
-  traits: TRAITS,
-  definitions: TRAIT_DEFINITIONS,
-  videos: VIDEO_CONFIG,
-  quiz: { principled: { explorer: PRINCIPLED_EXPLORER_QUIZ } },
-  levelMeta: LEVEL_META,
-  cert: CERT_CONFIG
-};
-// ============================================================
-// END CONFIG — do not edit below this line
-// ============================================================
-</script>
 
-<!-- ============================================================
-     SCREENS
-============================================================ -->
-
-<!-- SCREEN A — HOME -->
-<section id="screen-home" class="screen active">
-  <div class="top-bar">
-    <span class="wordmark">LP Ambassadors</span>
-    <div class="seed-logo-stub" title="The SEED Lab">S</div>
-  </div>
-
-  <div class="home-intro">
-    <div class="eyebrow">IB Learner Profile</div>
-    <h1 class="screen-title">Choose a Learner Profile trait to begin</h1>
-    <p class="screen-sub">Work through all 10 traits, earn badges, and become an LP Ambassador.</p>
-  </div>
-
-  <div class="trait-grid" id="trait-grid">
-    <!-- Rendered by JS -->
-  </div>
-</section>
-
-<!-- SCREEN B — TRAIT DETAIL -->
-<section id="screen-trait" class="screen">
-  <button class="btn-back" onclick="showScreen('screen-home')">
-    ← Back
-  </button>
-
-  <div class="eyebrow" id="trait-eyebrow">IB Learner Profile · Principled</div>
-  <h2 class="screen-title" id="trait-heading">Principled</h2>
-  <p class="screen-sub" id="trait-descriptor">Act with integrity and honesty</p>
-
-  <div class="trait-definition">
-    <p id="trait-definition-text"></p>
-  </div>
-
-  <div class="level-progress-bar">
-    <div class="level-progress-label" id="level-progress-label">0 of 4 levels complete</div>
-    <div class="level-progress-track">
-      <div class="level-progress-fill" id="level-progress-fill" style="width:0%"></div>
-    </div>
-  </div>
-
-  <div class="level-cards" id="level-cards">
-    <!-- Rendered by JS -->
-  </div>
-</section>
-
-<!-- SCREEN C1 — WONDER -->
-<section id="screen-wonder" class="screen">
-  <button class="btn-back" onclick="showScreen('screen-trait')">← Back</button>
-  <div class="journey-header">
-    <div class="eyebrow">IB Learner Profile · Principled</div>
-    <div class="pips" id="wonder-pips"></div>
-    <h2 class="screen-title">What does it mean to be Principled?</h2>
-    <p class="screen-sub">Before we start — what do YOU think? No right or wrong answer.</p>
-  </div>
-  <div class="wonder-options" id="wonder-options">
-    <!-- Rendered by JS -->
-  </div>
-  <p class="wonder-note">Your answer is saved — we'll come back to it at the end</p>
-</section>
-
-<!-- SCREEN C2 — WATCH -->
-<section id="screen-watch" class="screen">
-  <button class="btn-back" onclick="showScreen('screen-wonder')">← Back</button>
-  <div class="journey-header">
-    <div class="eyebrow">Watch</div>
-    <div class="pips" id="watch-pips"></div>
-    <h2 class="screen-title">Hear from someone who lives this every day</h2>
-    <p class="screen-sub">Watch these short videos — then answer a few quick questions.</p>
-  </div>
-  <div class="video-blocks" id="video-blocks">
-    <!-- Rendered by JS -->
-  </div>
-  <button class="btn-primary" onclick="showScreen('screen-quiz'); initQuiz()">
-    I've watched both →
-  </button>
-</section>
-
-<!-- SCREEN C3 — QUIZ -->
-<section id="screen-quiz" class="screen">
-  <button class="btn-back" onclick="showScreen('screen-watch')">← Back</button>
-  <div class="journey-header">
-    <div class="eyebrow">Quick check</div>
-    <div class="pips" id="quiz-pips"></div>
-    <div class="quiz-counter" id="quiz-counter">Question 1 of 3</div>
-    <div class="quiz-question" id="quiz-question"></div>
-  </div>
-  <div class="quiz-options" id="quiz-options"></div>
-  <div class="quiz-feedback" id="quiz-feedback"></div>
-</section>
-
-<!-- SCREEN C4 — REFLECT -->
-<section id="screen-reflect" class="screen">
-  <button class="btn-back" onclick="showScreen('screen-quiz')">← Back</button>
-  <div class="journey-header">
-    <div class="eyebrow">Reflect</div>
-    <div class="pips" id="reflect-pips"></div>
-    <h2 class="screen-title">Has your thinking changed?</h2>
-    <p class="screen-sub">After watching the videos, being principled is also about…</p>
-  </div>
-  <div class="wonder-recall-card">
-    <div class="wonder-recall-label">Your first answer</div>
-    <div class="wonder-recall-text" id="reflect-recall-text">—</div>
-  </div>
-  <div class="reflect-options" id="reflect-options">
-    <!-- Rendered by JS -->
-  </div>
-</section>
-
-<!-- SCREEN C5 — BADGE EARNED -->
-<section id="screen-badge" class="screen">
-  <div class="badge-pips-row">
-    <div class="badge-pip"></div>
-    <div class="badge-pip"></div>
-    <div class="badge-pip"></div>
-    <div class="badge-pip"></div>
-    <div class="badge-pip"></div>
-  </div>
-  <div class="badge-circle">🛡️</div>
-  <div class="badge-title">Principled Explorer</div>
-  <div class="badge-sub">LP Ambassadors · Level 1</div>
-  <div class="badge-atl-label">ATL Skills earned</div>
-  <div class="badge-pills-row">
-    <span class="atl-pill lit">Thinking skills</span>
-    <span class="atl-pill lit">Self-reflection</span>
-  </div>
-  <button class="btn-primary" onclick="openCertModal()">Download my badge →</button>
-  <button class="btn-secondary" onclick="unlockPractitionerAndReturn()">Continue to Practitioner →</button>
-</section>
-
-<!-- ============================================================
-     MODALS
-============================================================ -->
-
-<!-- Certificate name modal -->
-<div id="modal-cert-name" class="modal-overlay" role="dialog" aria-modal="true">
-  <div class="modal-box">
-    <div class="modal-title">What is your name?</div>
-    <p class="modal-sub">Your name will appear on your Principled Explorer badge.</p>
-    <input type="text" class="modal-input" id="cert-name-input" placeholder="Your name…" maxlength="40" />
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeCertModal()" style="flex:0 0 auto;width:auto;padding:13px 20px;">Cancel</button>
-      <button class="btn-primary" onclick="generateAndDownload()" style="flex:1;margin-top:0;">Create my badge</button>
-    </div>
-  </div>
-</div>
-
-<!-- Coming soon modal -->
-<div id="modal-coming-soon" class="modal-overlay" role="dialog" aria-modal="true">
-  <div class="modal-box" style="text-align:center">
-    <div class="coming-soon-icon">🌱</div>
-    <div class="modal-title">Coming soon</div>
-    <p class="modal-sub">This trait will be unlocked in a future update. Keep building your LP journey!</p>
-    <button class="btn-primary" onclick="closeComingSoon()">Got it</button>
-  </div>
-</div>
-
-<!-- Hidden canvas for badge generation -->
-<canvas id="cert-canvas" style="display:none"></canvas>
-
-<!-- ============================================================
-     APP LOGIC
-============================================================ -->
-<script>
-// ---- STATE ----
-const STORAGE_KEY = 'lp-ambassadors-v1';
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e) {}
-  return {
-    badges: {
-      principled: {
-        explorer:     { earned: false, earnedDate: null },
-        practitioner: { earned: false, earnedDate: null },
-        researcher:   { earned: false, earnedDate: null },
-        ambassador:   { earned: false, earnedDate: null }
-      }
-    },
-    wonderAnswers: {}
-  };
-}
-
-function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-let appState = loadState();
-
-// ---- SCREEN ROUTER ----
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-// ---- PIP HELPERS ----
-function renderPips(containerId, total, activeIndex) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = '';
-  for (let i = 0; i < total; i++) {
-    const pip = document.createElement('div');
-    pip.className = 'pip' + (i < activeIndex ? ' done' : i === activeIndex ? ' active' : '');
-    el.appendChild(pip);
-  }
-}
-
-// ---- SCREEN A — HOME ----
-function renderHomeGrid() {
-  const grid = document.getElementById('trait-grid');
-  const state = loadState();
-  grid.innerHTML = '';
-
-  APP_CONFIG.traits.forEach(trait => {
-    const traitBadges = state.badges[trait.id] || {};
-    const earned = Object.values(traitBadges).filter(b => b.earned).length;
-
-    const card = document.createElement('div');
-    card.className = 'trait-card' + (trait.active ? ' active' : ' locked');
-
-    let pipsHtml = '';
-    for (let i = 0; i < 4; i++) {
-      const lvlKey = ['explorer','practitioner','researcher','ambassador'][i];
-      const isEarned = traitBadges[lvlKey] && traitBadges[lvlKey].earned;
-      pipsHtml += `<div class="trait-pip${isEarned ? ' earned' : ''}"></div>`;
+  traits: {
+    principled: {
+      name: 'Principled',
+      descriptor: 'Act with integrity and honesty',
+      definition: "Being principled means acting honestly, fairly, and responsibly — even when it's difficult. Principled people do the right thing because it's right, not because someone is watching."
     }
+  },
 
-    const footerRight = trait.active
-      ? `<span class="active-badge">Active</span>`
-      : `<span class="lock-icon">🔒</span>`;
-
-    card.innerHTML = `
-      <div class="trait-card-name">${trait.name}</div>
-      <div class="trait-card-desc">${trait.desc}</div>
-      <div class="trait-card-footer">
-        <div class="trait-pips">${pipsHtml}</div>
-        ${footerRight}
-      </div>
-    `;
-
-    card.addEventListener('click', () => {
-      if (trait.active) {
-        openTraitDetail(trait.id);
-      } else {
-        document.getElementById('modal-coming-soon').classList.add('active');
-      }
-    });
-
-    grid.appendChild(card);
-  });
-}
-
-// ---- SCREEN B — TRAIT DETAIL ----
-function openTraitDetail(traitId) {
-  const trait = APP_CONFIG.traits.find(t => t.id === traitId);
-  const state = loadState();
-  const traitBadges = state.badges[traitId] || {};
-
-  document.getElementById('trait-eyebrow').textContent = `IB Learner Profile · ${trait.name}`;
-  document.getElementById('trait-heading').textContent = trait.name;
-  document.getElementById('trait-descriptor').textContent = trait.desc;
-  document.getElementById('trait-definition-text').textContent =
-    APP_CONFIG.definitions[traitId] || '';
-
-  const earnedCount = Object.values(traitBadges).filter(b => b.earned).length;
-  document.getElementById('level-progress-label').textContent =
-    `${earnedCount} of 4 levels complete`;
-  document.getElementById('level-progress-fill').style.width =
-    `${(earnedCount / 4) * 100}%`;
-
-  renderLevelCards(traitId, traitBadges);
-  showScreen('screen-trait');
-}
-
-function renderLevelCards(traitId, traitBadges) {
-  const container = document.getElementById('level-cards');
-  container.innerHTML = '';
-
-  const levelKeys = ['explorer','practitioner','researcher','ambassador'];
-
-  APP_CONFIG.levelMeta.forEach((meta, i) => {
-    const key = levelKeys[i];
-    const badge = traitBadges[key] || { earned: false };
-
-    // Unlock logic: first level always unlocked; others unlock when prev earned
-    const prevKey = i > 0 ? levelKeys[i-1] : null;
-    const prevEarned = i === 0 || (traitBadges[prevKey] && traitBadges[prevKey].earned);
-    const isUnlocked = prevEarned;
-
-    let statusClass, statusLabel;
-    if (badge.earned)         { statusClass = 'tag-earned';   statusLabel = 'Earned'; }
-    else if (!isUnlocked)     { statusClass = 'tag-locked';   statusLabel = 'Locked'; }
-    else                      { statusClass = 'tag-start';    statusLabel = 'Start'; }
-
-    const stateClass = badge.earned ? 'earned' : (isUnlocked ? 'unlocked' : 'locked');
-
-    const atlPills = meta.atl.map(skill => {
-      const lit = badge.earned;
-      return `<span class="atl-pill ${lit ? 'lit' : 'locked'}">${skill}</span>`;
-    }).join('');
-
-    const card = document.createElement('div');
-    card.className = `level-card ${stateClass}`;
-    card.dataset.level = meta.level;
-    card.innerHTML = `
-      <div class="level-card-header">
-        <div class="level-card-title">Level ${meta.level} — ${meta.name}</div>
-        <div class="level-status-tag ${statusClass}">${statusLabel}</div>
-      </div>
-      <div class="level-card-desc">${meta.desc}</div>
-      <div class="atl-pills">${atlPills}</div>
-    `;
-
-    if (isUnlocked && !badge.earned) {
-      card.style.cursor = 'pointer';
-      card.addEventListener('click', () => {
-        if (traitId === 'principled' && key === 'explorer') {
-          startExplorerJourney();
+  media: {
+    principled: {
+      explorer: {
+        photos: [
+          { src: 'https://drive.google.com/uc?id=1OhRYEiul0Gn-C1pDoft7s4ME0fMdq9st', caption: 'Being principled in PE — doing the right thing in the game' },
+          { src: 'https://drive.google.com/uc?id=107vdTd6MZqGGGiaKxHRWfKZ7t0nGoqyQ', caption: 'Showing honesty and respect on the field' },
+          { src: 'https://drive.google.com/uc?id=18tg92YoMqjQzkiCHhtoWARRqsvwWGvX_', caption: 'Good sportsmanship — win or lose' }
+        ]
+      },
+      practitioner: {
+        video: {
+          title: 'Mr Lee · What does it mean to be Principled?',
+          duration: '~2 min',
+          src: 'https://drive.google.com/file/d/1otBsspTYXGlKDyt7rw2nAbPFEGOvHEP9/preview'
         }
-      });
+      },
+      researcher: {
+        video: {
+          title: 'Mr Lee · How to interview someone',
+          duration: '~90s',
+          src: null
+        },
+        photo: {
+          src: null,
+          caption: 'A student interviewing their teacher'
+        }
+      }
     }
+  },
 
-    container.appendChild(card);
-  });
-}
+  checklist: {
+    principled: {
+      explorer: [
+        { text: "The referee misses a call — you know the ball touched you last. You admit it even though it costs your team a point.", correct: true  },
+        { text: "You pretend to try hard in PE but actually slow down so your team doesn't have to do extra.",                          correct: false },
+        { text: "You win a race but notice the person next to you tripped. You tell the teacher what happened.",                        correct: true  },
+        { text: "Your teammate makes a bad pass. You tell everyone it was their fault so you don't get blamed.",                        correct: false },
+        { text: "You're losing badly. Instead of giving up, you keep giving your best effort and encourage your team.",                 correct: true  }
+      ]
+    }
+  },
 
-// ---- SCREENS C1–C5: PRINCIPLED EXPLORER JOURNEY ----
+  quiz: {
+    principled: {
+      practitioner: [
+        {
+          q: "In Mr Lee's video, what example did he use to explain being principled?",
+          opts: ["A close game where the referee misses a call","Finishing your homework on time","Helping a friend who is hurt","Winning a race fairly"],
+          correct: 0
+        },
+        {
+          q: "According to the video, what does being principled sometimes cost you?",
+          opts: ["Your free time","Something you want — like winning","A friendship","Your homework grade"],
+          correct: 1
+        },
+        {
+          q: "Mr Lee said principled people are trusted because they…",
+          opts: ["Always win","Never make mistakes","Do the right thing because it's right — not because someone is watching","Follow every rule perfectly"],
+          correct: 2
+        }
+      ]
+    }
+  }
+
+};
+
+const CERT_CONFIG = {
+  width: 800, height: 600, bg: '#070A12',
+  titleY: null, nameY: null, subtitleY: null, logoX: null, logoY: null
+};
+
+const LEVEL_META = [
+  { level:1, key:'explorer',     name:'Explorer',     colour:'#185FA5', textColour:'#6db3f2', litClass:'lit1', desc:'Photos + checklist · Self-assessed',        atl:['Thinking skills','Self-reflection'] },
+  { level:2, key:'practitioner', name:'Practitioner', colour:'#0F6E56', textColour:'#5dcead', litClass:'lit2', desc:'Video + reflection · Teacher unlock',        atl:['Self-management','Communication'] },
+  { level:3, key:'researcher',   name:'Researcher',   colour:'#854F0B', textColour:'#e8a84a', litClass:'lit3', desc:'Interview someone · Teacher unlock',         atl:['Research skills','Social skills','Communication'] },
+  { level:4, key:'ambassador',   name:'Ambassador',   colour:'#993C1D', textColour:'#f28b6e', litClass:'lit4', desc:'Full portfolio · Coming soon',               atl:['Leadership','Self-management'] }
+];
+
 const WONDER_OPTIONS = [
   "Being honest even when it's hard",
   "Following the rules at school",
@@ -1159,302 +384,895 @@ const REFLECT_OPTIONS = [
   "It depends on the situation"
 ];
 
-function startExplorerJourney() {
-  renderWonderScreen();
-  showScreen('screen-wonder');
+const INTERVIEW_CARDS = [
+  { label:'Introduction', text:'"Hi, my name is _____ and I\'m working on my LP Ambassadors badge. Can I ask you one question? It will only take a minute."' },
+  { label:'Main question', text:'"What makes YOU a principled person or learner?"' },
+  { label:'Follow-up',     text:'"Can you give me a real example from your life?"' },
+  { label:'Closing',       text:'"Thank you so much — that was really helpful!"' },
+  { label:"You're done!",  text:"Great work, researcher! Now open Seesaw and post your recording." }
+];
+
+// ============================================================
+// END CONFIG — do not edit below this line
+// ============================================================
+</script>
+
+<!-- ═══════════════════════════════ SCREENS ═══════════════════════════════ -->
+
+<!-- SCREEN A — Home -->
+<section id="screen-home" class="screen active">
+  <div class="top-bar">
+    <span class="wordmark" id="logo-tap-target">LP Ambassadors</span>
+    <div class="seed-logo" id="logo-tap-target2" title="The SEED Lab">S</div>
+  </div>
+  <div class="eyebrow">IB Learner Profile</div>
+  <h1 class="t">Choose a Learner Profile trait to begin</h1>
+  <p class="sub">Work through all 10 traits, earn badges, and become an LP Ambassador.</p>
+  <div class="trait-grid" id="trait-grid"></div>
+</section>
+
+<!-- SCREEN B — Trait detail -->
+<section id="screen-trait" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-home')">← Back</button>
+  <div class="eyebrow" id="trait-eyebrow">IB Learner Profile · Principled</div>
+  <h1 class="t" id="trait-name">Principled</h1>
+  <p class="sub" id="trait-desc">Act with integrity and honesty</p>
+  <div class="def-card"><p id="trait-def"></p></div>
+  <div class="lv-prog">
+    <div class="lv-prog-lbl" id="lv-prog-lbl">0 of 4 levels complete</div>
+    <div class="lv-prog-track"><div class="lv-prog-fill" id="lv-prog-fill" style="width:0%"></div></div>
+  </div>
+  <div class="lv-cards" id="lv-cards"></div>
+</section>
+
+<!-- ─── LEVEL 1 ─── -->
+
+<!-- L1-S1 Wonder -->
+<section id="screen-l1-wonder" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-trait')">← Back</button>
+  <div class="eyebrow">IB Learner Profile · Principled · Level 1</div>
+  <div class="pips" id="pips-l1-wonder"></div>
+  <div class="cr">
+    <div>
+      <div id="l1-photo-0" class="photo-slot"></div>
+    </div>
+    <div>
+      <h2 class="t">What does it mean to be Principled?</h2>
+      <p class="sub">Before we start — what do YOU think? No right or wrong answer.</p>
+      <div class="opt-list" id="wonder-opts"></div>
+      <p style="font-size:12px;color:var(--muted);margin-top:18px;text-align:center;opacity:.7">Your answer is saved — we'll come back to it</p>
+    </div>
+  </div>
+</section>
+
+<!-- L1-S2 Checklist -->
+<section id="screen-l1-checklist" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-l1-wonder')">← Back</button>
+  <div class="eyebrow">Level 1 Explorer · Task</div>
+  <div class="pips" id="pips-l1-checklist"></div>
+  <div class="cr">
+    <div id="l1-photo-stack" class="photo-stack"></div>
+    <div>
+      <h2 class="t">Which of these show someone being Principled?</h2>
+      <p class="sub">Select ALL that apply — then check your answers.</p>
+      <div class="cl-list" id="cl-items"></div>
+      <div class="cl-score" id="cl-score"></div>
+      <button class="btn-p" id="cl-check-btn" onclick="checkAnswers()">Check my answers</button>
+      <button class="btn-s" id="cl-retry-btn" style="display:none" onclick="retryChecklist()">Try again</button>
+      <button class="btn-p" id="cl-continue-btn" style="display:none" onclick="showScreen('screen-l1-reflect'); renderReflectScreen()">Continue →</button>
+    </div>
+  </div>
+</section>
+
+<!-- L1-S3 Reflect -->
+<section id="screen-l1-reflect" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-l1-checklist')">← Back</button>
+  <div class="eyebrow">Reflect</div>
+  <div class="pips" id="pips-l1-reflect"></div>
+  <div class="cr">
+    <div id="l1-reflect-photo" class="photo-slot"></div>
+    <div>
+      <h2 class="t">Has your thinking changed?</h2>
+      <div class="recall-card">
+        <div class="recall-label">Your first answer</div>
+        <div class="recall-text" id="reflect-recall">—</div>
+      </div>
+      <p class="sub">After looking at those examples, being principled is also about…</p>
+      <div class="opt-list" id="reflect-opts"></div>
+    </div>
+  </div>
+</section>
+
+<!-- L1-S4 Badge -->
+<section id="screen-l1-badge" class="screen" style="align-items:center;text-align:center">
+  <div class="badge-pips"><div class="badge-pip-full"></div><div class="badge-pip-full"></div><div class="badge-pip-full"></div><div class="badge-pip-full"></div></div>
+  <div class="badge-circle" style="background:rgba(24,95,165,.2);border:3px solid #185FA5">🛡️</div>
+  <div class="badge-title">Principled Explorer</div>
+  <div class="badge-sub">LP Ambassadors · Level 1</div>
+  <div class="badge-atl-lbl">ATL Skills earned</div>
+  <div class="badge-pills-row">
+    <span class="atl-pill lit1">Thinking skills</span>
+    <span class="atl-pill lit1">Self-reflection</span>
+  </div>
+  <button class="btn-p" onclick="openCertModal('principled','explorer')">Download my badge →</button>
+  <button class="btn-s" onclick="unlockNextLevel('principled','practitioner')">Continue to Practitioner →</button>
+</section>
+
+<!-- ─── LEVEL 2 ─── -->
+
+<!-- L2-S1 Watch + Quiz -->
+<section id="screen-l2-watch" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-trait')">← Back</button>
+  <div class="eyebrow">Watch · Then Answer</div>
+  <div class="pips" id="pips-l2-watch"></div>
+  <div class="cr">
+    <div>
+      <div id="l2-video-block"></div>
+    </div>
+    <div>
+      <h2 class="t">Listen carefully — questions coming</h2>
+      <p class="sub">Watch the video, then answer these questions.</p>
+      <div id="l2-quiz-area"></div>
+    </div>
+  </div>
+</section>
+
+<!-- L2-S2 Reflection + Seesaw + Unlock -->
+<section id="screen-l2-reflect" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-l2-watch')">← Back</button>
+  <div class="eyebrow">Level 2 Practitioner · Reflect</div>
+  <div class="pips" id="pips-l2-reflect"></div>
+  <h2 class="t">Now write your reflection</h2>
+  <p class="sub">Describe a real moment when you were — or weren't — principled. Think about sport, school or home.</p>
+  <textarea class="reflect-ta" id="l2-ta" placeholder="Write your reflection here…" oninput="handleL2TAInput()"></textarea>
+  <p class="char-hint" id="l2-char-hint">Aim for 3–5 sentences</p>
+  <button class="btn-p" id="l2-continue-btn" disabled onclick="showSeesawSection()">Continue →</button>
+
+  <div id="l2-seesaw-section" style="display:none">
+    <div class="seesaw-card">
+      <div class="seesaw-title">Post to Seesaw</div>
+      <ol class="seesaw-steps">
+        <li><span class="seesaw-num">1</span><span>Open Seesaw on this device</span></li>
+        <li><span class="seesaw-num">2</span><span>Create a new post in your class journal</span></li>
+        <li><span class="seesaw-num">3</span><span>Copy or retype your reflection</span></li>
+        <li><span class="seesaw-num">4</span><span>Add a photo if you have one</span></li>
+        <li><span class="seesaw-num">5</span><span>Post it — your teacher will review it</span></li>
+      </ol>
+    </div>
+    <div class="info-callout">Once your teacher has seen your Seesaw post, they'll give you an unlock code.</div>
+    <div class="unlock-section">
+      <div class="unlock-label">Enter your unlock code</div>
+      <div class="unlock-row">
+        <input class="unlock-input" id="l2-code-input" placeholder="Enter code" maxlength="8" oninput="this.value=this.value.toUpperCase()" />
+        <button class="btn-unlock" onclick="handleUnlock('principled','practitioner','screen-l2-badge')">Unlock →</button>
+      </div>
+      <div class="unlock-err" id="l2-unlock-err">That code doesn't match — check with your teacher.</div>
+    </div>
+  </div>
+</section>
+
+<!-- L2-S3 Badge -->
+<section id="screen-l2-badge" class="screen" style="align-items:center;text-align:center">
+  <div class="badge-pips"><div class="badge-pip-full"></div><div class="badge-pip-full"></div><div class="badge-pip-full"></div><div class="badge-pip-full"></div></div>
+  <div class="badge-circle" style="background:rgba(15,110,86,.2);border:3px solid #0F6E56">🛡️</div>
+  <div class="badge-title">Principled Practitioner</div>
+  <div class="badge-sub">LP Ambassadors · Level 2</div>
+  <div class="badge-atl-lbl">ATL Skills earned</div>
+  <div class="badge-pills-row">
+    <span class="atl-pill lit2">Self-management</span>
+    <span class="atl-pill lit2">Communication</span>
+  </div>
+  <div class="prev-badges" id="l2-prev-badges"></div>
+  <button class="btn-p" onclick="openCertModal('principled','practitioner')">Download my badge →</button>
+  <button class="btn-s" onclick="unlockNextLevel('principled','researcher')">Continue to Researcher →</button>
+</section>
+
+<!-- ─── LEVEL 3 ─── -->
+
+<!-- L3-S1 Brief -->
+<section id="screen-l3-brief" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-trait')">← Back</button>
+  <div class="eyebrow">Level 3 Researcher</div>
+  <div class="pips" id="pips-l3-brief"></div>
+  <div class="cr">
+    <div id="l3-media-left" style="display:flex;flex-direction:column;gap:12px"></div>
+    <div>
+      <h2 class="t">Time to be a Researcher</h2>
+      <p class="sub">You're going to interview a real person — a teacher, older student, or family member — and find out what being Principled means to them.</p>
+      <div class="need-card">
+        <ul>
+          <li><span>📱</span><span>A device to record on (use Seesaw camera)</span></li>
+          <li><span>🧑</span><span>Someone willing to be interviewed (teacher, older student, family)</span></li>
+          <li><span>⏱</span><span>About 5–10 minutes</span></li>
+        </ul>
+      </div>
+      <button class="btn-p" onclick="showScreen('screen-l3-interview'); initInterviewCards()">Show me the interview questions →</button>
+    </div>
+  </div>
+</section>
+
+<!-- L3-S2 Interview cards -->
+<section id="screen-l3-interview" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-l3-brief')">← Back</button>
+  <div class="eyebrow">Your Interview Questions</div>
+  <div class="pips" id="pips-l3-interview"></div>
+  <h2 class="t">Tap each card to go through your questions</h2>
+  <p class="sub">Hold your screen up or read aloud. Tap the card to move forward.</p>
+  <div class="ic-wrap">
+    <div class="ic-counter" id="ic-counter">Card 1 of 5</div>
+    <div class="ic-card" id="ic-card" onclick="nextInterviewCard()">
+      <div class="ic-label" id="ic-label"></div>
+      <div class="ic-text" id="ic-text"></div>
+      <div class="ic-hint">tap to continue →</div>
+    </div>
+  </div>
+  <button class="btn-p" id="ic-seesaw-btn" style="display:none;margin-top:24px" onclick="showScreen('screen-l3-seesaw')">Go to Seesaw instructions →</button>
+</section>
+
+<!-- L3-S3 Seesaw + Unlock -->
+<section id="screen-l3-seesaw" class="screen">
+  <button class="btn-back" onclick="showScreen('screen-l3-interview')">← Back</button>
+  <div class="eyebrow">Level 3 Researcher</div>
+  <div class="pips" id="pips-l3-seesaw"></div>
+  <h2 class="t">Post your interview to Seesaw</h2>
+  <div class="seesaw-card">
+    <ol class="seesaw-steps">
+      <li><span class="seesaw-num">1</span><span>Open Seesaw</span></li>
+      <li><span class="seesaw-num">2</span><span>Create a new post — add your interview video or photos</span></li>
+      <li><span class="seesaw-num">3</span><span>Write 2–3 sentences: <em style="color:var(--sage)">"What surprised me about their answer was…"</em></span></li>
+      <li><span class="seesaw-num">4</span><span>Post to your class journal</span></li>
+      <li><span class="seesaw-num">5</span><span>Wait for your teacher to review it — they'll give you a code</span></li>
+    </ol>
+  </div>
+  <div class="info-callout">Your teacher will review your Seesaw post and give you an unlock code when they're happy with it.</div>
+  <div class="unlock-section">
+    <div class="unlock-label">Enter your unlock code</div>
+    <div class="unlock-row">
+      <input class="unlock-input" id="l3-code-input" placeholder="Enter code" maxlength="8" oninput="this.value=this.value.toUpperCase()" />
+      <button class="btn-unlock" onclick="handleUnlock('principled','researcher','screen-l3-badge')">Unlock →</button>
+    </div>
+    <div class="unlock-err" id="l3-unlock-err">That code doesn't match — check with your teacher.</div>
+  </div>
+</section>
+
+<!-- L3-S4 Badge -->
+<section id="screen-l3-badge" class="screen" style="align-items:center;text-align:center">
+  <div class="badge-pips"><div class="badge-pip-full"></div><div class="badge-pip-full"></div><div class="badge-pip-full"></div><div class="badge-pip-full"></div></div>
+  <div class="badge-circle" style="background:rgba(133,79,11,.2);border:3px solid #854F0B">🛡️</div>
+  <div class="badge-title">Principled Researcher</div>
+  <div class="badge-sub">LP Ambassadors · Level 3</div>
+  <div class="badge-atl-lbl">ATL Skills earned</div>
+  <div class="badge-pills-row">
+    <span class="atl-pill lit3">Research skills</span>
+    <span class="atl-pill lit3">Social skills</span>
+    <span class="atl-pill lit3">Communication</span>
+  </div>
+  <div class="prev-badges" id="l3-prev-badges"></div>
+  <button class="btn-p" onclick="openCertModal('principled','researcher')">Download my badge →</button>
+  <button class="btn-s dim">Level 4 coming soon</button>
+</section>
+
+<!-- ═══════════════════════════════ MODALS ═══════════════════════════════ -->
+
+<!-- Coming soon -->
+<div id="modal-coming-soon" class="modal">
+  <div class="modal-box" style="text-align:center">
+    <div style="font-size:40px;margin-bottom:12px">🌱</div>
+    <div class="modal-title">Coming soon</div>
+    <p class="modal-sub">This trait will be unlocked in a future update. Keep building your LP journey!</p>
+    <button class="btn-p" onclick="closeModal('modal-coming-soon')">Got it</button>
+  </div>
+</div>
+
+<!-- Cert name -->
+<div id="modal-cert-name" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">What is your name?</div>
+    <p class="modal-sub">Your name will appear on your badge.</p>
+    <input type="text" class="modal-input" id="cert-name-input" placeholder="Your name…" maxlength="40" />
+    <div class="modal-actions">
+      <button class="btn-s" onclick="closeModal('modal-cert-name')">Cancel</button>
+      <button class="btn-p" onclick="generateAndDownload()" style="margin-top:0">Create my badge</button>
+    </div>
+  </div>
+</div>
+
+<!-- Teacher panel -->
+<div id="modal-teacher-panel" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">Teacher Panel</div>
+    <!-- PIN screen -->
+    <div id="tp-pin-screen">
+      <p class="modal-sub">Enter your PIN to continue.</p>
+      <div class="tp-pin-form">
+        <input type="password" class="modal-input" id="tp-pin-input" placeholder="PIN" maxlength="6" inputmode="numeric" />
+        <div class="tp-pin-err" id="tp-pin-err">Incorrect PIN. Try again.</div>
+        <button class="btn-p" onclick="checkTeacherPIN()" style="margin-top:0">Enter →</button>
+        <button class="btn-s" onclick="closeModal('modal-teacher-panel')" style="margin-top:0">Cancel</button>
+      </div>
+    </div>
+    <!-- Code generator screen -->
+    <div id="tp-gen-screen" style="display:none">
+      <p class="modal-sub">Generate an unlock code for a student who has completed their Seesaw post.</p>
+      <div class="tp-section">
+        <div class="tp-label">Trait</div>
+        <select class="tp-select" id="tp-trait-select">
+          <option value="principled">Principled</option>
+        </select>
+        <div class="tp-label">Level</div>
+        <select class="tp-select" id="tp-level-select">
+          <option value="practitioner">Level 2 — Practitioner</option>
+          <option value="researcher">Level 3 — Researcher</option>
+        </select>
+        <button class="btn-p" onclick="generateTeacherCode()" style="margin-top:0">Generate code</button>
+        <div class="tp-code-display" id="tp-code-display"></div>
+      </div>
+      <button class="btn-s" onclick="closeTeacherPanel()">Close panel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="Enlarged photo" />
+</div>
+
+<canvas id="cert-canvas" style="display:none"></canvas>
+
+<!-- ═══════════════════════════════ APP LOGIC ═══════════════════════════════ -->
+<script>
+
+// ── STATE ──
+const SK = 'lp-ambassadors-v1';
+function loadState() {
+  try { const r = localStorage.getItem(SK); if (r) return JSON.parse(r); } catch(e) {}
+  return {
+    badges: { principled: { explorer:{earned:false,earnedDate:null}, practitioner:{earned:false,earnedDate:null}, researcher:{earned:false,earnedDate:null}, ambassador:{earned:false,earnedDate:null} } },
+    wonderAnswers: { principled: null },
+    reflections: { principled: { practitioner: null } },
+    teacherCodes: {}
+  };
+}
+function saveState(s) { localStorage.setItem(SK, JSON.stringify(s)); }
+
+// ── SCREEN ROUTER ──
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
 
-// C1 — WONDER
-function renderWonderScreen() {
-  renderPips('wonder-pips', 5, 0);
-  const container = document.getElementById('wonder-options');
-  container.innerHTML = '';
-  const state = loadState();
-  const saved = state.wonderAnswers && state.wonderAnswers.principled;
+// ── PIPS ──
+function renderPips(id, total, active) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'pip' + (i < active ? ' past' : i === active ? ' on' : '');
+    el.appendChild(d);
+  }
+}
 
+// ── MODAL HELPERS ──
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ── PHOTO HELPERS ──
+function photoSlotHTML(photo) {
+  if (!photo || !photo.src) {
+    return `<div class="photo-placeholder"><div class="photo-placeholder-icon">📷</div><span>${photo ? photo.caption : 'Photo coming soon'}</span></div>`;
+  }
+  return `<img src="${photo.src}" alt="${photo.caption}" loading="lazy"
+    onerror="this.parentElement.innerHTML='<div class=\\'photo-placeholder\\'><div class=\\'photo-placeholder-icon\\'>📷</div><span>${photo.caption}</span></div>'"
+    onclick="openLightbox('${photo.src}')" style="cursor:pointer" />
+  <div class="photo-caption">${photo.caption}</div>`;
+}
+
+function videoBlockHTML(video) {
+  const meta = `<div class="video-meta"><span class="video-title">${video.title}</span><span class="video-dur">${video.duration}</span></div>`;
+  if (!video.src) {
+    return `<div class="video-slot">${meta}<div class="video-placeholder"><div class="video-play">▶</div><span style="font-size:13px">Video coming soon</span></div></div>`;
+  }
+  return `<div class="video-slot">
+    <iframe src="${video.src}" allow="autoplay" allowfullscreen></iframe>
+    ${meta}
+  </div>`;
+}
+
+// ── HOME GRID ──
+function renderHomeGrid() {
+  const grid = document.getElementById('trait-grid');
+  const state = loadState();
+  grid.innerHTML = '';
+  TRAITS.forEach(t => {
+    const tb = state.badges[t.id] || {};
+    const div = document.createElement('div');
+    div.className = 'tc' + (t.active ? ' active' : ' locked');
+    const pips = ['explorer','practitioner','researcher','ambassador'].map(k =>
+      `<div class="tc-pip${tb[k]&&tb[k].earned?' earned':''}"></div>`).join('');
+    const foot = t.active
+      ? `<span class="active-tag">Active</span>`
+      : `<span class="lock-icon">🔒</span>`;
+    div.innerHTML = `<div class="tc-name">${t.name}</div><div class="tc-desc">${t.desc}</div>
+      <div class="tc-foot"><div class="tc-pips">${pips}</div>${foot}</div>`;
+    div.addEventListener('click', () => {
+      if (t.active) openTraitDetail(t.id);
+      else openModal('modal-coming-soon');
+    });
+    grid.appendChild(div);
+  });
+}
+
+// ── TRAIT DETAIL ──
+function openTraitDetail(id) {
+  const cfg = APP_CONFIG.traits[id] || {};
+  const state = loadState();
+  const tb = (state.badges[id] || {});
+  document.getElementById('trait-eyebrow').textContent = `IB Learner Profile · ${cfg.name||id}`;
+  document.getElementById('trait-name').textContent = cfg.name || id;
+  document.getElementById('trait-desc').textContent = cfg.descriptor || '';
+  document.getElementById('trait-def').textContent = cfg.definition || '';
+  const earned = LEVEL_META.filter(m => tb[m.key] && tb[m.key].earned).length;
+  document.getElementById('lv-prog-lbl').textContent = `${earned} of 4 levels complete`;
+  document.getElementById('lv-prog-fill').style.width = `${(earned/4)*100}%`;
+  renderLevelCards(id, tb);
+  showScreen('screen-trait');
+}
+
+function renderLevelCards(traitId, tb) {
+  const con = document.getElementById('lv-cards');
+  con.innerHTML = '';
+  const keys = ['explorer','practitioner','researcher','ambassador'];
+  LEVEL_META.forEach((m, i) => {
+    const badge = tb[m.key] || {earned:false};
+    const prevEarned = i === 0 || (tb[keys[i-1]] && tb[keys[i-1]].earned);
+    const isUnlocked = prevEarned && !badge.earned;
+    const stateClass = badge.earned ? 'earned' : (isUnlocked ? 'unlocked' : 'locked');
+    let tagClass, tagLabel;
+    if (badge.earned)      { tagClass='earned'; tagLabel='Earned'; }
+    else if (!prevEarned)  { tagClass='locked'; tagLabel='Locked'; }
+    else                   { tagClass='start';  tagLabel='Start'; }
+    const pills = m.atl.map(a => `<span class="atl-pill dim">${a}</span>`).join('');
+    const d = document.createElement('div');
+    d.className = `lv-card l${m.level} ${stateClass}`;
+    d.innerHTML = `
+      <div class="lv-card-head">
+        <div class="lv-card-name">Level ${m.level} — ${m.name}</div>
+        <span class="lv-tag ${tagClass}">${tagLabel}</span>
+      </div>
+      <div class="lv-card-desc">${m.desc}</div>
+      <div class="atl-pills">${pills}</div>`;
+    if (isUnlocked) {
+      d.addEventListener('click', () => startLevel(traitId, m.key));
+    } else if (badge.earned) {
+      d.addEventListener('click', () => startLevel(traitId, m.key));
+    }
+    con.appendChild(d);
+  });
+}
+
+function startLevel(trait, level) {
+  if (trait === 'principled') {
+    if (level === 'explorer')     { initL1(); showScreen('screen-l1-wonder'); }
+    else if (level === 'practitioner') { initL2(); showScreen('screen-l2-watch'); }
+    else if (level === 'researcher')   { initL3(); showScreen('screen-l3-brief'); }
+  }
+}
+
+// ── LEVEL 1 ──
+function initL1() {
+  renderPips('pips-l1-wonder',    4, 0);
+  renderPips('pips-l1-checklist', 4, 1);
+  renderPips('pips-l1-reflect',   4, 2);
+  const photos = APP_CONFIG.media.principled.explorer.photos;
+  // Wonder photo
+  document.getElementById('l1-photo-0').innerHTML = photoSlotHTML(photos[0]);
+  // Checklist photos
+  document.getElementById('l1-photo-stack').innerHTML =
+    [photos[1], photos[2]].map(p => `<div class="photo-slot stacked">${photoSlotHTML(p)}</div>`).join('');
+  // Reflect photo
+  document.getElementById('l1-reflect-photo').innerHTML = photoSlotHTML(photos[0]);
+  // Wonder options
+  const saved = loadState().wonderAnswers.principled;
+  const wo = document.getElementById('wonder-opts');
+  wo.innerHTML = '';
   WONDER_OPTIONS.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'wonder-option' + (saved === opt ? ' selected' : '');
-    btn.textContent = opt;
-    btn.addEventListener('click', () => {
+    const b = document.createElement('button');
+    b.className = 'opt' + (saved === opt ? ' sel' : '');
+    b.textContent = opt;
+    b.addEventListener('click', () => {
       const s = loadState();
-      if (!s.wonderAnswers) s.wonderAnswers = {};
       s.wonderAnswers.principled = opt;
       saveState(s);
-      document.querySelectorAll('.wonder-option').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      setTimeout(() => {
-        renderWatchScreen();
-        showScreen('screen-watch');
-      }, 350);
+      wo.querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+      b.classList.add('sel');
+      setTimeout(() => { initChecklist(); showScreen('screen-l1-checklist'); }, 350);
     });
-    container.appendChild(btn);
+    wo.appendChild(b);
   });
-}
-
-// C2 — WATCH
-function renderWatchScreen() {
-  renderPips('watch-pips', 5, 1);
-  const container = document.getElementById('video-blocks');
-  container.innerHTML = '';
-  const videos = APP_CONFIG.videos.principled.explorer;
-
-  videos.forEach(v => {
-    const block = document.createElement('div');
-    block.className = 'video-block';
-
-    const embedArea = document.createElement('div');
-    embedArea.className = 'video-embed-area';
-
-    if (v.src) {
-      const iframe = document.createElement('iframe');
-      iframe.className = 'video-iframe';
-      iframe.src = v.src;
-      iframe.allow = 'autoplay; encrypted-media';
-      iframe.allowFullscreen = true;
-      embedArea.appendChild(iframe);
-    } else {
-      embedArea.innerHTML = `
-        <div class="video-placeholder">
-          <div class="video-play-icon">▶</div>
-          <div class="video-coming-soon">Video coming soon</div>
-        </div>
-      `;
-    }
-
-    block.innerHTML = `
-      <div class="video-block-meta">
-        <div class="video-block-title">${v.title}</div>
-        <div class="video-duration">${v.duration}</div>
-      </div>
-    `;
-    block.insertBefore(embedArea, block.firstChild);
-    container.appendChild(block);
-  });
-}
-
-// C3 — QUIZ
-let quizState = { current: 0, answered: false };
-
-function initQuiz() {
-  renderPips('quiz-pips', 5, 2);
-  quizState = { current: 0, answered: false };
-  renderQuizQuestion();
-}
-
-function renderQuizQuestion() {
-  const questions = APP_CONFIG.quiz.principled.explorer;
-  const q = questions[quizState.current];
-
-  document.getElementById('quiz-counter').textContent =
-    `Question ${quizState.current + 1} of ${questions.length}`;
-  document.getElementById('quiz-question').textContent = q.q;
-
-  const optContainer = document.getElementById('quiz-options');
-  optContainer.innerHTML = '';
-  const feedback = document.getElementById('quiz-feedback');
-  feedback.className = 'quiz-feedback';
-  feedback.textContent = '';
-
-  q.opts.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'quiz-option';
-    btn.textContent = opt;
-    btn.addEventListener('click', () => handleQuizAnswer(i));
-    optContainer.appendChild(btn);
-  });
-
-  quizState.answered = false;
-}
-
-function handleQuizAnswer(selectedIndex) {
-  if (quizState.answered) return;
-  quizState.answered = true;
-
-  const questions = APP_CONFIG.quiz.principled.explorer;
-  const q = questions[quizState.current];
-  const isCorrect = selectedIndex === q.correct;
-
-  const buttons = document.querySelectorAll('.quiz-option');
-  buttons.forEach((btn, i) => {
-    btn.disabled = true;
-    if (i === q.correct) btn.classList.add('correct');
-    else if (i === selectedIndex && !isCorrect) btn.classList.add('wrong');
-  });
-
-  const feedback = document.getElementById('quiz-feedback');
-  if (isCorrect) {
-    feedback.textContent = '✓ Correct!';
-    feedback.className = 'quiz-feedback show correct-msg';
-  } else {
-    feedback.textContent = 'Not quite — see the correct answer above.';
-    feedback.className = 'quiz-feedback show wrong-msg';
-  }
-
-  const delay = isCorrect ? 900 : 1400;
-  setTimeout(() => {
-    quizState.current++;
-    if (quizState.current < questions.length) {
-      renderQuizQuestion();
-    } else {
-      renderReflectScreen();
-      showScreen('screen-reflect');
-    }
-  }, delay);
-}
-
-// C4 — REFLECT
-function renderReflectScreen() {
-  renderPips('reflect-pips', 5, 3);
-  const state = loadState();
-  const saved = (state.wonderAnswers && state.wonderAnswers.principled) || '—';
-  document.getElementById('reflect-recall-text').textContent = `"${saved}"`;
-
-  const container = document.getElementById('reflect-options');
-  container.innerHTML = '';
-
+  // Reflect options
+  const ro = document.getElementById('reflect-opts');
+  ro.innerHTML = '';
   REFLECT_OPTIONS.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'reflect-option';
-    btn.textContent = opt;
-    btn.addEventListener('click', () => {
-      btn.style.borderColor = 'var(--moss)';
-      btn.style.background = 'rgba(127,176,105,0.1)';
-      setTimeout(() => {
-        earnExplorerBadge();
-        showScreen('screen-badge');
-      }, 350);
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = opt;
+    b.addEventListener('click', () => {
+      b.classList.add('sel');
+      setTimeout(() => { earnBadge('principled','explorer'); showScreen('screen-l1-badge'); }, 350);
     });
-    container.appendChild(btn);
+    ro.appendChild(b);
   });
 }
 
-// C5 — BADGE EARNED
-function earnExplorerBadge() {
-  const state = loadState();
-  const today = new Date().toISOString().slice(0, 10);
-  if (!state.badges.principled) state.badges.principled = {};
-  state.badges.principled.explorer = { earned: true, earnedDate: today };
-  saveState(state);
-  // Refresh home grid in background
+// Checklist state
+let clSelected = new Set();
+let clAttempts = 0;
+function initChecklist() {
+  clSelected = new Set();
+  clAttempts = 0;
+  const items = APP_CONFIG.checklist.principled.explorer;
+  const con = document.getElementById('cl-items');
+  con.innerHTML = '';
+  items.forEach((item, i) => {
+    const d = document.createElement('div');
+    d.className = 'cl-item';
+    d.dataset.index = i;
+    d.innerHTML = `<div class="cl-check" id="cl-chk-${i}"></div>
+      <span>${item.text}</span>
+      <div class="cl-fb" id="cl-fb-${i}"></div>`;
+    d.addEventListener('click', () => toggleClItem(i));
+    con.appendChild(d);
+  });
+  document.getElementById('cl-score').classList.remove('show');
+  document.getElementById('cl-check-btn').style.display = '';
+  document.getElementById('cl-retry-btn').style.display = 'none';
+  document.getElementById('cl-continue-btn').style.display = 'none';
+}
+
+function toggleClItem(i) {
+  const item = document.querySelector(`[data-index="${i}"]`);
+  const chk  = document.getElementById(`cl-chk-${i}`);
+  if (item.classList.contains('locked')) return;
+  if (clSelected.has(i)) { clSelected.delete(i); item.classList.remove('sel'); chk.textContent = ''; }
+  else { clSelected.add(i); item.classList.add('sel'); chk.textContent = '✓'; }
+}
+
+function checkAnswers() {
+  clAttempts++;
+  const items = APP_CONFIG.checklist.principled.explorer;
+  let correct = 0;
+  items.forEach((item, i) => {
+    const fb  = document.getElementById(`cl-fb-${i}`);
+    const row = document.querySelector(`[data-index="${i}"]`);
+    const studentSel = clSelected.has(i);
+    const isRight = studentSel === item.correct;
+    if (isRight) correct++;
+    fb.className = 'cl-fb show ' + (isRight ? 'ok' : 'bad');
+    fb.textContent = isRight ? '✓' : '✗';
+    row.classList.add('locked');
+  });
+  const score = document.getElementById('cl-score');
+  score.textContent = `You got ${correct} of ${items.length} right`;
+  score.classList.add('show');
+  document.getElementById('cl-check-btn').style.display = 'none';
+  document.getElementById('cl-continue-btn').style.display = '';
+  if (clAttempts < 2) document.getElementById('cl-retry-btn').style.display = '';
+}
+
+function retryChecklist() { initChecklist(); }
+
+function renderReflectScreen() {
+  const s = loadState();
+  const ans = s.wonderAnswers.principled || '—';
+  document.getElementById('reflect-recall').textContent = `"${ans}"`;
+}
+
+// ── LEVEL 2 ──
+let l2quizState = { current: 0, answered: false };
+function initL2() {
+  renderPips('pips-l2-watch',   4, 0);
+  renderPips('pips-l2-reflect', 4, 1);
+  const vid = APP_CONFIG.media.principled.practitioner.video;
+  document.getElementById('l2-video-block').innerHTML = videoBlockHTML(vid);
+  l2quizState = { current: 0, answered: false };
+  renderL2Quiz();
+  // Reset reflect screen
+  document.getElementById('l2-ta').value = '';
+  document.getElementById('l2-continue-btn').disabled = true;
+  document.getElementById('l2-seesaw-section').style.display = 'none';
+  document.getElementById('l2-unlock-err').classList.remove('show');
+  document.getElementById('l2-code-input').value = '';
+}
+
+function renderL2Quiz() {
+  const qs = APP_CONFIG.quiz.principled.practitioner;
+  const area = document.getElementById('l2-quiz-area');
+  if (l2quizState.current >= qs.length) {
+    area.innerHTML = `<div style="background:rgba(127,176,105,.1);border:1px solid rgba(127,176,105,.2);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-size:22px;margin-bottom:6px">✓</div>
+      <div style="font-size:14px;color:var(--moss);font-weight:600">All questions done — great work!</div>
+    </div>
+    <button class="btn-p" onclick="showScreen('screen-l2-reflect')" style="margin-top:16px">Continue to your reflection →</button>`;
+    return;
+  }
+  const q = qs[l2quizState.current];
+  area.innerHTML = `
+    <div class="quiz-counter">Question ${l2quizState.current+1} of ${qs.length}</div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-opts" id="l2-quiz-opts"></div>
+    <div class="quiz-fb" id="l2-quiz-fb"></div>`;
+  const opts = document.getElementById('l2-quiz-opts');
+  q.opts.forEach((opt, i) => {
+    const b = document.createElement('button');
+    b.className = 'quiz-opt'; b.textContent = opt;
+    b.addEventListener('click', () => handleL2Answer(i));
+    opts.appendChild(b);
+  });
+  l2quizState.answered = false;
+}
+
+function handleL2Answer(idx) {
+  if (l2quizState.answered) return;
+  l2quizState.answered = true;
+  const q = APP_CONFIG.quiz.principled.practitioner[l2quizState.current];
+  const btns = document.querySelectorAll('#l2-quiz-opts .quiz-opt');
+  btns.forEach((b,i) => {
+    b.disabled = true;
+    if (i === q.correct) b.classList.add('ok');
+    else if (i === idx && idx !== q.correct) b.classList.add('bad');
+  });
+  const ok = idx === q.correct;
+  const fb = document.getElementById('l2-quiz-fb');
+  fb.textContent = ok ? '✓ Correct!' : 'Not quite — the correct answer is highlighted.';
+  fb.className = 'quiz-fb show ' + (ok ? 'ok-msg' : 'bad-msg');
+  setTimeout(() => { l2quizState.current++; renderL2Quiz(); }, ok ? 900 : 1400);
+}
+
+function handleL2TAInput() {
+  const val = document.getElementById('l2-ta').value;
+  document.getElementById('l2-continue-btn').disabled = val.trim().length < 20;
+}
+
+function showSeesawSection() {
+  const ta = document.getElementById('l2-ta').value.trim();
+  const s = loadState();
+  if (!s.reflections) s.reflections = {};
+  if (!s.reflections.principled) s.reflections.principled = {};
+  s.reflections.principled.practitioner = ta;
+  saveState(s);
+  document.getElementById('l2-seesaw-section').style.display = '';
+  document.getElementById('l2-continue-btn').style.display = 'none';
+  document.getElementById('l2-seesaw-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── LEVEL 3 ──
+let l3cardCurrent = 0;
+function initL3() {
+  renderPips('pips-l3-brief',     4, 0);
+  renderPips('pips-l3-interview', 4, 1);
+  renderPips('pips-l3-seesaw',    4, 2);
+  const med = APP_CONFIG.media.principled.researcher;
+  const left = document.getElementById('l3-media-left');
+  left.innerHTML = videoBlockHTML(med.video) + `<div class="photo-slot" style="margin-top:0">${photoSlotHTML(med.photo)}</div>`;
+  document.getElementById('l3-unlock-err').classList.remove('show');
+  document.getElementById('l3-code-input').value = '';
+}
+
+function initInterviewCards() {
+  l3cardCurrent = 0;
+  renderInterviewCard();
+}
+
+function renderInterviewCard() {
+  const cards = INTERVIEW_CARDS;
+  document.getElementById('ic-counter').textContent = `Card ${l3cardCurrent+1} of ${cards.length}`;
+  document.getElementById('ic-label').textContent = cards[l3cardCurrent].label;
+  document.getElementById('ic-text').textContent  = cards[l3cardCurrent].text;
+  const btn = document.getElementById('ic-seesaw-btn');
+  btn.style.display = l3cardCurrent >= 2 ? '' : 'none';
+}
+
+function nextInterviewCard() {
+  if (l3cardCurrent < INTERVIEW_CARDS.length - 1) {
+    l3cardCurrent++;
+    const card = document.getElementById('ic-card');
+    card.style.opacity = '0'; card.style.transform = 'scale(.97)';
+    setTimeout(() => { renderInterviewCard(); card.style.opacity=''; card.style.transform=''; }, 180);
+    card.style.transition = 'opacity .18s,transform .18s';
+  }
+}
+
+// ── UNLOCK CODE ──
+function generateUnlockCode(trait, level) {
+  const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+  const expiry = Date.now() + (24 * 60 * 60 * 1000);
+  const s = loadState();
+  if (!s.teacherCodes) s.teacherCodes = {};
+  s.teacherCodes[`${trait}-${level}`] = { code, expiry };
+  saveState(s);
+  return code;
+}
+
+function validateCode(trait, level, input) {
+  const s = loadState();
+  const entry = s.teacherCodes && s.teacherCodes[`${trait}-${level}`];
+  if (!entry) return false;
+  if (Date.now() > entry.expiry) return false;
+  return input.toUpperCase().trim() === entry.code;
+}
+
+function handleUnlock(trait, level, nextScreen) {
+  const inputId = level === 'practitioner' ? 'l2-code-input' : 'l3-code-input';
+  const errId   = level === 'practitioner' ? 'l2-unlock-err' : 'l3-unlock-err';
+  const code = document.getElementById(inputId).value;
+  if (validateCode(trait, level, code)) {
+    earnBadge(trait, level);
+    buildPrevBadges(nextScreen);
+    showScreen(nextScreen);
+  } else {
+    document.getElementById(errId).classList.add('show');
+  }
+}
+
+function earnBadge(trait, level) {
+  const s = loadState();
+  const today = new Date().toISOString().slice(0,10);
+  if (!s.badges[trait]) s.badges[trait] = {};
+  s.badges[trait][level] = { earned: true, earnedDate: today };
+  saveState(s);
   renderHomeGrid();
 }
 
-function unlockPractitionerAndReturn() {
-  openTraitDetail('principled');
+function unlockNextLevel(trait, nextLevel) {
+  // next level becomes startable once prev is earned — already handled by earn state
+  openTraitDetail(trait);
 }
 
-// ---- CERT MODAL ----
-function openCertModal() {
-  document.getElementById('modal-cert-name').classList.add('active');
+function buildPrevBadges(nextScreen) {
+  const s = loadState();
+  const tb = s.badges.principled || {};
+  const earned = LEVEL_META.filter(m => tb[m.key] && tb[m.key].earned);
+  const ids = { 'screen-l2-badge':'l2-prev-badges', 'screen-l3-badge':'l3-prev-badges' };
+  const conId = ids[nextScreen];
+  if (!conId) return;
+  const con = document.getElementById(conId);
+  if (!con) return;
+  con.innerHTML = earned.map(m => `
+    <div class="prev-badge" style="border-color:${m.colour}">
+      <span class="prev-badge-icon">🛡️</span>
+      <div class="prev-badge-info">
+        <div class="prev-badge-name">Principled ${m.name}</div>
+        <div class="prev-badge-lvl">Level ${m.level} · Earned</div>
+      </div>
+      <span class="prev-badge-tick" style="color:${m.colour}">✓</span>
+    </div>`).join('');
+}
+
+// ── CERTIFICATE ──
+let certContext = { trait: 'principled', level: 'explorer' };
+function openCertModal(trait, level) {
+  certContext = { trait, level };
+  document.getElementById('cert-name-input').value = '';
+  openModal('modal-cert-name');
   setTimeout(() => document.getElementById('cert-name-input').focus(), 100);
 }
-
-function closeCertModal() {
-  document.getElementById('modal-cert-name').classList.remove('active');
-  document.getElementById('cert-name-input').value = '';
-}
-
-document.getElementById('cert-name-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') generateAndDownload();
-});
+document.getElementById('cert-name-input').addEventListener('keydown', e => { if (e.key==='Enter') generateAndDownload(); });
 
 function generateAndDownload() {
   const name = document.getElementById('cert-name-input').value.trim() || 'Explorer';
-  closeCertModal();
-  generateBadgePNG(name);
+  closeModal('modal-cert-name');
+  generateBadgePNG(name, certContext.trait, certContext.level);
 }
 
-function generateBadgePNG(studentName) {
-  const C = APP_CONFIG.cert;
-  const canvas = document.getElementById('cert-canvas');
-  canvas.width  = C.width;
-  canvas.height = C.height;
-  const ctx = canvas.getContext('2d');
-
-  // Background
-  ctx.fillStyle = C.bg;
-  ctx.fillRect(0, 0, C.width, C.height);
-
-  // Accent bar
-  ctx.fillStyle = C.accentColour;
-  ctx.fillRect(0, 0, C.width, 6);
-
-  // Badge circle
-  const cx = C.width / 2, cy = 120;
-  ctx.beginPath();
-  ctx.arc(cx, cy, 60, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(24,95,165,0.2)';
-  ctx.fill();
-  ctx.strokeStyle = C.accentColour;
-  ctx.lineWidth = 3;
-  ctx.stroke();
-  ctx.font = '44px serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('🛡️', cx, cy);
-
-  // Title
-  ctx.font = `bold 42px Georgia, serif`;
-  ctx.fillStyle = '#F3E8D0';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillText('Principled Explorer', C.width / 2, C.titleY);
-
-  // Student name
-  ctx.font = `32px Georgia, serif`;
-  ctx.fillStyle = '#7FB069';
-  ctx.fillText(studentName, C.width / 2, C.nameY);
-
-  // Subtitle
-  ctx.font = `18px Arial, sans-serif`;
-  ctx.fillStyle = 'rgba(243,232,208,0.7)';
-  ctx.fillText('LP Ambassadors · Level 1', C.width / 2, C.subtitleY);
-
-  // Date
+function generateBadgePNG(studentName, trait, level) {
+  const C = CERT_CONFIG;
+  const meta = LEVEL_META.find(m => m.key === level) || LEVEL_META[0];
   const state = loadState();
-  const dateEarned = (state.badges.principled && state.badges.principled.explorer &&
-    state.badges.principled.explorer.earnedDate) || new Date().toISOString().slice(0,10);
-  ctx.font = `14px Arial, sans-serif`;
-  ctx.fillStyle = 'rgba(243,232,208,0.45)';
-  ctx.fillText(`Earned ${dateEarned}`, C.width / 2, C.subtitleY + 36);
-
-  // ATL skills
-  ctx.font = `bold 13px Arial, sans-serif`;
-  ctx.fillStyle = 'rgba(168,198,159,0.8)';
-  ctx.fillText('ATL SKILLS: Thinking skills · Self-reflection', C.width / 2, C.atlY);
-
-  // SEED Lab wordmark
-  ctx.font = `bold 14px Arial, sans-serif`;
-  ctx.fillStyle = 'rgba(168,198,159,0.5)';
-  ctx.fillText('The SEED Lab · theseedlab.org', C.logoX, C.logoY);
-
-  // Download
-  const link = document.createElement('a');
-  link.download = 'principled-explorer-badge.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+  const dateEarned = (state.badges[trait] && state.badges[trait][level] && state.badges[trait][level].earnedDate) || new Date().toISOString().slice(0,10);
+  const canvas = document.getElementById('cert-canvas');
+  canvas.width = C.width; canvas.height = C.height;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = C.bg || '#070A12';
+  ctx.fillRect(0, 0, C.width, C.height);
+  // Accent bar
+  ctx.fillStyle = meta.colour;
+  ctx.fillRect(0, 0, C.width, 8);
+  // Badge circle
+  const cx = C.width/2, cy = 130;
+  ctx.beginPath(); ctx.arc(cx, cy, 70, 0, Math.PI*2);
+  ctx.fillStyle = meta.colour + '33'; ctx.fill();
+  ctx.strokeStyle = meta.colour; ctx.lineWidth = 3; ctx.stroke();
+  ctx.font = '52px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('🛡️', cx, cy);
+  // Title
+  ctx.font = 'bold 42px Georgia, serif'; ctx.fillStyle = '#F3E8D0'; ctx.textBaseline='alphabetic';
+  ctx.fillText(`Principled ${meta.name}`, C.width/2, C.titleY||240);
+  // Student name
+  ctx.font = '30px Georgia, serif'; ctx.fillStyle = meta.colour;
+  ctx.fillText(studentName, C.width/2, C.nameY||295);
+  // Subtitle
+  ctx.font = '18px Arial, sans-serif'; ctx.fillStyle='rgba(243,232,208,.65)';
+  ctx.fillText(`LP Ambassadors · Level ${meta.level}`, C.width/2, C.subtitleY||340);
+  // Date
+  ctx.font = '14px Arial, sans-serif'; ctx.fillStyle='rgba(243,232,208,.4)';
+  ctx.fillText(`Earned ${dateEarned}`, C.width/2, 376);
+  // ATL
+  ctx.font = 'bold 13px Arial, sans-serif'; ctx.fillStyle='rgba(168,198,159,.8)';
+  ctx.fillText('ATL Skills: ' + meta.atl.join(' · '), C.width/2, 414);
+  // Footer
+  ctx.font = 'bold 13px Arial, sans-serif'; ctx.fillStyle='rgba(168,198,159,.45)';
+  ctx.fillText('The SEED Lab · theseedlab.org', C.logoX||C.width/2, C.logoY||555);
+  const a = document.createElement('a');
+  a.download = `principled-${level}-badge.png`;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
 }
 
-// ---- COMING SOON MODAL ----
-function closeComingSoon() {
-  document.getElementById('modal-coming-soon').classList.remove('active');
+// ── TEACHER PANEL ──
+let tapCount = 0, tapTimer = null;
+function handleLogoTap() {
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+  if (tapCount >= 5) { tapCount = 0; openTeacherPanelModal(); }
+}
+['logo-tap-target','logo-tap-target2'].forEach(id => {
+  document.getElementById(id).addEventListener('click', handleLogoTap);
+});
+
+function openTeacherPanelModal() {
+  document.getElementById('tp-pin-screen').style.display = '';
+  document.getElementById('tp-gen-screen').style.display = 'none';
+  document.getElementById('tp-pin-input').value = '';
+  document.getElementById('tp-pin-err').classList.remove('show');
+  document.getElementById('tp-code-display').classList.remove('show');
+  openModal('modal-teacher-panel');
+  setTimeout(() => document.getElementById('tp-pin-input').focus(), 100);
+}
+document.getElementById('tp-pin-input').addEventListener('keydown', e => { if (e.key==='Enter') checkTeacherPIN(); });
+
+function checkTeacherPIN() {
+  const pin = document.getElementById('tp-pin-input').value.trim();
+  if (pin === '7333') {
+    document.getElementById('tp-pin-screen').style.display = 'none';
+    document.getElementById('tp-gen-screen').style.display = '';
+  } else {
+    document.getElementById('tp-pin-err').classList.add('show');
+    document.getElementById('tp-pin-input').value = '';
+  }
 }
 
-// Close modals on overlay click
-document.getElementById('modal-coming-soon').addEventListener('click', function(e) {
-  if (e.target === this) closeComingSoon();
-});
-document.getElementById('modal-cert-name').addEventListener('click', function(e) {
-  if (e.target === this) closeCertModal();
-});
+function generateTeacherCode() {
+  const trait = document.getElementById('tp-trait-select').value;
+  const level = document.getElementById('tp-level-select').value;
+  const code = generateUnlockCode(trait, level);
+  const disp = document.getElementById('tp-code-display');
+  disp.textContent = code;
+  disp.classList.add('show');
+}
 
-// ---- INIT ----
+function closeTeacherPanel() {
+  document.getElementById('tp-code-display').classList.remove('show');
+  closeModal('modal-teacher-panel');
+}
+
+// ── LIGHTBOX ──
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+// ── INIT ──
 renderHomeGrid();
-renderPips('wonder-pips', 5, 0);
-renderPips('watch-pips',  5, 1);
-renderPips('quiz-pips',   5, 2);
-renderPips('reflect-pips',5, 3);
+renderPips('pips-l1-wonder', 4, 0);
+renderPips('pips-l1-checklist', 4, 1);
+renderPips('pips-l1-reflect', 4, 2);
 </script>
 </body>
 </html>
