@@ -934,8 +934,25 @@ async function cloudLoad() {
   try {
     const r = await fetch(`${APPS_SCRIPT_URL}?auth=${AUTH_TOKEN}`, { redirect: 'follow' });
     const json = await r.json();
-    if (json && json.classes) {
-      D = json;
+    if (json && json.classes && Object.keys(json.classes).length > 0) {
+      if (D && D.classes) {
+        Object.entries(json.classes).forEach(([cls, savedCls]) => {
+          if (D.classes[cls] && savedCls.students && savedCls.students.length > 0) {
+            savedCls.students.forEach(savedStudent => {
+              const live = D.classes[cls].students.find(s => s.name === savedStudent.name);
+              if (live && savedStudent.history && savedStudent.history.length > 0) {
+                live.history = savedStudent.history;
+                live.atl = savedStudent.atl;
+                live.atlLevel = savedStudent.atlLevel;
+                live.peLevel = savedStudent.peLevel;
+              }
+            });
+          }
+          if (savedCls.unitATL) D.classes[cls].unitATL = savedCls.unitATL;
+        });
+      } else {
+        D = json;
+      }
       localStorage.setItem('pec4', JSON.stringify(D));
       setSyncBadge('ok');
       return true;
