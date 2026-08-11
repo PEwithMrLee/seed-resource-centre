@@ -850,11 +850,17 @@ async function unlock() {
   err.textContent = '';
   sessionStorage.setItem('pec_auth', '1');
 
-  // Try to load from cloud
+  // Try to load roster + state from cloud
   if (APPS_SCRIPT_URL !== 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') {
-    note.textContent = '🔄 Loading your data from the cloud…';
-    const ok = await cloudLoad();
-    note.textContent = ok ? '✅ Data loaded!' : '⚠️ Offline — using local data';
+    note.textContent = '🔄 Loading your classes from the cloud…';
+    const rosterOk = await cloudLoadRoster();
+    if (rosterOk) {
+      note.textContent = '🔄 Loading saved session data…';
+      await cloudLoad();
+      note.textContent = '✅ All data loaded!';
+    } else {
+      note.textContent = '⚠️ Offline — using local data';
+    }
     await new Promise(r => setTimeout(r, 800));
   }
 
@@ -886,6 +892,41 @@ function setSyncBadge(s) {
   const [txt, cls] = map[s] || map.idle;
   el.textContent = txt;
   el.className = 'sync-badge' + (cls ? ' ' + cls : '');
+}
+
+async function cloudLoadRoster() {
+  if (APPS_SCRIPT_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') return false;
+  try {
+    const r = await fetch(`${APPS_SCRIPT_URL}?auth=${AUTH_TOKEN}&action=roster`, { redirect: 'follow' });
+    const json = await r.json();
+    if (json && json.classes) {
+      // Merge roster into existing D — preserve history, just add new students/classes
+      if (!D) D = { classes: {} };
+      Object.entries(json.classes).forEach(([cls, clsData]) => {
+        if (!D.classes[cls]) {
+          D.classes[cls] = clsData;
+        } else {
+          // Add any new students not already in local data
+          const existingNames = D.classes[cls].students.map(s => s.name);
+          clsData.students.forEach(s => {
+            if (!existingNames.includes(s.name)) {
+              s.history = [{date:curDate,status:'fly',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null}];
+              D.classes[cls].students.push(s);
+            }
+          });
+          // Mark students not in roster as inactive (don't delete, preserve history)
+          const rosterNames = clsData.students.map(s => s.name);
+          D.classes[cls].students = D.classes[cls].students.filter(s => rosterNames.includes(s.name));
+        }
+      });
+      localStorage.setItem('pec4', JSON.stringify(D));
+      return true;
+    }
+    return false;
+  } catch(err) {
+    console.warn('Roster load failed:', err);
+    return false;
+  }
 }
 
 async function cloudLoad() {
@@ -973,40 +1014,10 @@ function fmtFull(iso) {
   return new Date(iso+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
 }
 
-// DEFAULT CLASSES
+// DEFAULT CLASSES — loaded from Google Sheets Roster tabs
+// If offline or first load, start with empty scaffold
 if (!D) {
-  const mk = (name) => ({ name, unitATL: null, students: [] });
-  const mkStudent = (name) => ({ name, flag: '', atl: null, atlLevel: null, peLevel: null, history: [{date:curDate,status:'fly',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null}] });
-  D = {
-    classes: {
-      'Pre-K': mk('Pre-K'), 'K1': mk('K1'), 'K2': mk('K2'),
-      '1A': mk('1A'), '1B': mk('1B'),
-      '2A': mk('2A'), '2B': mk('2B'),
-      '3A': mk('3A'),
-      '3B': {
-        name: '3B', unitATL: null,
-        students: [
-          mkStudent('Jenny'),
-          mkStudent('Wesley'),
-          mkStudent('David'),
-          mkStudent('Beomjun'),
-          mkStudent('Minseong'),
-          mkStudent('Jion'),
-          mkStudent('Yuto'),
-          mkStudent('Eli'),
-          mkStudent('Seoyun'),
-          mkStudent('Songyi'),
-          mkStudent('Riley'),
-          mkStudent('Henry'),
-          mkStudent('Ivan'),
-          mkStudent('Lydia'),
-          mkStudent('Ethan'),
-          mkStudent('Olivia'),
-        ]
-      },
-      '4A': mk('4A'), '4B': mk('4B'), '5A': mk('5A'), '5B': mk('5B'),
-    }
-  };
+  D = { classes: {} };
   save();
 }
 
