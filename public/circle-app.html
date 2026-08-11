@@ -721,7 +721,7 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
       </div>
     </div>
     <div class="sec">
-      <div class="sl">How are you feeling?</div>
+      <div class="sl">What do you notice?</div>
       <div class="frow">
         <button class="fbtn" onclick="sFeeling('energised')"><span class="fi">⚡</span><span class="fl">Energised</span></button>
         <button class="fbtn" onclick="sFeeling('ok')"><span class="fi">😊</span><span class="fl">OK</span></button>
@@ -796,6 +796,7 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
       <label>Starting Status</label>
       <select id="nStatus">
         <option value="unchecked">Not set yet</option>
+
         <option value="fly">🟢 Fly</option>
         <option value="grow">🟡 Grow</option>
         <option value="pit">🔴 Pit Stop</option>
@@ -829,8 +830,8 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
 // ╔══════════════════════════════════════════╗
 // ║  CONFIG — change these two values        ║
 // ╚══════════════════════════════════════════╝
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvKOsE5AXCERQ1C4ack5DlNuZBolEIPnTO0tb6vUXR93bJ7CwLX2ca5RrIZYSWt8s/exec';
-const AUTH_TOKEN      = 'circle_teacher_7742'; // must match Apps Script
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1w_pJTWsHthdAeEqcK_f0BlYuU-DngjkjHCN6TLL2FFySvuFpIz6mmhUU4AoBZRo/exec';
+const AUTH_TOKEN      = 'pe_circle_7333'; // must match Apps Script
 const APP_PASSWORD    = '733333';              // your access password (change this!)
 // ═══════════════════════════════════════════════════════
 
@@ -975,42 +976,35 @@ function fmtFull(iso) {
 // DEFAULT CLASSES
 if (!D) {
   const mk = (name) => ({ name, unitATL: null, students: [] });
+  const mkStudent = (name) => ({ name, flag: '', atl: null, atlLevel: null, peLevel: null, history: [{date:curDate,status:'fly',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null}] });
   D = {
     classes: {
       'Pre-K': mk('Pre-K'), 'K1': mk('K1'), 'K2': mk('K2'),
       '1A': mk('1A'), '1B': mk('1B'),
       '2A': mk('2A'), '2B': mk('2B'),
-      '3A': mk('3A'), '3B': mk('3B'),
-      '4A': {
-        name:'4A', unitATL:'Social',
-        students:[
-          {name:'Mei',   flag:'🇯🇵',atl:'Self-Management',atlLevel:'Meeting',  peLevel:'Exceeding',history:[
-            {date:'2026-05-22',status:'fly', feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-            {date:'2026-05-29',status:'fly', feeling:'ok',       warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-            {date:curDate,     status:'fly', feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-          ]},
-          {name:'Carlos',flag:'🇧🇷',atl:'Social',atlLevel:'Developing',peLevel:'Meeting',history:[
-            {date:'2026-05-22',status:'grow',feeling:'tired',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-            {date:'2026-05-29',status:'fly', feeling:'ok',   warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-            {date:curDate,     status:'grow',feeling:'ok',   warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-          ]},
-          {name:'Amara', flag:'🇬🇭',atl:'Communication',atlLevel:'Meeting',peLevel:'Meeting',history:[
-            {date:'2026-05-22',status:'fly',feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-            {date:curDate,     status:'fly',feeling:'energised',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-          ]},
-          {name:'Luca',  flag:'🇮🇹',atl:'Self-Management',atlLevel:'Beginning',peLevel:'Developing',history:[
-            {date:'2026-05-22',status:'grow',feeling:'ok',   warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-            {date:'2026-05-29',status:'pit', feeling:'upset',warning:true, contactTeacher:true, contactParent:false,notes:'Dispute on pitch',coLevel:null},
-            {date:curDate,     status:'pit', feeling:'upset',warning:true, contactTeacher:true, contactParent:false,notes:'Argument at break',coLevel:null},
-          ]},
-          {name:'Priya', flag:'🇮🇳',atl:'Thinking',atlLevel:'Developing',peLevel:'Meeting',history:[
-            {date:'2026-05-29',status:'grow',feeling:'tired',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-            {date:curDate,     status:'grow',feeling:'tired',warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null},
-          ]},
-          {name:'James', flag:'🇦🇺',atl:null,atlLevel:null,peLevel:null,history:[]},
+      '3A': mk('3A'),
+      '3B': {
+        name: '3B', unitATL: null,
+        students: [
+          mkStudent('Jenny'),
+          mkStudent('Wesley'),
+          mkStudent('David'),
+          mkStudent('Beomjun'),
+          mkStudent('Minseong'),
+          mkStudent('Jion'),
+          mkStudent('Yuto'),
+          mkStudent('Eli'),
+          mkStudent('Seoyun'),
+          mkStudent('Songyi'),
+          mkStudent('Riley'),
+          mkStudent('Henry'),
+          mkStudent('Ivan'),
+          mkStudent('Lydia'),
+          mkStudent('Ethan'),
+          mkStudent('Olivia'),
         ]
       },
-      '4B': mk('4B'), '5A': mk('5A'), '5B': mk('5B'),
+      '4A': mk('4A'), '4B': mk('4B'), '5A': mk('5A'), '5B': mk('5B'),
     }
   };
   save();
@@ -1530,7 +1524,7 @@ function addStudentConfirm() {
   const name=document.getElementById('nName').value.trim();
   if(!name) return;
   const s={name,flag:document.getElementById('nFlag').value.trim()||'🏳️',atl:null,atlLevel:null,peLevel:null,history:[]};
-  const e={date:curDate,status:document.getElementById('nStatus').value,feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};
+  const e={date:curDate,status:document.getElementById('nStatus').value||'fly',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};
   s.history.push(e);
   D.classes[curClass].students.push(s);
   save();
@@ -1572,7 +1566,7 @@ function openSummary(mode) {
 function getEntry(s) {
   if(!s.history) s.history=[];
   let e=s.history.find(h=>h.date===curDate);
-  if(!e){e={date:curDate,status:'unchecked',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};s.history.push(e);}
+  if(!e){e={date:curDate,status:'fly',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};s.history.push(e);}
   return e;
 }
 function oClose(e,id){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');}
