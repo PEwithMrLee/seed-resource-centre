@@ -771,7 +771,10 @@ body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:
       <div class="sl">Note History</div>
       <div class="note-hist" id="noteHist"></div>
     </div>
-    <button class="svbtn" onclick="saveDet()">Save & Close</button>
+    <div style="display:flex;gap:10px;padding:0 16px 16px">
+      <button class="svbtn" style="background:var(--muted,#888);flex:0 0 auto;padding:0 20px" onclick="resetDet()">↺ Reset</button>
+      <button class="svbtn" style="flex:1" onclick="saveDet()">Save & Close</button>
+    </div>
   </div>
 </div>
 
@@ -934,10 +937,13 @@ async function cloudLoad() {
   try {
     const r = await fetch(`${APPS_SCRIPT_URL}?auth=${AUTH_TOKEN}`, { redirect: 'follow' });
     const json = await r.json();
+    // Only apply saved state if it has actual class data — don't overwrite roster with empty state
     if (json && json.classes && Object.keys(json.classes).length > 0) {
+      // Merge saved state INTO roster — preserve student history but keep roster structure
       if (D && D.classes) {
         Object.entries(json.classes).forEach(([cls, savedCls]) => {
           if (D.classes[cls] && savedCls.students && savedCls.students.length > 0) {
+            // Apply saved history to matched students
             savedCls.students.forEach(savedStudent => {
               const live = D.classes[cls].students.find(s => s.name === savedStudent.name);
               if (live && savedStudent.history && savedStudent.history.length > 0) {
@@ -974,7 +980,7 @@ async function cloudSave() {
   Object.entries(D.classes).forEach(([cls, clsData]) => {
     (clsData.students || []).forEach(s => {
       const e = (s.history || []).find(h => h.date === curDate);
-      if (e && e.status !== 'unchecked') {
+      if (e && e.status && e.status !== 'unchecked') {
         log.push([
           e.date, cls, s.name, s.flag || '',
           e.status || '', e.feeling || '',
@@ -1520,6 +1526,15 @@ function sLevel(t,v){
   else{tempData.peLevel=v;document.querySelectorAll('#peRow .lvb').forEach(b=>b.classList.toggle('on',b.textContent===v));}
 }
 function sTog(f){tempData._e[f]=!tempData._e[f];const m={warning:'togW',contactTeacher:'togT',contactParent:'togP'};togSt(m[f],tempData._e[f]);}
+function resetDet(){
+  // Clear today's entry for this student
+  const s=D.classes[curClass].students[activeIdx];
+  if(!s) return;
+  const ei=s.history.findIndex(h=>h.date===curDate);
+  if(ei>=0) s.history.splice(ei,1);
+  save();
+  openDet(activeIdx);
+}
 function saveDet(){
   tempData._e.notes=document.getElementById('ntf').value;
   const s=D.classes[curClass].students[activeIdx];
@@ -1594,7 +1609,8 @@ function openSummary(mode) {
 function getEntry(s) {
   if(!s.history) s.history=[];
   let e=s.history.find(h=>h.date===curDate);
-  if(!e){e={date:curDate,status:'fly',feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};s.history.push(e);}
+  // Don't auto-stamp — only create entry when teacher deliberately taps
+  if(!e) e={date:curDate,status:null,feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};
   return e;
 }
 function oClose(e,id){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');}
