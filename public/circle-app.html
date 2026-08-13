@@ -1316,8 +1316,13 @@ function updateOpeningPulse() {
 }
 
 function qStatus(i,v) {
-  const e=getEntry(D.classes[curClass].students[i]);
-  e.status = e.status===v ? 'unchecked' : v;
+  const s=D.classes[curClass].students[i];
+  let e=s.history.find(h=>h.date===curDate);
+  if(!e){
+    e={date:curDate,status:null,feeling:null,warning:false,contactTeacher:false,contactParent:false,notes:'',coLevel:null};
+    s.history.push(e);
+  }
+  e.status = e.status===v ? null : v;
   save(); renderOpening();
 }
 
